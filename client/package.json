@@ -27,5 +27,6 @@
   },
   "devDependencies": {
     "eslint-config-wesbos": "^3.1.4"
-  }
+  },
+  "proxy": "http://localhost:3000"
 }
