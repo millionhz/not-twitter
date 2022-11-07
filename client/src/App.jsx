@@ -1,6 +1,16 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 function App() {
+  const [message, setMessage] = React.useState('Fetching...');
+
+  useEffect(() => {
+    fetch('/api')
+      .then((res) => res.json())
+      .then((data) => {
+        setMessage(data.message);
+      });
+  }, []);
+
   const appStyle = {
     textAlign: 'center',
   };
@@ -18,7 +28,7 @@ function App() {
   return (
     <div className="App" style={appStyle}>
       <header className="App-header" style={headerStyle}>
-        <h1>Hello</h1>
+        <h1>{message}</h1>
       </header>
     </div>
   );
