@@ -8,8 +8,15 @@
 
 ## Install Dependencies
 
+
+### Server
 ```bash
-npm i -D
+cd ./server && npm i -D
+```
+
+### Client
+```bash
+cd ./client && npm i -D
 ```
 
 ## Run
