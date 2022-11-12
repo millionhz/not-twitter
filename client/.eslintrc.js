@@ -10,5 +10,6 @@ module.exports = {
         endOfLine: 'lf',
       },
     ],
+    'react/prop-types': 0,
   },
 };
