@@ -6,6 +6,7 @@
 
 const http = require('http');
 const app = require('../app');
+const { connection } = require('../utilities/database');
 
 /**
  * Get port from environment and store in Express.
@@ -60,6 +61,14 @@ function onListening() {
  * Listen on provided port, on all network interfaces.
  */
 
-server.listen(port);
+connection.connect((err) => {
+  if (err) {
+    console.error(`error connecting: ${err.stack}`);
+    return;
+  }
+  console.log('Database connected');
+  server.listen(port);
+});
+
 server.on('error', onError);
 server.on('listening', onListening);
