@@ -7,7 +7,7 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 
-export default function AuthForm({ title, onSubmit, children }) {
+function AuthForm({ title, onSubmit, children }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -71,3 +71,5 @@ export default function AuthForm({ title, onSubmit, children }) {
     </Container>
   );
 }
+
+export default AuthForm;
