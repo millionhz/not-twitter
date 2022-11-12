@@ -1,36 +1,13 @@
-import React, { useEffect } from 'react';
+import React from 'react';
+import { ThemeProvider } from '@emotion/react';
+import theme from './theme/theme';
+import LoginPage from './features/authentication/LoginPage';
 
 function App() {
-  const [message, setMessage] = React.useState('Fetching...');
-
-  useEffect(() => {
-    fetch('/api')
-      .then((res) => res.json())
-      .then((data) => {
-        setMessage(data.message);
-      });
-  }, []);
-
-  const appStyle = {
-    textAlign: 'center',
-  };
-
-  const headerStyle = {
-    minHeight: '100vh',
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center',
-    fontSize: '20px',
-    color: 'black',
-  };
-
   return (
-    <div className="App" style={appStyle}>
-      <header className="App-header" style={headerStyle}>
-        <h1>{message}</h1>
-      </header>
-    </div>
+    <ThemeProvider theme={theme}>
+      <LoginPage />;
+    </ThemeProvider>
   );
 }
 
