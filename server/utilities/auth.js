@@ -1,19 +1,19 @@
 const passport = require('passport');
 const LocalStrategy = require('passport-local');
 const { Strategy: JwtStrategy, ExtractJwt } = require('passport-jwt');
-const users = require('./users');
+const { authenticate, getUserById } = require('./database');
 
 passport.use(
-  new LocalStrategy({ usernameField: 'email' }, (username, password, done) => {
-    const userIsValid = users.some(
-      (user) => user.email === username && user.password === password
-    );
+  new LocalStrategy({ usernameField: 'email' }, (email, password, done) => {
+    authenticate(email, password)
+      .then((user) => {
+        if (user) {
+          return done(null, user);
+        }
 
-    if (userIsValid) {
-      return done(null, { email: username });
-    }
-
-    return done(null, false);
+        return done(null, false);
+      })
+      .catch((err) => done(err));
   })
 );
 
@@ -24,21 +24,26 @@ passport.use(
       secretOrKey: process.env.JWT_SECRET,
     },
     (jwtPayload, done) => {
-      const { email } = jwtPayload;
-      const userIsValid = users.some((user) => user.email === email);
+      const { userId } = jwtPayload;
 
-      if (userIsValid) {
-        return done(null, { email });
-      }
+      getUserById(userId)
+        .then((user) => {
+          if (user) {
+            return done(null, user);
+          }
 
-      return done(null, false);
+          return done(null, false);
+        })
+        .catch((err) => {
+          done(err);
+        });
     }
   )
 );
 
 passport.serializeUser((user, cb) => {
   process.nextTick(() => {
-    cb(null, { email: user.email });
+    cb(null, user);
   });
 });
 

@@ -9,9 +9,9 @@ router.get('/', (req, res) => {
 });
 
 router.post('/', auth.authenticate('local', { session: false }), (req, res) => {
-  const { email } = req.body;
-  const token = getToken(email);
+  const { user_id: userId } = req.user;
 
+  const token = getToken(userId);
   res.json({ token });
 });
 
