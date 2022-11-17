@@ -4,6 +4,9 @@ const instance = axios.create({
   baseURL: '/api',
 });
 
+export const signup = (email, password) =>
+  instance.post('/signup', { email, password });
+
 export const getPosts = () => instance.get('/post');
 
 export const getPostById = (id) => instance.get(`/post/${id}`);

@@ -2,7 +2,7 @@ import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { ThemeProvider } from '@emotion/react';
 import theme from './theme/theme';
-import SignInPage from './features/authentication/SignInPage';
+import LogInPage from './features/authentication/LogInPage';
 import SignUpPage from './features/authentication/SignUpPage';
 import HomePage from './features/home/HomePage';
 import ProfilePage from './features/profile/ProfilePage';
@@ -14,7 +14,7 @@ function App() {
         <Route path="/">
           <Route path="home" element={<HomePage />} />
           <Route path="myprofile" element={<ProfilePage />} />
-          <Route path="signin" element={<SignInPage />} />
+          <Route path="login" element={<LogInPage />} />
           <Route path="signup" element={<SignUpPage />} />
         </Route>
       </Routes>
