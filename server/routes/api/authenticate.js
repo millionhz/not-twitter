@@ -3,7 +3,7 @@ const express = require('express');
 const router = express.Router();
 
 router.get('/', (req, res) => {
-  res.sendStatus(200);
+  res.json({ user: req.user });
 });
 
 module.exports = router;
