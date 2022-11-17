@@ -13,6 +13,7 @@ function SignupPage() {
     signup(email, password)
       .then(() => {
         // server returns status 200
+        alert('Successfully signed up!');
         navigate('/login');
       })
       .catch((err) => {
