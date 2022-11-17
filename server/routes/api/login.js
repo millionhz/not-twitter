@@ -4,10 +4,6 @@ const { getToken } = require('../../utilities/jwt');
 
 const router = express.Router();
 
-router.get('/', (req, res) => {
-  res.json({ message: 'Log in' });
-});
-
 router.post('/', auth.authenticate('local', { session: false }), (req, res) => {
   const { user_id: userId } = req.user;
 

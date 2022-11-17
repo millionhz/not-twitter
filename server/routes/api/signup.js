@@ -9,11 +9,13 @@ router.get('/', (req, res) => {
 
 router.post('/', (req, res, next) => {
   const { email, password } = req.body;
+
   insertUser(email, password)
     .then(() => {
-      res.json({ message: `User ${email} created` });
+      res.sendStatus(200);
     })
     .catch((err) => {
+      res.status(500).json({ message: err.message });
       next(err);
     });
 });

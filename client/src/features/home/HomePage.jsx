@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import { Link, Outlet } from 'react-router-dom';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
@@ -17,6 +18,8 @@ import PersonIcon from '@mui/icons-material/Person';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 // import InfiniteScroll from 'react-infinite-scroll-component';
 // import { getPosts } from '../../api/backend';
+import { getToken } from '../../utilities/localStorage';
+
 import Post from '../post/Post';
 
 const drawerWidth = 240;
@@ -64,6 +67,22 @@ const dummyPosts = [
 function HomePage() {
   const [posts, setPosts] = useState([]);
   const [checkMorePosts, setCheck] = useState(true);
+
+  useEffect(() => {
+    axios
+      .get('/api/authenticate', {
+        headers: {
+          Authorization: `Bearer ${getToken()}`,
+        },
+      })
+      .then((res) => {
+        const { data } = res;
+        console.log(data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  });
 
   // useEffect(() => {
   //     await getPosts().then(response => {

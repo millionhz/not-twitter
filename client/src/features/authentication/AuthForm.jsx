@@ -7,7 +7,7 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 
-function AuthForm({ title, onSubmit, children }) {
+function AuthForm({ title, onSubmit, error, children }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -42,6 +42,7 @@ function AuthForm({ title, onSubmit, children }) {
             name="email"
             autoComplete="email"
             autoFocus
+            error={error}
             value={email}
             onChange={(event) => setEmail(event.target.value)}
           />
@@ -54,6 +55,7 @@ function AuthForm({ title, onSubmit, children }) {
             type="password"
             id="password"
             autoComplete="current-password"
+            error={error}
             value={password}
             onChange={(event) => setPassword(event.target.value)}
           />
