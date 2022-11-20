@@ -18,7 +18,7 @@ import PersonIcon from '@mui/icons-material/Person';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import PostAddIcon from '@mui/icons-material/PostAdd';
 // import InfiniteScroll from 'react-infinite-scroll-component';
-// import { getPosts } from '../../api/backend';
+import { getPosts } from '../../api/backend';
 import { getToken } from '../../utilities/localStorage';
 // import SideBar from '../sidebar/SideBar';
 import Post from '../post/Post';
@@ -71,19 +71,10 @@ function HomePage() {
   // const [checkMorePosts, setCheck] = useState(true);
 
   useEffect(() => {
-    const axiosInstance = axios.create({
-      baseURL: '/api',
-      headers: {
-        Authorization: `Bearer ${getToken()}`,
-      },
-    });
-
-    axiosInstance
-      .get('/post')
+    getPosts()
       .then((postList) => {
         // posts successfully fetched
-        console.log('fetched posts');
-        setPosts(...postList);
+        setPosts(postList.data);
       })
       .catch((error) => {
         const {
@@ -189,7 +180,7 @@ function HomePage() {
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
         <Toolbar />
         {posts.map((post) => (
-          <Post {...post} key={post.postID} />
+          <Post {...post} key={post.post_id} />
         ))}
       </Box>
     </Box>
