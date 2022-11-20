@@ -83,10 +83,36 @@ const authenticate = async (email, password) => {
   return null;
 };
 
+const query = (sql, params) =>
+  new Promise((resolve, reject) => {
+    connection.query(sql, params, (err, res) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(res);
+      }
+    });
+  });
+
+const insertLike = (postId, userId) => {
+  const createdTime = getCurrentTime();
+  const sql = `INSERT INTO likes (post_id, user_id, created_time) VALUES (?, ?, ?)`;
+
+  return query(sql, [postId, userId, createdTime]);
+};
+
+const getLikesById = (postId) => {
+  const sql = `SELECT * FROM likes WHERE post_id = ?`;
+
+  return query(sql, [postId]);
+};
+
 module.exports = {
   connection,
   insertUser,
   getUserByEmail,
   authenticate,
   getUserById,
+  insertLike,
+  getLikesById,
 };
