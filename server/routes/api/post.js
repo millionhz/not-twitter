@@ -1,11 +1,11 @@
 const express = require('express');
 const { insertPost } = require('../../utilities/database');
-const { getPostList } = require('../../utilities/database');
+const { getPosts } = require('../../utilities/database');
 
 const router = express.Router();
 
 router.get('/', (req, res, next) => {
-  getPostList()
+  getPosts()
     .then((postList) => {
       res.json(postList);
     })
