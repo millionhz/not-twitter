@@ -114,7 +114,7 @@ const insertPost = (postContent, userId) => {
   return query(sql, [createdTime, createdTime, postContent, userId]);
 };
 
-const getPosts = () => {
+const getPosts = (params = {}) => {
   const sql = `
   SELECT
     users.user_id,
@@ -130,7 +130,9 @@ const getPosts = () => {
       FROM
         posts
       WHERE
-        is_deleted = 0
+        is_deleted = 0 ${params.postId ? 'AND post_id = ?' : ''} ${
+    params.userId ? 'AND user_id = ?' : ''
+  }
     ) as posts
     INNER JOIN users ON posts.user_id = users.user_id
     LEFT JOIN (
@@ -146,8 +148,13 @@ const getPosts = () => {
     created_time DESC;
   `;
 
-  return query(sql, []);
+  return query(sql, [params.postId, params.userId].filter(Boolean));
 };
+
+const getPostById = (postId) =>
+  getPosts({ postId }).then((posts) => (posts.length === 0 ? null : posts[0]));
+
+const getPostsByUserId = (userId) => getPosts({ userId });
 
 module.exports = {
   connection,
@@ -159,4 +166,6 @@ module.exports = {
   getLikesById,
   insertPost,
   getPosts,
+  getPostById,
+  getPostsByUserId,
 };
