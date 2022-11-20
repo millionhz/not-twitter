@@ -114,6 +114,41 @@ const insertPost = (postContent, userId) => {
   return query(sql, [createdTime, createdTime, postContent, userId]);
 };
 
+const getPosts = () => {
+  const sql = `
+  SELECT
+    users.user_id,
+    users.name,
+    posts.post_id,
+    posts.content,
+    posts.created_time,
+    IFNULL(likes, 0) AS likes
+  FROM
+    (
+      SELECT
+        *
+      FROM
+        posts
+      WHERE
+        is_deleted = 0
+    ) as posts
+    INNER JOIN users ON posts.user_id = users.user_id
+    LEFT JOIN (
+      SELECT
+        post_id,
+        COUNT(*) as likes
+      from
+        likes
+      GROUP BY
+        post_id
+    ) as likes ON posts.post_id = likes.post_id
+  ORDER BY
+    created_time DESC;
+  `;
+
+  return query(sql, []);
+};
+
 module.exports = {
   connection,
   insertUser,
@@ -123,4 +158,5 @@ module.exports = {
   insertLike,
   getLikesById,
   insertPost,
+  getPosts,
 };

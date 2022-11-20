@@ -71,30 +71,29 @@ function HomePage() {
   // const [checkMorePosts, setCheck] = useState(true);
 
   useEffect(() => {
-    axios
-      .get('/api/authenticate', {
-        headers: {
-          Authorization: `Bearer ${getToken()}`,
-        },
+    const axiosInstance = axios.create({
+      baseURL: '/api',
+      headers: {
+        Authorization: `Bearer ${getToken()}`,
+      },
+    });
+
+    axiosInstance
+      .get('/post')
+      .then((postList) => {
+        // posts successfully fetched
+        console.log('fetched posts');
+        setPosts(...postList);
       })
-      .then((res) => {
-        const { data } = res;
-        console.log(data);
-      })
-      .catch((err) => {
-        console.log(err);
+      .catch((error) => {
+        const {
+          response: {
+            data: { message },
+          },
+        } = error;
+        console.log(message);
       });
   });
-
-  // useEffect(() => {
-  //     await getPosts().then(response => {
-  //     setPosts(response.result)
-  //     console.log("response from API received")
-  //   })
-  //   .catch(error => console.log(error))
-
-  //   console.log("useEffect axios request initiating render")
-  // }, [])
 
   //   const fetchMorePosts = () => {
   //     if (dummyPosts.length >= 500) {
@@ -189,7 +188,7 @@ function HomePage() {
       </Drawer>
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
         <Toolbar />
-        {dummyPosts.map((post) => (
+        {posts.map((post) => (
           <Post {...post} key={post.postID} />
         ))}
       </Box>
