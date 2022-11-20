@@ -19,8 +19,6 @@ import NotificationsIcon from '@mui/icons-material/Notifications';
 import PostAddIcon from '@mui/icons-material/PostAdd';
 // import InfiniteScroll from 'react-infinite-scroll-component';
 import { getPosts } from '../../api/backend';
-import { getToken } from '../../utilities/localStorage';
-// import SideBar from '../sidebar/SideBar';
 import Post from '../post/Post';
 
 const drawerWidth = 240;
@@ -37,35 +35,6 @@ const sideBarNav = [
   },
 ];
 
-const options = {
-  year: 'numeric',
-  month: 'short',
-  day: 'numeric',
-};
-
-const date = new Date();
-const formattedDate = date.toLocaleDateString('en-US', options);
-
-const dummyPosts = [
-  {
-    postID: 1,
-    postedBy: 'Humaira',
-    date: formattedDate,
-    numLikes: 20,
-    numComments: 15,
-    content: 'Hello There! This is dummy caption on my post!',
-    // media: '../../assets/dostiyan-logo.png',
-  },
-  {
-    postID: 2,
-    postedBy: 'Someone else',
-    date: formattedDate,
-    numLikes: 30,
-    content: 'Hello There! This is dummy caption on my post!',
-    // media: '',
-  },
-];
-
 function HomePage() {
   const [posts, setPosts] = useState([]);
   // const [checkMorePosts, setCheck] = useState(true);
@@ -74,6 +43,7 @@ function HomePage() {
     getPosts()
       .then((postList) => {
         // posts successfully fetched
+        console.log(postList.data);
         setPosts(postList.data);
       })
       .catch((error) => {
@@ -180,7 +150,9 @@ function HomePage() {
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
         <Toolbar />
         {posts.map((post) => (
-          <Post {...post} key={post.post_id} />
+          <div>
+            <Post post={post} key={post.post_id} />
+          </div>
         ))}
       </Box>
     </Box>
