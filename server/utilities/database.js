@@ -151,11 +151,8 @@ const getPosts = (params = {}) => {
   return query(sql, [params.postId, params.userId].filter(Boolean));
 };
 
-const getPostById = (postId) => {
-  const post = getPosts({ postId });
-
-  return post.length === 0 ? null : post[0];
-};
+const getPostById = (postId) =>
+  getPosts({ postId }).then((posts) => (posts.length === 0 ? null : posts[0]));
 
 const getPostsByUserId = (userId) => getPosts({ userId });
 

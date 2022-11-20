@@ -1,13 +1,40 @@
 const express = require('express');
-const { insertPost } = require('../../utilities/database');
-const { getPostList } = require('../../utilities/database');
+const {
+  insertPost,
+  getPostsByUserId,
+  getPostById,
+} = require('../../utilities/database');
+const { getPosts } = require('../../utilities/database');
 
 const router = express.Router();
 
 router.get('/', (req, res, next) => {
-  getPostList()
-    .then((postList) => {
-      res.json(postList);
+  const { userId } = req.body;
+
+  const posts = userId ? getPostsByUserId(userId) : getPosts();
+
+  posts
+    .then((data) => {
+      res.json(data);
+    })
+    .catch((err) => {
+      res.status(500).json({ message: err.message });
+      next(err);
+    });
+});
+
+router.get('/:postId', (req, res, next) => {
+  const { postId } = req.params;
+
+  getPostById(postId)
+    .then((data) => {
+      // TODO: add comments to post
+
+      if (data) {
+        res.json(data);
+      } else {
+        res.sendStatus(404);
+      }
     })
     .catch((err) => {
       res.status(500).json({ message: err.message });
