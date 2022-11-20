@@ -3,9 +3,11 @@ import { getToken } from '../utilities/localStorage';
 
 const instance = axios.create({
   baseURL: '/api',
-  headers: {
-    Authorization: `Bearer ${getToken()}`,
-  },
+});
+
+instance.interceptors.request.use((config) => {
+  config.headers.Authorization = `Bearer ${getToken()}`;
+  return config;
 });
 
 export const signup = (email, password) =>
