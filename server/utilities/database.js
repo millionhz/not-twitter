@@ -114,6 +114,39 @@ const insertPost = (postContent, userId) => {
   return query(sql, [createdTime, createdTime, postContent, userId]);
 };
 
+const insertComment = (postId, content, userId) => {
+  const createdTime = getCurrentTime();
+  const sql = `INSERT INTO comments (post_id, content, user_id, created_time) VALUES (?, ?, ?, ?)`;
+
+  return new Promise((resolve, reject) => {
+    connection.query(
+      sql,
+      [postId, content, userId, createdTime],
+      (err, res) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(res);
+        }
+      }
+    );
+  });
+};
+
+const getCommentsById = (postId) => {
+  const sql = `SELECT * FROM comments WHERE post_id = ?`;
+
+  return new Promise((resolve, reject) => {
+    connection.query(sql, [postId], (err, res) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(res);
+      }
+    });
+  });
+};
+
 const getPosts = (params = {}) => {
   const sql = `
   SELECT
@@ -165,6 +198,8 @@ module.exports = {
   insertLike,
   getLikesById,
   insertPost,
+  insertComment,
+  getCommentsById,
   getPosts,
   getPostById,
   getPostsByUserId,
