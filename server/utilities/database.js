@@ -107,6 +107,13 @@ const getLikesById = (postId) => {
   return query(sql, [postId]);
 };
 
+const insertPost = (postContent, userId) => {
+  const createdTime = getCurrentTime();
+  const sql = `INSERT INTO posts (created_time, updated_time, content, user_id) VALUES (?, ?, ?, ?)`;
+
+  return query(sql, [createdTime, createdTime, postContent, userId]);
+};
+
 module.exports = {
   connection,
   insertUser,
@@ -115,4 +122,5 @@ module.exports = {
   getUserById,
   insertLike,
   getLikesById,
+  insertPost,
 };
