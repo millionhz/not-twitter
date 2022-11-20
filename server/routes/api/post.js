@@ -3,8 +3,8 @@ const {
   insertPost,
   getPostsByUserId,
   getPostById,
+  getPosts,
 } = require('../../utilities/database');
-const { getPosts } = require('../../utilities/database');
 
 const router = express.Router();
 
@@ -29,7 +29,6 @@ router.get('/:postId', (req, res, next) => {
   getPostById(postId)
     .then((data) => {
       // TODO: add comments to post
-
       if (data) {
         res.json(data);
       } else {
