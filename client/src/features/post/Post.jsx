@@ -25,7 +25,7 @@ const ExpandMore = styled((props) => {
   }),
 }));
 
-function Post({ postedBy, date, numLikes, content, mediaURL }) {
+function Post({ postedBy, date, numLikes, content }) {
   const [expanded, setExpanded] = useState(false);
   const [likeIconColor, setLikeIconColor] = useState('');
 
@@ -38,7 +38,7 @@ function Post({ postedBy, date, numLikes, content, mediaURL }) {
   };
 
   return (
-    <Card sx={{ maxWidth: 345 }}>
+    <Card sx={{ maxWidth: 500, marginBottom: 3 }}>
       <CardHeader
         avatar={
           <Avatar sx={{ bgcolor: red[500] }} aria-label="post">
@@ -53,13 +53,13 @@ function Post({ postedBy, date, numLikes, content, mediaURL }) {
           {content}
         </Typography>
       </CardContent>
-      <CardMedia
+      {/* <CardMedia
         component="img"
         height="200"
         width="300"
         image={mediaURL}
         alt="Post Media"
-      />
+      /> */}
       <Typography>{numLikes} likes</Typography>
       <CardActions disableSpacing>
         <IconButton onClick={changeColor} aria-label="like post">
