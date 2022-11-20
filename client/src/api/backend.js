@@ -22,4 +22,6 @@ export const getPostById = (id) => instance.get(`/post/${id}`);
 
 export const createPost = (data) => instance.post('/post', data);
 
+export const addComment = (data) => instance.post('/comment', data)
+
 export default instance;

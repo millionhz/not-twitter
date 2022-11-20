@@ -9,6 +9,7 @@ import ProfilePage from './features/profile/ProfilePage';
 import ProtectedRoutes from './features/authentication/ProtectedRoutes';
 import PageNotFound from './features/not-found/PageNotFound';
 import CreatePostPage from './features/post/CreatePostPage';
+import NewComment from './features/comments/NewComment';
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
             <Route path="home" element={<HomePage />} />
             <Route path="home/createpost" element={<CreatePostPage />} />
             <Route path="myprofile" element={<ProfilePage />} />
+            <Route path="home/newcomment" element={<NewComment />} />
           </Route>
           <Route path="login" element={<LogInPage />} />
           <Route path="signup" element={<SignUpPage />} />

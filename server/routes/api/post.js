@@ -4,6 +4,7 @@ const {
   getPostsByUserId,
   getPostById,
   getPosts,
+  getCommentsById,
 } = require('../../utilities/database');
 
 const router = express.Router();
@@ -27,10 +28,11 @@ router.get('/:postId', (req, res, next) => {
   const { postId } = req.params;
 
   getPostById(postId)
-    .then((data) => {
-      // TODO: add comments to post
+    .then(async (data) => {
+      const comments = await getCommentsById(postId);
+
       if (data) {
-        res.json(data);
+        res.json({ ...data, comments });
       } else {
         res.sendStatus(404);
       }
