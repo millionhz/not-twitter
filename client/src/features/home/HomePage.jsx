@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Link, Outlet } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
 import AppBar from '@mui/material/AppBar';
@@ -16,10 +16,11 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 import PersonIcon from '@mui/icons-material/Person';
 import NotificationsIcon from '@mui/icons-material/Notifications';
+import PostAddIcon from '@mui/icons-material/PostAdd';
 // import InfiniteScroll from 'react-infinite-scroll-component';
 // import { getPosts } from '../../api/backend';
 import { getToken } from '../../utilities/localStorage';
-
+// import SideBar from '../sidebar/SideBar';
 import Post from '../post/Post';
 
 const drawerWidth = 240;
@@ -41,6 +42,7 @@ const options = {
   month: 'short',
   day: 'numeric',
 };
+
 const date = new Date();
 const formattedDate = date.toLocaleDateString('en-US', options);
 
@@ -52,7 +54,7 @@ const dummyPosts = [
     numLikes: 20,
     numComments: 15,
     content: 'Hello There! This is dummy caption on my post!',
-    media: '../../assets/dostiyan-logo.png',
+    // media: '../../assets/dostiyan-logo.png',
   },
   {
     postID: 2,
@@ -60,13 +62,13 @@ const dummyPosts = [
     date: formattedDate,
     numLikes: 30,
     content: 'Hello There! This is dummy caption on my post!',
-    media: '',
+    // media: '',
   },
 ];
 
 function HomePage() {
   const [posts, setPosts] = useState([]);
-  const [checkMorePosts, setCheck] = useState(true);
+  // const [checkMorePosts, setCheck] = useState(true);
 
   useEffect(() => {
     axios
@@ -120,7 +122,6 @@ function HomePage() {
           >
             <Avatar sx={{ bgcolor: '#513' }}>N</Avatar>
           </Link>
-
           <IconButton aria-label="notifications icon" component="label">
             <NotificationsIcon sx={{ color: '#fff' }} />
           </IconButton>
@@ -158,6 +159,32 @@ function HomePage() {
               </ListItem>
             ))}
           </List>
+          <Link
+            to="/home/createpost"
+            style={{
+              textDecoration: 'none',
+              color: 'inherit',
+              width: 'fullWidth',
+            }}
+          >
+            <IconButton
+              aria-label="create post icon"
+              sx={{
+                display: 'flex',
+                flexDirection: 'row',
+                justifyContent: 'center',
+                alignItems: 'center',
+                marginTop: 95,
+                marginLeft: 2,
+                borderRadius: 0,
+              }}
+            >
+              <PostAddIcon sx={{ fontSize: 40, color: '#000' }} />
+              <Typography sx={{ marginLeft: 1, fontSize: 18 }}>
+                Create Post
+              </Typography>
+            </IconButton>
+          </Link>
         </Box>
       </Drawer>
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
