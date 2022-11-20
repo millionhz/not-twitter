@@ -12,7 +12,6 @@ function NewComment() {
   const [content, setContent] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const navigate = useNavigate();
-  
 
   const handleComments = (event) => {
     event.preventDefault();
@@ -27,7 +26,7 @@ function NewComment() {
     });
 
     axiosInstance
-      .post('/comment', { postId:5, content })
+      .post('/comment', { postId: 5, content })
       .then(() => {
         // comment successfully inserted into database
         alert('Comment Posted!');
@@ -63,9 +62,9 @@ function NewComment() {
     <Container component="main" maxWidth="md">
       <Box
         sx={{
-          m : 'auto',
+          m: 'auto',
           mt: '40%',
-          width: '800px'
+          width: '800px',
         }}
       >
         <Box component="form" onSubmit={handleComments} sx={{ mt: 1 }}>
