@@ -1,5 +1,9 @@
 const express = require('express');
-const { insertLike, getLikesById } = require('../../utilities/database');
+const {
+  insertLike,
+  getLikesById,
+  deleteLike,
+} = require('../../utilities/database');
 
 const router = express.Router();
 
@@ -16,18 +20,24 @@ router.get('/', (req, res, next) => {
     });
 });
 
-router.post('/', (req, res, next) => {
+router.post('/', async (req, res, next) => {
   const { user_id: userId } = req.user;
   const { postId } = req.body;
 
-  insertLike(postId, userId)
-    .then(() => {
-      res.sendStatus(200);
-    })
-    .catch((err) => {
-      res.status(500).json({ message: err.message });
-      next(err);
-    });
+  try {
+    await insertLike(postId, userId);
+    res.sendStatus(200);
+  } catch (err) {
+    if (err.errno === 1062) {
+      try {
+        await deleteLike(postId, userId);
+        res.sendStatus(200);
+      } catch (err) {
+        res.status(500).json({ message: err.message });
+        next(err);
+      }
+    }
+  }
 });
 
 module.exports = router;

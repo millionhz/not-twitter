@@ -189,6 +189,12 @@ const getPostById = (postId) =>
 
 const getPostsByUserId = (userId) => getPosts({ userId });
 
+const deleteLike = (postId, userId) => {
+  const sql = `DELETE FROM likes WHERE post_id = ? and user_id = ?;`;
+
+  return query(sql, [postId, userId]);
+};
+
 module.exports = {
   connection,
   insertUser,
@@ -203,4 +209,5 @@ module.exports = {
   getPosts,
   getPostById,
   getPostsByUserId,
+  deleteLike,
 };
