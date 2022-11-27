@@ -4,10 +4,10 @@ import { ThemeProvider } from '@emotion/react';
 import theme from './theme/theme';
 import LogInPage from './pages/LogInPage';
 import SignUpPage from './pages/SignUpPage';
-import HomePage from './features/home/HomePage';
+import HomePage from './pages/HomePage';
 import ProfilePage from './features/profile/ProfilePage';
 import PageNotFound from './features/not-found/PageNotFound';
-import CreatePostPage from './features/post/CreatePostPage';
+import CreatePostPage from './pages/CreatePostPage';
 import NewComment from './features/comments/NewComment';
 import AuthRouter from './routers/AuthRouter';
 
@@ -23,6 +23,7 @@ function App() {
           element={<AuthRouter onValid={<Outlet />} onInvalid={toLogin} />}
         >
           <Route index element={<HomePage />} />
+          <Route path="createpost" element={<CreatePostPage />} />
         </Route>
         <Route
           path="/"

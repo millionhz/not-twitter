@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import { Link } from 'react-router-dom';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
@@ -18,8 +17,8 @@ import PersonIcon from '@mui/icons-material/Person';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import PostAddIcon from '@mui/icons-material/PostAdd';
 // import InfiniteScroll from 'react-infinite-scroll-component';
-import { getPosts } from '../../api/backend';
-import Post from '../post/Post';
+import { getPosts } from '../api/backend';
+import Post from '../components/Post';
 
 const drawerWidth = 240;
 const sideBarNav = [

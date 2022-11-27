@@ -6,7 +6,7 @@ import TextField from '@mui/material/TextField';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 // import { createPost } from '../../api/backend';
-import { getToken } from '../../utilities/localStorage';
+import { getToken } from '../utilities/localStorage';
 
 function CreatePostPage() {
   const MAX_LENGTH = 256;
@@ -31,7 +31,7 @@ function CreatePostPage() {
       .then(() => {
         // post successfully inserted into database
         alert('Posted!');
-        navigate('/home');
+        navigate('/');
       })
       .catch((error) => {
         const {
