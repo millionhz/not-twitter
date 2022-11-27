@@ -1,5 +1,5 @@
 const express = require('express');
-const { insertLike, getLikesById } = require('../../utilities/database');
+const { getLikesById, toggleLike } = require('../../utilities/database');
 
 const router = express.Router();
 
@@ -20,7 +20,7 @@ router.post('/', (req, res, next) => {
   const { user_id: userId } = req.user;
   const { postId } = req.body;
 
-  insertLike(postId, userId)
+  toggleLike(postId, userId)
     .then(() => {
       res.sendStatus(200);
     })
