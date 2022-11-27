@@ -195,13 +195,27 @@ const deleteLike = (postId, userId) => {
   return query(sql, [postId, userId]);
 };
 
+const toggleLike = (postId, userId) =>
+  new Promise((resolve, reject) => {
+    insertLike(postId, userId)
+      .then(resolve)
+      .catch((err) => {
+        if (err.errno !== 1062) {
+          reject(err);
+          return;
+        }
+
+        deleteLike(postId, userId).then(resolve).catch(reject);
+      });
+  });
+
 module.exports = {
   connection,
   insertUser,
   getUserByEmail,
   authenticate,
   getUserById,
-  insertLike,
+
   getLikesById,
   insertPost,
   insertComment,
@@ -209,5 +223,5 @@ module.exports = {
   getPosts,
   getPostById,
   getPostsByUserId,
-  deleteLike,
+  toggleLike,
 };

@@ -1,9 +1,5 @@
 const express = require('express');
-const {
-  insertLike,
-  getLikesById,
-  deleteLike,
-} = require('../../utilities/database');
+const { getLikesById, toggleLike } = require('../../utilities/database');
 
 const router = express.Router();
 
@@ -24,24 +20,13 @@ router.post('/', (req, res, next) => {
   const { user_id: userId } = req.user;
   const { postId } = req.body;
 
-  insertLike(postId, userId)
+  toggleLike(postId, userId)
     .then(() => {
       res.sendStatus(200);
     })
     .catch((err) => {
-      if (err.errno !== 1062) {
-        res.status(500).json({ message: err.message });
-        next(err);
-      } else {
-        deleteLike(postId, userId)
-          .then(() => {
-            res.sendStatus(200);
-          })
-          .catch((err_) => {
-            res.status(500).json({ message: err_.message });
-            next(err_);
-          });
-      }
+      res.status(500).json({ message: err.message });
+      next(err);
     });
 });
 
