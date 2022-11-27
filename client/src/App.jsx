@@ -6,7 +6,7 @@ import LogInPage from './pages/LogInPage';
 import SignUpPage from './pages/SignUpPage';
 import HomePage from './pages/HomePage';
 import ProfilePage from './features/profile/ProfilePage';
-import PageNotFound from './features/not-found/PageNotFound';
+import PageNotFound from './pages/PageNotFound';
 import CreatePostPage from './pages/CreatePostPage';
 import NewComment from './features/comments/NewComment';
 import AuthRouter from './routers/AuthRouter';
