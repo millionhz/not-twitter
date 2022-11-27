@@ -54,7 +54,7 @@ function HomePage() {
         } = error;
         console.log(message);
       });
-  });
+  }, []);
 
   //   const fetchMorePosts = () => {
   //     if (dummyPosts.length >= 500) {
