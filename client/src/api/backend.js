@@ -24,6 +24,6 @@ export const createPost = (data) => instance.post('/post', data);
 
 export const addComment = (data) => instance.post('/comment', data);
 
-export const isAuthenticated = () => instance.get('/authenticate');
+export const authenticate = () => instance.get('/authenticate');
 
 export default instance;

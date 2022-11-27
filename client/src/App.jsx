@@ -20,18 +20,17 @@ function App() {
       <Routes>
         <Route
           path="/"
-          element={<AuthRouter onValid={<Outlet />} onInValid={toLogin} />}
+          element={<AuthRouter onValid={<Outlet />} onInvalid={toLogin} />}
         >
           <Route index element={<HomePage />} />
         </Route>
         <Route
           path="/"
-          element={<AuthRouter onValid={toHome} onInValid={<Outlet />} />}
+          element={<AuthRouter onValid={toHome} onInvalid={<Outlet />} />}
         >
           <Route path="login" element={<LogInPage />} />
           <Route path="signup" element={<SignUpPage />} />
         </Route>
-
         <Route path="*" element={<PageNotFound />} />
       </Routes>
     </ThemeProvider>

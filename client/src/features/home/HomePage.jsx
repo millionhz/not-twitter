@@ -120,7 +120,7 @@ function HomePage() {
             ))}
           </List>
           <Link
-            to="/home/createpost"
+            to="/createpost"
             style={{
               textDecoration: 'none',
               color: 'inherit',

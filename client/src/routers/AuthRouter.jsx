@@ -1,21 +1,11 @@
-import React, { useEffect, useState } from 'react';
-import { isAuthenticated } from '../api/backend';
+import React from 'react';
+import useAuth from '../hooks/useAuth';
 
-function AuthRouter({ onValid, onInValid }) {
-  const [isValid, setIsValid] = useState(null);
-
-  useEffect(() => {
-    isAuthenticated()
-      .then(() => {
-        setIsValid(true);
-      })
-      .catch(() => {
-        setIsValid(false);
-      });
-  }, []);
+function AuthRouter({ onValid, onInvalid }) {
+  const isValid = useAuth();
 
   if (isValid === false) {
-    return onInValid;
+    return onInvalid;
   }
 
   if (isValid) {
