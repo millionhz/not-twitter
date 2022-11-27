@@ -5,10 +5,9 @@ import theme from './theme/theme';
 import LogInPage from './pages/LogInPage';
 import SignUpPage from './pages/SignUpPage';
 import HomePage from './pages/HomePage';
-import ProfilePage from './features/profile/ProfilePage';
 import PageNotFound from './pages/PageNotFound';
 import CreatePostPage from './pages/CreatePostPage';
-import NewComment from './features/comments/NewComment';
+import CreateCommentPage from './pages/CreateCommentPage';
 import AuthRouter from './routers/AuthRouter';
 
 const toLogin = <Navigate to="/login" />;
@@ -24,6 +23,7 @@ function App() {
         >
           <Route index element={<HomePage />} />
           <Route path="createpost" element={<CreatePostPage />} />
+          <Route path="createcomment" element={<CreateCommentPage />} />
         </Route>
         <Route
           path="/"

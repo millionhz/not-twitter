@@ -5,7 +5,7 @@ import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { getToken } from '../../utilities/localStorage';
+import { getToken } from '../utilities/localStorage';
 
 function NewComment() {
   const MAX_LENGTH = 256;
@@ -30,7 +30,7 @@ function NewComment() {
       .then(() => {
         // comment successfully inserted into database
         alert('Comment Posted!');
-        navigate('/home');
+        navigate('/');
       })
       .catch((error) => {
         const {
