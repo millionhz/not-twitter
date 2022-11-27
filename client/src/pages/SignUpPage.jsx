@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Link from '@mui/material/Link';
 import Typography from '@mui/material/Typography';
-import AuthForm from './AuthForm';
-import { signup } from '../../api/backend';
+import AuthForm from '../components/AuthForm';
+import { signup } from '../api/backend';
 
 function SignupPage() {
   const [isError, setError] = useState(false);
