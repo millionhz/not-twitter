@@ -29,9 +29,9 @@ function PageNotFound() {
         <Button
           variant="contained"
           sx={{ marginTop: 2 }}
-          onClick={() => navigate('/login')}
+          onClick={() => navigate(-1)}
         >
-          BACK TO LOGIN
+          Go Back
         </Button>
       </Container>
     </Box>
