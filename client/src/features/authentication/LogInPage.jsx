@@ -18,7 +18,7 @@ function LoginPage() {
         } = res;
         setToken(token);
 
-        navigate('/home');
+        navigate('/', { replace: true });
       })
       .catch(() => {
         setError(true);

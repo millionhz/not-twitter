@@ -54,7 +54,7 @@ function HomePage() {
         } = error;
         console.log(message);
       });
-  });
+  }, []);
 
   //   const fetchMorePosts = () => {
   //     if (dummyPosts.length >= 500) {
@@ -120,7 +120,7 @@ function HomePage() {
             ))}
           </List>
           <Link
-            to="/home/createpost"
+            to="/createpost"
             style={{
               textDecoration: 'none',
               color: 'inherit',
