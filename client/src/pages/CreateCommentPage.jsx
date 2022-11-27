@@ -5,16 +5,15 @@ import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-// import { createPost } from '../../api/backend';
-import { getToken } from '../../utilities/localStorage';
+import { getToken } from '../utilities/localStorage';
 
-function CreatePostPage() {
+function NewComment() {
   const MAX_LENGTH = 256;
   const [content, setContent] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const navigate = useNavigate();
 
-  const handlePost = (event) => {
+  const handleComments = (event) => {
     event.preventDefault();
     console.log('here');
     console.log(content);
@@ -27,11 +26,11 @@ function CreatePostPage() {
     });
 
     axiosInstance
-      .post('/post', { postContent: content })
+      .post('/comment', { postId: 5, content })
       .then(() => {
-        // post successfully inserted into database
-        alert('Posted!');
-        navigate('/home');
+        // comment successfully inserted into database
+        alert('Comment Posted!');
+        navigate('/');
       })
       .catch((error) => {
         const {
@@ -63,25 +62,24 @@ function CreatePostPage() {
     <Container component="main" maxWidth="md">
       <Box
         sx={{
-          marginTop: '50%',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
+          m: 'auto',
+          mt: '40%',
+          width: '800px',
         }}
       >
-        <Box component="form" onSubmit={handlePost} sx={{ mt: 1 }}>
+        <Box component="form" onSubmit={handleComments} sx={{ mt: 1 }}>
           <TextField
             required
             fullWidth
             error={content.length >= MAX_LENGTH}
-            id="posttext"
-            name="post content"
+            id="commenttext"
+            name="comment content"
             helperText={errorMessage}
             value={content}
             inputProps={{ maxLength: MAX_LENGTH }}
             multiline
             minRows="5"
-            placeholder="Enter post text here .."
+            placeholder="Your comment ..."
             onChange={(event) => setContent(event.target.value)}
           />
           <Button
@@ -90,7 +88,7 @@ function CreatePostPage() {
             variant="contained"
             sx={{ mt: 3, mb: 3 }}
           >
-            POST
+            POST COMMENT
           </Button>
         </Box>
       </Box>
@@ -98,4 +96,4 @@ function CreatePostPage() {
   );
 }
 
-export default CreatePostPage;
+export default NewComment;

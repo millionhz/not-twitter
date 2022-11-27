@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import Link from '@mui/material/Link';
 import Typography from '@mui/material/Typography';
 import { useNavigate } from 'react-router-dom';
-import AuthForm from './AuthForm';
-import { setToken } from '../../utilities/localStorage';
-import { login } from '../../api/backend';
+import AuthForm from '../components/AuthForm';
+import { setToken } from '../utilities/localStorage';
+import { login } from '../api/backend';
 
 function LoginPage() {
   const [isError, setError] = useState(false);
