@@ -148,10 +148,8 @@ function HomePage() {
       </Drawer>
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
         <Toolbar />
-        {posts.map((post) => (
-          <div>
-            <Post post={post} key={post.post_id} />
-          </div>
+        {posts.map(({ name, post_id: postId, content }) => (
+          <Post name={name} content={content} key={postId} id={postId} />
         ))}
       </Box>
     </Box>
