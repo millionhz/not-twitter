@@ -1,12 +1,7 @@
 import React from 'react';
-import {
-  Card,
-  CardHeader,
-  CardContent,
-  Avatar,
-  Typography,
-} from '@mui/material';
+import { CardHeader, CardContent, Avatar, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import Card from './Card';
 
 function Post({ name, content, id }) {
   const navigate = useNavigate();
@@ -16,11 +11,7 @@ function Post({ name, content, id }) {
   }
 
   return (
-    <Card
-      variant="outlined"
-      onClick={() => handleClick()}
-      sx={{ maxWidth: 600, borderRadius: 0, borderBottom: 0 }}
-    >
+    <Card onClick={() => handleClick()}>
       <CardHeader
         avatar={<Avatar sx={{ bgcolor: 'primary.main' }}>R</Avatar>}
         title={name}
