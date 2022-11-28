@@ -32,6 +32,11 @@ const sideBarNav = [
     icon: <PersonIcon sx={{ margin: 1 }} />,
     label: 'My Profile',
   },
+  {
+    route: '/post/compose',
+    icon: <PostAddIcon sx={{ margin: 1 }} />,
+    label: 'Create Post',
+  },
 ];
 
 function HomePage() {
@@ -118,32 +123,6 @@ function HomePage() {
               </ListItem>
             ))}
           </List>
-          <Link
-            to="/createpost"
-            style={{
-              textDecoration: 'none',
-              color: 'inherit',
-              width: 'fullWidth',
-            }}
-          >
-            <IconButton
-              aria-label="create post icon"
-              sx={{
-                display: 'flex',
-                flexDirection: 'row',
-                justifyContent: 'center',
-                alignItems: 'center',
-                marginTop: 95,
-                marginLeft: 2,
-                borderRadius: 0,
-              }}
-            >
-              <PostAddIcon sx={{ fontSize: 40, color: '#000' }} />
-              <Typography sx={{ marginLeft: 1, fontSize: 18 }}>
-                Create Post
-              </Typography>
-            </IconButton>
-          </Link>
         </Box>
       </Drawer>
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>

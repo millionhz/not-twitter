@@ -20,7 +20,7 @@ export const getPosts = () => instance.get('/post');
 
 export const getPostById = (postId) => instance.get(`/post/${postId}`);
 
-export const createPost = (data) => instance.post('/post', data);
+export const createPost = (content) => instance.post('/post', { content });
 
 export const addComment = (postId, content) =>
   instance.post(`/post/${postId}/comment`, { content });

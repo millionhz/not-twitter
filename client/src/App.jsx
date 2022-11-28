@@ -8,7 +8,6 @@ import SignUpPage from './pages/SignUpPage';
 import HomePage from './pages/HomePage';
 import PageNotFound from './pages/PageNotFound';
 import CreatePostPage from './pages/CreatePostPage';
-import CreateCommentPage from './pages/CreateCommentPage';
 import PostPage from './pages/PostPage';
 
 const toLogin = <Navigate to="/login" />;
@@ -23,9 +22,8 @@ function App() {
           element={<AuthRouter onValid={<Outlet />} onInvalid={toLogin} />}
         >
           <Route index element={<HomePage />} />
+          <Route path="post/compose" element={<CreatePostPage />} />
           <Route path="post/:postId" element={<PostPage />} />
-          <Route path="createpost" element={<CreatePostPage />} />
-          <Route path="createcomment" element={<CreateCommentPage />} />
         </Route>
         <Route
           path="/"

@@ -6,6 +6,7 @@ function Compose({ placeholder, onSubmit }) {
 
   return (
     <Box
+      sx={{ maxWidth: 600 }}
       component="form"
       onSubmit={(e) => {
         e.preventDefault();
@@ -17,7 +18,6 @@ function Compose({ placeholder, onSubmit }) {
         value={value}
         placeholder={placeholder}
         onChange={(event) => setValue(event.target.value)}
-        sx={{ maxWidth: 600 }}
       />
     </Box>
   );

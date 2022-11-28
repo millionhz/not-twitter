@@ -50,9 +50,9 @@ router.get('/:postId', (req, res, next) => {
 
 router.post('/', (req, res, next) => {
   const { user_id: userId } = req.user;
-  const { postContent } = req.body;
+  const { content } = req.body;
 
-  insertPost(postContent, userId)
+  insertPost(content, userId)
     .then(() => {
       res.sendStatus(200);
     })
