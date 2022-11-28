@@ -3,9 +3,7 @@ const auth = require('../../utilities/auth');
 const signupRouter = require('./signup');
 const loginRouter = require('./login');
 const authenticateRouter = require('./authenticate');
-const likeRouter = require('./like');
 const postRouter = require('./post');
-const commentRouter = require('./comment');
 
 const router = express.Router();
 
@@ -14,8 +12,6 @@ router.use('/login', loginRouter);
 
 router.use(auth.authenticate('jwt', { session: false }));
 router.use('/authenticate', authenticateRouter);
-router.use('/like', likeRouter);
 router.use('/post', postRouter);
-router.use('/comment', commentRouter);
 
 module.exports = router;
