@@ -134,7 +134,7 @@ const insertComment = (postId, content, userId) => {
 };
 
 const getCommentsById = (postId) => {
-  const sql = `SELECT * FROM comments WHERE post_id = ?`;
+  const sql = `SELECT comment_id, content, comments.created_time, name FROM (SELECT * FROM comments WHERE post_id = ? AND is_deleted = 0) as comments INNER JOIN users ON comments.user_id = users.user_id;`;
 
   return new Promise((resolve, reject) => {
     connection.query(sql, [postId], (err, res) => {
@@ -150,7 +150,6 @@ const getCommentsById = (postId) => {
 const getPosts = (params = {}) => {
   const sql = `
   SELECT
-    users.user_id,
     users.name,
     posts.post_id,
     posts.content,
@@ -209,13 +208,18 @@ const toggleLike = (postId, userId) =>
       });
   });
 
+const isLikedByUser = (postId, userId) => {
+  const sql = `SELECT * FROM likes WHERE post_id = ? AND user_id = ?;`;
+
+  return query(sql, [postId, userId]).then((data) => Boolean(data.length));
+};
+
 module.exports = {
   connection,
   insertUser,
   getUserByEmail,
   authenticate,
   getUserById,
-
   getLikesById,
   insertPost,
   insertComment,
@@ -224,4 +228,5 @@ module.exports = {
   getPostById,
   getPostsByUserId,
   toggleLike,
+  isLikedByUser,
 };
