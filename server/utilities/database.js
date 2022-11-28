@@ -134,7 +134,7 @@ const insertComment = (postId, content, userId) => {
 };
 
 const getCommentsById = (postId) => {
-  const sql = `SELECT * FROM comments WHERE post_id = ?`;
+  const sql = `SELECT comment_id, content, comments.created_time, name FROM (SELECT * FROM comments WHERE post_id = ? AND is_deleted = 0) as comments INNER JOIN users ON comments.user_id = users.user_id;`;
 
   return new Promise((resolve, reject) => {
     connection.query(sql, [postId], (err, res) => {
@@ -150,7 +150,6 @@ const getCommentsById = (postId) => {
 const getPosts = (params = {}) => {
   const sql = `
   SELECT
-    users.user_id,
     users.name,
     posts.post_id,
     posts.content,
@@ -189,13 +188,48 @@ const getPostById = (postId) =>
 
 const getPostsByUserId = (userId) => getPosts({ userId });
 
+const deleteLike = (postId, userId) => {
+  const sql = `DELETE FROM likes WHERE post_id = ? and user_id = ?;`;
+
+  return query(sql, [postId, userId]);
+};
+
+const toggleLike = (postId, userId) =>
+  new Promise((resolve, reject) => {
+    insertLike(postId, userId)
+      .then(resolve)
+      .catch((err) => {
+        if (err.errno !== 1062) {
+          reject(err);
+          return;
+        }
+
+        deleteLike(postId, userId).then(resolve).catch(reject);
+      });
+  });
+
+const isLikedByUser = (postId, userId) => {
+  const sql = `SELECT * FROM likes WHERE post_id = ? AND user_id = ?;`;
+
+  return query(sql, [postId, userId]).then((data) => Boolean(data.length));
+};
+
+const searchPost = (word) => {
+  const sql = `SELECT user_id,post_id,content from posts where posts.content like ? and is_reported=0 and is_deleted=0;`;
+  return query(sql, [`%${word}%`]);
+};
+
+const searchName = (name) => {
+  const sql = `SELECT email,name,profile_img_id,bio,dob,created_time from users where name like ? and is_activated=1;`;
+  return query(sql, [`%${name}%`]);
+};
+
 module.exports = {
   connection,
   insertUser,
   getUserByEmail,
   authenticate,
   getUserById,
-  insertLike,
   getLikesById,
   insertPost,
   insertComment,
@@ -203,4 +237,8 @@ module.exports = {
   getPosts,
   getPostById,
   getPostsByUserId,
+  toggleLike,
+  isLikedByUser,
+  searchPost,
+  searchName,
 };

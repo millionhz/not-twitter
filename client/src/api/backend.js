@@ -18,11 +18,16 @@ export const login = (email, password) =>
 
 export const getPosts = () => instance.get('/post');
 
-export const getPostById = (id) => instance.get(`/post/${id}`);
+export const getPostById = (postId) => instance.get(`/post/${postId}`);
 
-export const createPost = (data) => instance.post('/post', data);
+export const createPost = (content) => instance.post('/post', { content });
 
-export const addComment = (data) => instance.post('/comment', data);
+export const addComment = (postId, content) =>
+  instance.post(`/post/${postId}/comment`, { content });
+
+export const authenticate = () => instance.get('/authenticate');
+
+export const toggleLike = (postId) => instance.post(`/post/${postId}/like`);
 
 export const authenticate = () => instance.get('/authenticate');
 

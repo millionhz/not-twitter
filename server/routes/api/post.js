@@ -5,6 +5,9 @@ const {
   getPostById,
   getPosts,
   getCommentsById,
+  isLikedByUser,
+  toggleLike,
+  insertComment,
 } = require('../../utilities/database');
 
 const router = express.Router();
@@ -25,14 +28,16 @@ router.get('/', (req, res, next) => {
 });
 
 router.get('/:postId', (req, res, next) => {
+  const { user_id: userId } = req.user;
   const { postId } = req.params;
 
   getPostById(postId)
     .then(async (data) => {
       const comments = await getCommentsById(postId);
+      const isLiked = await isLikedByUser(postId, userId);
 
       if (data) {
-        res.json({ ...data, comments });
+        res.json({ ...data, comments, isLiked });
       } else {
         res.sendStatus(404);
       }
@@ -45,9 +50,38 @@ router.get('/:postId', (req, res, next) => {
 
 router.post('/', (req, res, next) => {
   const { user_id: userId } = req.user;
-  const { postContent } = req.body;
+  const { content } = req.body;
 
-  insertPost(postContent, userId)
+  insertPost(content, userId)
+    .then(() => {
+      res.sendStatus(200);
+    })
+    .catch((err) => {
+      res.status(500).json({ message: err.message });
+      next(err);
+    });
+});
+
+router.post('/:postId/like', (req, res, next) => {
+  const { user_id: userId } = req.user;
+  const { postId } = req.params;
+
+  toggleLike(postId, userId)
+    .then(() => {
+      res.sendStatus(200);
+    })
+    .catch((err) => {
+      res.status(500).json({ message: err.message });
+      next(err);
+    });
+});
+
+router.post('/:postId/comment', (req, res, next) => {
+  const { user_id: userId } = req.user;
+  const { content } = req.body;
+  const { postId } = req.params;
+
+  insertComment(postId, content, userId)
     .then(() => {
       res.sendStatus(200);
     })

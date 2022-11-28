@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import { Link } from 'react-router-dom';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
@@ -18,8 +17,8 @@ import PersonIcon from '@mui/icons-material/Person';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import PostAddIcon from '@mui/icons-material/PostAdd';
 // import InfiniteScroll from 'react-infinite-scroll-component';
-import { getPosts } from '../../api/backend';
-import Post from '../post/Post';
+import { getPosts } from '../api/backend';
+import Post from '../components/Post';
 
 const drawerWidth = 240;
 const sideBarNav = [
@@ -32,6 +31,11 @@ const sideBarNav = [
     route: '/myprofile',
     icon: <PersonIcon sx={{ margin: 1 }} />,
     label: 'My Profile',
+  },
+  {
+    route: '/post/compose',
+    icon: <PostAddIcon sx={{ margin: 1 }} />,
+    label: 'Create Post',
   },
 ];
 
@@ -119,40 +123,12 @@ function HomePage() {
               </ListItem>
             ))}
           </List>
-          <Link
-            to="/createpost"
-            style={{
-              textDecoration: 'none',
-              color: 'inherit',
-              width: 'fullWidth',
-            }}
-          >
-            <IconButton
-              aria-label="create post icon"
-              sx={{
-                display: 'flex',
-                flexDirection: 'row',
-                justifyContent: 'center',
-                alignItems: 'center',
-                marginTop: 95,
-                marginLeft: 2,
-                borderRadius: 0,
-              }}
-            >
-              <PostAddIcon sx={{ fontSize: 40, color: '#000' }} />
-              <Typography sx={{ marginLeft: 1, fontSize: 18 }}>
-                Create Post
-              </Typography>
-            </IconButton>
-          </Link>
         </Box>
       </Drawer>
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
         <Toolbar />
-        {posts.map((post) => (
-          <div>
-            <Post post={post} key={post.post_id} />
-          </div>
+        {posts.map(({ name, post_id: postId, content }) => (
+          <Post name={name} content={content} key={postId} id={postId} />
         ))}
       </Box>
     </Box>
