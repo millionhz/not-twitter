@@ -10,8 +10,8 @@ instance.interceptors.request.use((config) => {
   return config;
 });
 
-export const signup = (email, password) =>
-  instance.post('/signup', { email, password });
+export const signup = (name, email, password) =>
+  instance.post('/signup', { name, email, password });
 
 export const login = (email, password) =>
   instance.post('/login', { email, password });

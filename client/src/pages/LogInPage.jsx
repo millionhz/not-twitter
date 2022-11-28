@@ -1,11 +1,85 @@
 import React, { useContext, useState } from 'react';
-import Link from '@mui/material/Link';
-import Typography from '@mui/material/Typography';
+import {
+  Link,
+  Typography,
+  Container,
+  Box,
+  Avatar,
+  TextField,
+  Button,
+} from '@mui/material';
+import { LockOutlined } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
-import AuthForm from '../components/AuthForm';
 import { setToken } from '../utilities/localStorage';
 import { login } from '../api/backend';
 import AuthContext from '../context/AuthContext';
+
+function AuthForm({ title, onSubmit, error, children }) {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    onSubmit(email, password);
+  };
+
+  return (
+    <Container component="main" maxWidth="xs">
+      <Box
+        sx={{
+          marginTop: '50%',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+        }}
+      >
+        <Avatar sx={{ m: 2, bgcolor: 'primary.main' }}>
+          <LockOutlined />
+        </Avatar>
+        <Typography component="h1" variant="h5">
+          {title}
+        </Typography>
+        <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            id="email"
+            label="Email Address"
+            name="email"
+            autoComplete="email"
+            autoFocus
+            error={error}
+            value={email}
+            onChange={(event) => setEmail(event.target.value)}
+          />
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            name="password"
+            label="Password"
+            type="password"
+            id="password"
+            autoComplete="current-password"
+            error={error}
+            value={password}
+            onChange={(event) => setPassword(event.target.value)}
+          />
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            sx={{ mt: 3, mb: 3 }}
+          >
+            {title}
+          </Button>
+          {children}
+        </Box>
+      </Box>
+    </Container>
+  );
+}
 
 function LoginPage() {
   const [isError, setError] = useState(false);

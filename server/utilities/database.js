@@ -12,19 +12,14 @@ const connection = mysql.createConnection({
 const getCurrentTime = () =>
   new Date().toISOString().slice(0, 19).replace('T', ' ');
 
-const insertUser = async (
-  email,
-  password,
-  name = 'John Doe',
-  dob = '1990-01-01'
-) => {
+const insertUser = async (email, password, name) => {
   const hash = bcrypt.hashSync(password, 10);
   const createdTime = getCurrentTime();
   const sql =
-    'INSERT INTO users (email, hash, name, dob, created_time) VALUES (?, ?, ?, ?, ?)';
+    'INSERT INTO users (email, hash, name, created_time) VALUES (?, ?, ?, ?)';
 
   return new Promise((resolve, reject) => {
-    connection.query(sql, [email, hash, name, dob, createdTime], (err, res) => {
+    connection.query(sql, [email, hash, name, createdTime], (err, res) => {
       if (err) {
         reject(err);
       } else {
