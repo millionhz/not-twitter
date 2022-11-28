@@ -224,6 +224,22 @@ const searchName = (name) => {
   return query(sql, [`%${name}%`]);
 };
 
+const updatePassword = (user_id, new_password) => {
+  const hash = bcrypt.hashSync(new_password, 10);
+  const query = `UPDATE users SET hash=$1 WHERE user_id=$2`;
+  let values = [hash, user_id];
+
+  return new Promise((resolve, reject) => {
+    connection.query(query, values, (error, result) => {
+      if (error) {
+        reject(error);
+      } else {
+        resolve(result);
+      }
+    });
+  });
+};
+
 module.exports = {
   connection,
   insertUser,
@@ -241,4 +257,5 @@ module.exports = {
   isLikedByUser,
   searchPost,
   searchName,
+  updatePassword,
 };
