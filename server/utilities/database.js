@@ -214,6 +214,16 @@ const isLikedByUser = (postId, userId) => {
   return query(sql, [postId, userId]).then((data) => Boolean(data.length));
 };
 
+const searchPost = (word) => {
+  const sql = `SELECT user_id,post_id,content from posts where posts.content like ? and is_reported=0 and is_deleted=0;`;
+  return query(sql, [`%${word}%`]);
+};
+
+const searchName = (name) => {
+  const sql = `SELECT email,name,profile_img_id,bio,dob,created_time from users where name like ? and is_activated=1;`;
+  return query(sql, [`%${name}%`]);
+};
+
 module.exports = {
   connection,
   insertUser,
@@ -229,4 +239,6 @@ module.exports = {
   getPostsByUserId,
   toggleLike,
   isLikedByUser,
+  searchPost,
+  searchName,
 };
