@@ -45,7 +45,7 @@ function PostPage() {
   }
 
   const { content: postContent, name, likes, isLiked, comments } = post;
-
+  console.log(comments);
   return (
     postContent && (
       <div>
@@ -75,9 +75,11 @@ function PostPage() {
           onSubmit={(data) => handleSubmit(data)}
         />
         <div>
-          {comments.map(({ content: commentContent, comment_id: id }) => (
-            <Comment content={commentContent} key={id} />
-          ))}
+          {comments.map(
+            ({ content: commentContent, comment_id: id, name: userName }) => (
+              <Comment content={commentContent} name={userName} key={id} />
+            )
+          )}
         </div>
       </div>
     )
