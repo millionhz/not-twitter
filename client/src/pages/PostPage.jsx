@@ -42,7 +42,6 @@ function PostPage() {
     addComment(postId, content).then(() => {
       navigate(0);
     });
-    console.log(content);
   }
 
   const { content: postContent, name, likes, isLiked, comments } = post;
