@@ -210,12 +210,12 @@ const isLikedByUser = (postId, userId) => {
 };
 
 const searchPost = (word) => {
-  const sql = `SELECT user_id,post_id,content from posts where posts.content like ? and is_reported=0 and is_deleted=0;`;
+  const sql = `SELECT name, post_id, content FROM (SELECT * FROM posts WHERE is_reported = 0 AND is_deleted=0 AND content LIKE ?) as posts INNER JOIN users WHERE users.user_id = posts.user_id;`;
   return query(sql, [`%${word}%`]);
 };
 
 const searchName = (name) => {
-  const sql = `SELECT email,name,profile_img_id,bio,dob,created_time from users where name like ? and is_activated=1;`;
+  const sql = `SELECT user_id ,name, profile_img_id from users where name like ? and is_activated = 1;`;
   return query(sql, [`%${name}%`]);
 };
 
