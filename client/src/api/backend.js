@@ -29,4 +29,8 @@ export const authenticate = () => instance.get('/authenticate');
 
 export const toggleLike = (postId) => instance.post(`/post/${postId}/like`);
 
+export const searchPost = (word) => instance.post(`/post/search`, { word });
+
+export const searchUser = (name) => instance.post(`/user/search`, { name });
+
 export default instance;
