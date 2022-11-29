@@ -1,9 +1,10 @@
 import React from 'react';
-import { CardHeader, CardContent, Avatar, Typography } from '@mui/material';
+import { CardContent, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import Card from './Card';
+import PostHeader from './PostHeader';
 
-function Post({ name, content, id }) {
+function Post({ name, content, id, sx }) {
   const navigate = useNavigate();
 
   function handleClick() {
@@ -11,11 +12,8 @@ function Post({ name, content, id }) {
   }
 
   return (
-    <Card onClick={() => handleClick()}>
-      <CardHeader
-        avatar={<Avatar sx={{ bgcolor: 'primary.main' }}>R</Avatar>}
-        title={name}
-      />
+    <Card onClick={() => handleClick()} sx={sx}>
+      <PostHeader name={name} />
       <CardContent>
         <Typography variant="body.1">{content}</Typography>
       </CardContent>

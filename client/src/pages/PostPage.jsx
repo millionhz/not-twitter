@@ -1,17 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import {
-  CardHeader,
+  Container,
   CardContent,
-  Avatar,
   Typography,
   CardActions,
   IconButton,
+  Box,
 } from '@mui/material';
 import { FavoriteBorder, Favorite } from '@mui/icons-material';
 import Card from '../components/Card';
 import Compose from '../components/Compose';
 import Comment from '../components/Comment';
+import PostHeader from '../components/PostHeader';
 import { addComment, getPostById, toggleLike } from '../api/backend';
 
 function PostPage() {
@@ -48,40 +49,57 @@ function PostPage() {
   console.log(comments);
   return (
     postContent && (
-      <div>
-        <Card>
-          <CardHeader
-            avatar={<Avatar sx={{ bgcolor: 'primary.main' }}>R</Avatar>}
-            title={name}
-          />
-          <CardContent>
-            <Typography variant="body.1">{postContent}</Typography>
-          </CardContent>
-          <CardActions>
-            <IconButton onClick={() => handleLike()}>
-              {isLiked ? (
-                <Favorite color="secondary" />
-              ) : (
-                <FavoriteBorder color="primary" />
-              )}
-            </IconButton>
-            <p>
-              {likes} {likes === 1 ? 'like' : 'likes'}
-            </p>
-          </CardActions>
-        </Card>
-        <Compose
-          placeholder="Enter comment here..."
-          onSubmit={(data) => handleSubmit(data)}
-        />
-        <div>
-          {comments.map(
-            ({ content: commentContent, comment_id: id, name: userName }) => (
-              <Comment content={commentContent} name={userName} key={id} />
-            )
-          )}
-        </div>
-      </div>
+      <Container>
+        <Box
+          sx={{
+            m: 'auto',
+            mt: '5%',
+            width: 600,
+          }}
+        >
+          <Card>
+            <PostHeader name={name} />
+            <CardContent>
+              <Typography variant="body.1">{postContent}</Typography>
+            </CardContent>
+            <CardActions>
+              <IconButton onClick={() => handleLike()}>
+                {isLiked ? (
+                  <Favorite color="secondary" />
+                ) : (
+                  <FavoriteBorder color="primary" />
+                )}
+              </IconButton>
+              <p>
+                {likes} {likes === 1 ? 'like' : 'likes'}
+              </p>
+            </CardActions>
+          </Card>
+          <Box sx={{ py: '5%' }}>
+            <Compose
+              placeholder="Enter comment here..."
+              onSubmit={(data) => handleSubmit(data)}
+            />
+          </Box>
+          <div>
+            {comments.map(
+              (
+                { content: commentContent, comment_id: id, name: userName },
+                idx
+              ) => (
+                <Comment
+                  content={commentContent}
+                  name={userName}
+                  key={id}
+                  sx={{
+                    borderBottom: idx === comments.length - 1 ? undefined : 0,
+                  }}
+                />
+              )
+            )}
+          </div>
+        </Box>
+      </Container>
     )
   );
 }

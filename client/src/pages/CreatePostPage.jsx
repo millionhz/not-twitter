@@ -60,6 +60,7 @@ function CreatePostPage() {
             inputProps={{ maxLength: MAX_LENGTH }}
             placeholder="What's on your mind..."
             onChange={(event) => setContent(event.target.value)}
+            autoComplete="off"
           />
           <Button
             type="submit"

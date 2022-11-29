@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import { TextField, Box } from '@mui/material';
+import { TextField, Box, Button } from '@mui/material';
 
 function Compose({ placeholder, onSubmit }) {
   const [value, setValue] = useState('');
 
   return (
     <Box
-      sx={{ maxWidth: 600 }}
+      sx={{ maxWidth: 600, display: 'flex' }}
       component="form"
       onSubmit={(e) => {
         e.preventDefault();
@@ -19,6 +19,9 @@ function Compose({ placeholder, onSubmit }) {
         placeholder={placeholder}
         onChange={(event) => setValue(event.target.value)}
       />
+      <Button type="submit" variant="contained">
+        Post
+      </Button>
     </Box>
   );
 }
