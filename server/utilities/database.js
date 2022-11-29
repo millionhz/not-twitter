@@ -224,16 +224,30 @@ const searchName = (name) => {
   return query(sql, [`%${name}%`]);
 };
 
-const updatePassword = (user_id, new_password) => {
+const updatePassword = async (email, new_password) => {
+  // checking if the user exists
+  const response = await getUserByEmail(email);
+  // this means that the user does not exist
+  if (response.length === 0) {
+    return null;
+  }
+  // hashing the new password
   const hash = bcrypt.hashSync(new_password, 10);
-  const query = `UPDATE users SET hash=$1 WHERE user_id=$2`;
-  let values = [hash, user_id];
+  // updating the users table by setting the user_password field equal
+  // to the new one
+  const query = `UPDATE users SET user_password=? WHERE user_email=?`;
+  // seeding the new password and the user_id
+  let values = [hash, email];
 
+  // promisifying the query execution to handle errors
   return new Promise((resolve, reject) => {
-    connection.query(query, values, (error, result) => {
+    pool.query(query, values, (error, result) => {
+      // if there was an error encountered during query execution
       if (error) {
+        // reject the promise
         reject(error);
       } else {
+        // resolve it
         resolve(result);
       }
     });
