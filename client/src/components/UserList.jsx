@@ -1,20 +1,14 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import { CardHeader } from '@mui/material';
-import Card from './Card';
-import Avatar from './Avatar';
+import User from './User';
 
-function User({ name, id, sx }) {
-  const navigate = useNavigate();
-  const handleClick = () => {
-    navigate(`/user/${id}`);
-  };
-
+function UserList({ users }) {
   return (
-    <Card sx={sx} onClick={handleClick}>
-      <CardHeader avatar={<Avatar name={name} />} title={name} />
-    </Card>
+    <div>
+      {users.map(({ name, user_id: id }) => (
+        <User name={name} key={id} id={id} />
+      ))}
+    </div>
   );
 }
 
-export default User;
+export default UserList;

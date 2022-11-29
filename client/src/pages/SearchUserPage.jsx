@@ -27,6 +27,7 @@ function SearchUserPage() {
         console.log(message);
       });
   };
+
   return (
     <Container>
       <Box
