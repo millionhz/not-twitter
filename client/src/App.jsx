@@ -10,6 +10,8 @@ import PageNotFound from './pages/PageNotFound';
 import CreatePostPage from './pages/CreatePostPage';
 import PostPage from './pages/PostPage';
 import LoggedOutRoutes from './routes/LoggedOutRoutes';
+import SearchPostPage from './pages/SearchPostPage';
+import SearchUserPage from './pages/SearchUserPage';
 
 function App() {
   return (
@@ -18,7 +20,9 @@ function App() {
         <Route element={<LoggedInRouter />}>
           <Route index element={<HomePage />} />
           <Route path="post/compose" element={<CreatePostPage />} />
+          <Route path="post/search" element={<SearchPostPage />} />
           <Route path="post/:postId" element={<PostPage />} />
+          <Route path="user/search" element={<SearchUserPage />} />
         </Route>
         <Route element={<LoggedOutRoutes />}>
           <Route path="login" element={<LogInPage />} />

@@ -7,12 +7,13 @@ import {
   CardActions,
   IconButton,
   Box,
+  CardHeader,
 } from '@mui/material';
 import { FavoriteBorder, Favorite } from '@mui/icons-material';
 import Card from '../components/Card';
 import Compose from '../components/Compose';
 import Comment from '../components/Comment';
-import PostHeader from '../components/PostHeader';
+import Avatar from '../components/Avatar';
 import { addComment, getPostById, toggleLike } from '../api/backend';
 
 function PostPage() {
@@ -58,7 +59,7 @@ function PostPage() {
           }}
         >
           <Card>
-            <PostHeader name={name} />
+            <CardHeader avatar={<Avatar name={name} />} title={name} />
             <CardContent>
               <Typography variant="body.1">{postContent}</Typography>
             </CardContent>
@@ -78,6 +79,7 @@ function PostPage() {
           <Box sx={{ py: '5%' }}>
             <Compose
               placeholder="Enter comment here..."
+              title="Post"
               onSubmit={(data) => handleSubmit(data)}
             />
           </Box>
