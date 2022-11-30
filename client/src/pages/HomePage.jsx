@@ -16,6 +16,7 @@ import {
   PostAdd,
   Person,
   Notifications,
+  Upload,
 } from '@mui/icons-material';
 
 import { getPosts } from '../api/backend';
@@ -45,6 +46,11 @@ function HomePage() {
       route: '/post/compose',
       icon: <PostAdd sx={{ margin: 1 }} />,
       label: 'Create Post',
+    },
+    {
+      route: '/image/compose',
+      icon: <Upload sx={{ margin: 1 }} />,
+      label: 'Upload Image',
     },
     {
       route: '/post/search',

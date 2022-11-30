@@ -43,6 +43,17 @@ export const searchUser = (name) => instance.post(`/user/search`, { name });
 
 export const followUser = (userId) => instance.post(`/user/follow`, { userId });
 
+export const uploadImage = (imageFile) => {
+  const formData = new FormData();
+  formData.append('image', imageFile);
+
+  return instance.post(`/post/image`, formData, {
+    headers: {
+      'Content-Type': `multipart/form-data;`,
+    },
+  });
+};
+
 export const updatePassword = (password, newPassword) =>
   instance.patch(`/user/password`, { password, newPassword });
 
