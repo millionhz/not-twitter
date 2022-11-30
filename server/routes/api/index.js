@@ -4,8 +4,8 @@ const signupRouter = require('./signup');
 const loginRouter = require('./login');
 const authenticateRouter = require('./authenticate');
 const postRouter = require('./post');
-const searchRouter = require('./search');
-const changePasswordRouter = require('./changePassword.js');
+const changePasswordRouter = require('./changePassword');
+const userRouter = require('./user');
 
 const router = express.Router();
 
@@ -14,8 +14,8 @@ router.use('/login', loginRouter);
 
 router.use(auth.authenticate('jwt', { session: false }));
 router.use('/authenticate', authenticateRouter);
+router.use('/user', userRouter);
 router.use('/post', postRouter);
-router.use('/search', searchRouter);
 router.use('/changePassword', changePasswordRouter);
 
 module.exports = router;

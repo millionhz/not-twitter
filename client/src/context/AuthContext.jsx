@@ -4,24 +4,26 @@ import { authenticate } from '../api/backend';
 const AuthContext = createContext({});
 
 export function AuthProvider({ children }) {
-  const [authenticated, setAuthenticated] = useState(null);
+  const [user, setUser] = useState({
+    isAuthenticated: null,
+  });
 
   useEffect(() => {
     authenticate()
-      .then(() => {
-        setAuthenticated(true);
+      .then((data) => {
+        setUser({ ...data.data, isAuthenticated: true });
       })
       .catch(() => {
-        setAuthenticated(false);
+        setUser((prev) => ({ ...prev, isAuthenticated: false }));
       });
   }, []);
 
   const authProviderValue = useMemo(
     () => ({
-      authenticated,
-      setAuthenticated,
+      user,
+      setUser,
     }),
-    [authenticated, setAuthenticated]
+    [user, setUser]
   );
 
   return (

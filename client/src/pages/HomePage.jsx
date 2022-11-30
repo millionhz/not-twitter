@@ -16,9 +16,10 @@ import ListItemText from '@mui/material/ListItemText';
 import PersonIcon from '@mui/icons-material/Person';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import PostAddIcon from '@mui/icons-material/PostAdd';
+import SearchIcon from '@mui/icons-material/Search';
 // import InfiniteScroll from 'react-infinite-scroll-component';
 import { getPosts } from '../api/backend';
-import Post from '../components/Post';
+import PostList from '../components/PostList';
 
 const drawerWidth = 240;
 const sideBarNav = [
@@ -37,6 +38,16 @@ const sideBarNav = [
     icon: <PostAddIcon sx={{ margin: 1 }} />,
     label: 'Create Post',
   },
+  {
+    route: '/post/search',
+    icon: <SearchIcon sx={{ margin: 1 }} />,
+    label: 'Search Post',
+  },
+  {
+    route: '/user/search',
+    icon: <SearchIcon sx={{ margin: 1 }} />,
+    label: 'Search User',
+  },
 ];
 
 function HomePage() {
@@ -47,7 +58,6 @@ function HomePage() {
     getPosts()
       .then((postList) => {
         // posts successfully fetched
-        console.log(postList.data);
         setPosts(postList.data);
       })
       .catch((error) => {
@@ -127,9 +137,7 @@ function HomePage() {
       </Drawer>
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
         <Toolbar />
-        {posts.map(({ name, post_id: postId, content }) => (
-          <Post name={name} content={content} key={postId} id={postId} />
-        ))}
+        <PostList posts={posts} />
       </Box>
     </Box>
   );

@@ -12,19 +12,14 @@ const connection = mysql.createConnection({
 const getCurrentTime = () =>
   new Date().toISOString().slice(0, 19).replace('T', ' ');
 
-const insertUser = async (
-  email,
-  password,
-  name = 'John Doe',
-  dob = '1990-01-01'
-) => {
+const insertUser = async (email, password, name) => {
   const hash = bcrypt.hashSync(password, 10);
   const createdTime = getCurrentTime();
   const sql =
-    'INSERT INTO users (email, hash, name, dob, created_time) VALUES (?, ?, ?, ?, ?)';
+    'INSERT INTO users (email, hash, name, created_time) VALUES (?, ?, ?, ?)';
 
   return new Promise((resolve, reject) => {
-    connection.query(sql, [email, hash, name, dob, createdTime], (err, res) => {
+    connection.query(sql, [email, hash, name, createdTime], (err, res) => {
       if (err) {
         reject(err);
       } else {
@@ -133,6 +128,33 @@ const insertComment = (postId, content, userId) => {
   });
 };
 
+const insertFollow = (userId, myUserId) => {
+  const createdTime = getCurrentTime();
+  const sql = `INSERT INTO follows (followed_id, follower_id, created_time) VALUES (?, ?, ?);`;
+
+  return query(sql, [userId, myUserId, createdTime]);
+};
+
+const deleteFollow = (userId, myUserId) => {
+  const sql = `DELETE FROM follows WHERE followed_id = ? and follower_id = ?;`;
+
+  return query(sql, [userId, myUserId]);
+};
+
+const toggleFollow = (userId, myUserId) =>
+  new Promise((resolve, reject) => {
+    insertFollow(userId, myUserId)
+      .then(resolve)
+      .catch((err) => {
+        if (err.errno !== 1062) {
+          reject(err);
+          return;
+        }
+
+        deleteFollow(userId, myUserId).then(resolve).catch(reject);
+      });
+  });
+
 const getCommentsById = (postId) => {
   const sql = `SELECT comment_id, content, comments.created_time, name FROM (SELECT * FROM comments WHERE post_id = ? AND is_deleted = 0) as comments INNER JOIN users ON comments.user_id = users.user_id;`;
 
@@ -152,6 +174,7 @@ const getPosts = (params = {}) => {
   SELECT
     users.name,
     posts.post_id,
+    posts.user_id,
     posts.content,
     posts.created_time,
     IFNULL(likes, 0) AS likes
@@ -215,12 +238,12 @@ const isLikedByUser = (postId, userId) => {
 };
 
 const searchPost = (word) => {
-  const sql = `SELECT user_id,post_id,content from posts where posts.content like ? and is_reported=0 and is_deleted=0;`;
+  const sql = `SELECT name, post_id, content FROM (SELECT * FROM posts WHERE is_reported = 0 AND is_deleted=0 AND content LIKE ?) as posts INNER JOIN users WHERE users.user_id = posts.user_id;`;
   return query(sql, [`%${word}%`]);
 };
 
 const searchName = (name) => {
-  const sql = `SELECT email,name,profile_img_id,bio,dob,created_time from users where name like ? and is_activated=1;`;
+  const sql = `SELECT user_id ,name, profile_img_id from users where name like ? and is_activated = 1;`;
   return query(sql, [`%${name}%`]);
 };
 
@@ -252,6 +275,19 @@ const updatePassword = async (email, new_password) => {
       }
     });
   });
+
+const getUserDataById = (userId, myUserId) => {
+  const sql = `SELECT * FROM (SELECT user_id, name, bio FROM users WHERE user_id = ? AND is_activated = 1) as t1 JOIN (SELECT COUNT(followed_id) AS is_following FROM follows WHERE followed_id = ? AND follower_id = ?) AS t2;`;
+
+  return query(sql, [userId, userId, myUserId]).then((data) =>
+    data.length === 0 ? null : data[0]
+  );
+};
+
+const deletePost = (postId, userId) => {
+  const sql = `UPDATE posts SET is_deleted = 1 WHERE post_id = ? AND user_id = ?;`;
+
+  return query(sql, [postId, userId]);
 };
 
 module.exports = {
@@ -272,4 +308,7 @@ module.exports = {
   searchPost,
   searchName,
   updatePassword,
+  getUserDataById,
+  toggleFollow,
+  deletePost,
 };
