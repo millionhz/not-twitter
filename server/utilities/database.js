@@ -219,6 +219,16 @@ const searchName = (name) => {
   return query(sql, [`%${name}%`]);
 };
 
+const updateName = (userId, name) => {
+  const sql = `Update users set name = ? where user_id= ?;`;
+  return query(sql, [`'${name}'`, userId]);
+};
+
+const updateBio = (userId, newBio) => {
+  const sql = `Update users set bio = ? where user_id= ?;`;
+  return query(sql, [`'${newBio}'`, userId]);
+};
+
 module.exports = {
   connection,
   insertUser,
@@ -236,4 +246,6 @@ module.exports = {
   isLikedByUser,
   searchPost,
   searchName,
+  updateName,
+  updateBio,
 };
