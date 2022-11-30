@@ -8,6 +8,7 @@ const {
   isLikedByUser,
   toggleLike,
   searchPost,
+  deletePost,
   insertComment,
 } = require('../../utilities/database');
 
@@ -42,6 +43,19 @@ router.get('/:postId', (req, res, next) => {
       } else {
         res.sendStatus(404);
       }
+    })
+    .catch((err) => {
+      res.status(500).json({ message: err.message });
+      next(err);
+    });
+});
+
+router.get('/user/:userId', (req, res, next) => {
+  const { userId } = req.params;
+
+  getPostsByUserId(userId)
+    .then((data) => {
+      res.json(data);
     })
     .catch((err) => {
       res.status(500).json({ message: err.message });
@@ -96,6 +110,20 @@ router.post('/:postId/comment', (req, res, next) => {
   const { postId } = req.params;
 
   insertComment(postId, content, userId)
+    .then(() => {
+      res.sendStatus(200);
+    })
+    .catch((err) => {
+      res.status(500).json({ message: err.message });
+      next(err);
+    });
+});
+
+router.delete('/:postId', (req, res, next) => {
+  const { user_id: userId } = req.user;
+  const { postId } = req.params;
+
+  deletePost(postId, userId)
     .then(() => {
       res.sendStatus(200);
     })

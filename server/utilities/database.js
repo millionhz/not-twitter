@@ -128,6 +128,33 @@ const insertComment = (postId, content, userId) => {
   });
 };
 
+const insertFollow = (userId, myUserId) => {
+  const createdTime = getCurrentTime();
+  const sql = `INSERT INTO follows (followed_id, follower_id, created_time) VALUES (?, ?, ?);`;
+
+  return query(sql, [userId, myUserId, createdTime]);
+};
+
+const deleteFollow = (userId, myUserId) => {
+  const sql = `DELETE FROM follows WHERE followed_id = ? and follower_id = ?;`;
+
+  return query(sql, [userId, myUserId]);
+};
+
+const toggleFollow = (userId, myUserId) =>
+  new Promise((resolve, reject) => {
+    insertFollow(userId, myUserId)
+      .then(resolve)
+      .catch((err) => {
+        if (err.errno !== 1062) {
+          reject(err);
+          return;
+        }
+
+        deleteFollow(userId, myUserId).then(resolve).catch(reject);
+      });
+  });
+
 const getCommentsById = (postId) => {
   const sql = `SELECT comment_id, content, comments.created_time, name FROM (SELECT * FROM comments WHERE post_id = ? AND is_deleted = 0) as comments INNER JOIN users ON comments.user_id = users.user_id;`;
 
@@ -147,6 +174,7 @@ const getPosts = (params = {}) => {
   SELECT
     users.name,
     posts.post_id,
+    posts.user_id,
     posts.content,
     posts.created_time,
     IFNULL(likes, 0) AS likes
@@ -229,6 +257,20 @@ const updateBio = (userId, newBio) => {
   return query(sql, [`'${newBio}'`, userId]);
 };
 
+const getUserDataById = (userId, myUserId) => {
+  const sql = `SELECT * FROM (SELECT user_id, name, bio FROM users WHERE user_id = ? AND is_activated = 1) as t1 JOIN (SELECT COUNT(followed_id) AS is_following FROM follows WHERE followed_id = ? AND follower_id = ?) AS t2;`;
+
+  return query(sql, [userId, userId, myUserId]).then((data) =>
+    data.length === 0 ? null : data[0]
+  );
+};
+
+const deletePost = (postId, userId) => {
+  const sql = `UPDATE posts SET is_deleted = 1 WHERE post_id = ? AND user_id = ?;`;
+
+  return query(sql, [postId, userId]);
+};
+
 module.exports = {
   connection,
   insertUser,
@@ -248,4 +290,7 @@ module.exports = {
   searchName,
   updateName,
   updateBio,
+  getUserDataById,
+  toggleFollow,
+  deletePost,
 };

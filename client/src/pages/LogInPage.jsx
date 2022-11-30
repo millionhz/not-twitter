@@ -11,7 +11,7 @@ import {
 import { LockOutlined } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import { setToken } from '../utilities/localStorage';
-import { login } from '../api/backend';
+import { login, authenticate } from '../api/backend';
 import AuthContext from '../context/AuthContext';
 
 function AuthForm({ title, onSubmit, error, children }) {
@@ -84,7 +84,7 @@ function AuthForm({ title, onSubmit, error, children }) {
 function LoginPage() {
   const [isError, setError] = useState(false);
   const navigate = useNavigate();
-  const { setAuthenticated } = useContext(AuthContext);
+  const { setUser } = useContext(AuthContext);
 
   const signIn = (email, password) => {
     login(email, password)
@@ -92,8 +92,17 @@ function LoginPage() {
         const {
           data: { token },
         } = res;
+
         setToken(token);
-        setAuthenticated(true);
+
+        authenticate()
+          .then((data) => {
+            setUser({ ...data.data, isAuthenticated: true });
+          })
+          .catch(() => {
+            setError(true);
+          });
+
         navigate('/', { replace: true });
       })
       .catch(() => {
