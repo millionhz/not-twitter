@@ -247,6 +247,16 @@ const searchName = (name) => {
   return query(sql, [`%${name}%`]);
 };
 
+const updateName = (userId, name) => {
+  const sql = `Update users set name = ? where user_id= ?;`;
+  return query(sql, [`'${name}'`, userId]);
+};
+
+const updateBio = (userId, newBio) => {
+  const sql = `Update users set bio = ? where user_id= ?;`;
+  return query(sql, [`'${newBio}'`, userId]);
+};
+
 const getUserDataById = (userId, myUserId) => {
   const sql = `SELECT * FROM (SELECT user_id, name, bio FROM users WHERE user_id = ? AND is_activated = 1) as t1 JOIN (SELECT COUNT(followed_id) AS is_following FROM follows WHERE followed_id = ? AND follower_id = ?) AS t2;`;
 
@@ -278,6 +288,8 @@ module.exports = {
   isLikedByUser,
   searchPost,
   searchName,
+  updateName,
+  updateBio,
   getUserDataById,
   toggleFollow,
   deletePost,
