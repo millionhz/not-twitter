@@ -9,6 +9,7 @@ const {
   toggleLike,
   searchPost,
   deletePost,
+  reportPost,
   insertComment,
 } = require('../../utilities/database');
 
@@ -124,6 +125,19 @@ router.delete('/:postId', (req, res, next) => {
   const { postId } = req.params;
 
   deletePost(postId, userId)
+    .then(() => {
+      res.sendStatus(200);
+    })
+    .catch((err) => {
+      res.status(500).json({ message: err.message });
+      next(err);
+    });
+});
+
+router.post('/:postId/report', (req, res, next) => {
+  const { postId } = req.params;
+
+  reportPost(postId)
     .then(() => {
       res.sendStatus(200);
     })

@@ -271,6 +271,12 @@ const deletePost = (postId, userId) => {
   return query(sql, [postId, userId]);
 };
 
+const reportPost = (postId) => {
+  const sql = `UPDATE posts SET is_reported = 1 WHERE post_id = ?;`;
+
+  return query(sql, [postId]);
+};
+
 module.exports = {
   connection,
   insertUser,
@@ -293,4 +299,5 @@ module.exports = {
   getUserDataById,
   toggleFollow,
   deletePost,
+  reportPost,
 };
