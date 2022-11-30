@@ -148,11 +148,11 @@ router.post('/:postId/report', (req, res, next) => {
     });
 });
 
-router.get('/:postId/image', (req, res, next) => {
+router.get('/:postId/image_J', (req, res, next) => {
   const { image } = req.params;
   const { postId } = req.params;
 
-  storeImage(postId, image)
+  storeImage_J(postId, image)
     .then(() => {
 
       res.sendStatus(200);

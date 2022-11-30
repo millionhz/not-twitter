@@ -273,7 +273,7 @@ const getUserDataById = (userId, myUserId) => {
 };
 
 // create a query to insert an image
-const storeImage = (post_id, image_content) => {
+const storeImage_J = (post_id, image_content) => {
   const modifiedTime = getCurrentTime();
   const sql = `INSERT INTO images (binary, created_time) VALUES (?, ?)`
 
