@@ -17,6 +17,7 @@ import PersonIcon from '@mui/icons-material/Person';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import PostAddIcon from '@mui/icons-material/PostAdd';
 import SearchIcon from '@mui/icons-material/Search';
+import KeyIcon from '@mui/icons-material/Key';
 // import InfiniteScroll from 'react-infinite-scroll-component';
 import { getPosts } from '../api/backend';
 import PostList from '../components/PostList';
@@ -48,6 +49,11 @@ const sideBarNav = [
     icon: <SearchIcon sx={{ margin: 1 }} />,
     label: 'Search User',
   },
+  {
+    route: '/updatepassword',
+    icon: <KeyIcon sx={{ margin: 1 }} />,
+    label: 'Update Password',
+  },
 ];
 
 function HomePage() {
@@ -70,11 +76,6 @@ function HomePage() {
       });
   }, []);
 
-  //   const fetchMorePosts = () => {
-  //     if (dummyPosts.length >= 500) {
-  //       setCheck(false);
-  //     }
-  //   };
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />

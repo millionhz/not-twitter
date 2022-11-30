@@ -41,4 +41,7 @@ export const searchUser = (name) => instance.post(`/user/search`, { name });
 
 export const followUser = (userId) => instance.post(`/user/follow`, { userId });
 
+export const updatePassword = (password, newPassword) =>
+  instance.patch(`/user/password`, { password, newPassword });
+
 export default instance;

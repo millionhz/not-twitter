@@ -12,13 +12,12 @@ import { useNavigate } from 'react-router-dom';
 import { updatePassword } from '../api/backend';
 
 function AuthForm({ title, onSubmit, error, children }) {
-  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [new_password, setNewPassword] = useState(''); // for updating the password
+  const [newPassword, setNewPassword] = useState(''); // for updating the password
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    onSubmit(email, password, new_password);
+    onSubmit(password, newPassword);
   };
 
   return (
@@ -39,24 +38,12 @@ function AuthForm({ title, onSubmit, error, children }) {
         </Typography>
         <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
           <TextField
-            autoFocus
-            margin="normal"
-            required
-            fullWidth
-            name="email"
-            label="Email"
-            type="text"
-            id="emaill"
-            error={error}
-            value={email}
-            onChange={(event) => setEmail(event.target.value)}
-          />
-          <TextField
             margin="normal"
             required
             fullWidth
             id="password"
-            label="Password"
+            label="Old Password"
+            type="password"
             name="password"
             autoComplete="current-password"
             error={error}
@@ -69,11 +56,10 @@ function AuthForm({ title, onSubmit, error, children }) {
             fullWidth
             name="new-password"
             label="New Password"
-            type="new-password"
+            type="password"
             id="new-password"
             autoComplete="new-password"
-            error={error}
-            value={new_password}
+            value={newPassword}
             onChange={(event) => setNewPassword(event.target.value)}
           />
           <Button
@@ -91,31 +77,22 @@ function AuthForm({ title, onSubmit, error, children }) {
   );
 }
 
-function UpdatePassword () {
+function UpdatePassword() {
   const [isError, setError] = useState(false);
   const navigate = useNavigate();
 
-  const update = (email, password, new_password) => {
-    updatePassword(email, password, new_password)
+  const handleSubmit = (password, newPassword) => {
+    updatePassword(password, newPassword)
       .then(() => {
-        navigate('/updatePassword');
+        navigate('/');
       })
-      .catch((err) => {
-        const {
-          response: {
-            data: { message },
-          },
-        } = err;
-        console.log(message);
+      .catch(() => {
         setError(true);
       });
   };
 
   return (
-    <AuthForm onSubmit={update} title="Update Password" error={isError}>
-      <Typography variant="body2" color="text.secondary" align="center">
-      </Typography>
-    </AuthForm>
+    <AuthForm onSubmit={handleSubmit} title="Update Password" error={isError} />
   );
 }
 
