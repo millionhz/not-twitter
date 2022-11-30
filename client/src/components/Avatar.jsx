@@ -1,9 +1,11 @@
 import React from 'react';
 import { Avatar } from '@mui/material';
 
-function Avatar_({ name, image }) {
+function Avatar_({ name, image, sx }) {
   return (
-    <Avatar sx={{ bgcolor: 'primary.main' }}>{name[0].toUpperCase()}</Avatar>
+    <Avatar sx={{ ...sx, bgcolor: 'primary.main' }}>
+      {name ? name[0].toUpperCase() : ''}
+    </Avatar>
   );
 }
 

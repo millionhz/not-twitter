@@ -219,6 +219,14 @@ const searchName = (name) => {
   return query(sql, [`%${name}%`]);
 };
 
+const getUserDataById = (userId, myUserId) => {
+  const sql = `SELECT * FROM (SELECT user_id, name, bio FROM users WHERE user_id = ? AND is_activated = 1) as t1 JOIN (SELECT COUNT(followed_id) AS is_following FROM follows WHERE followed_id = ? AND follower_id = ?) AS t2;`;
+
+  return query(sql, [userId, userId, myUserId]).then((data) =>
+    data.length === 0 ? null : data[0]
+  );
+};
+
 module.exports = {
   connection,
   insertUser,
@@ -236,4 +244,5 @@ module.exports = {
   isLikedByUser,
   searchPost,
   searchName,
+  getUserDataById,
 };

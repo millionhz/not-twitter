@@ -20,6 +20,10 @@ export const getPosts = () => instance.get('/post');
 
 export const getPostById = (postId) => instance.get(`/post/${postId}`);
 
+export const getPostByUserId = (userId) => instance.get(`/post/user/${userId}`);
+
+export const getUserById = (userId) => instance.get(`/user/${userId}`);
+
 export const createPost = (content) => instance.post('/post', { content });
 
 export const addComment = (postId, content) =>

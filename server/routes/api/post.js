@@ -49,6 +49,19 @@ router.get('/:postId', (req, res, next) => {
     });
 });
 
+router.get('/user/:userId', (req, res, next) => {
+  const { userId } = req.params;
+
+  getPostsByUserId(userId)
+    .then((data) => {
+      res.json(data);
+    })
+    .catch((err) => {
+      res.status(500).json({ message: err.message });
+      next(err);
+    });
+});
+
 router.post('/', (req, res, next) => {
   const { user_id: userId } = req.user;
   const { content } = req.body;
