@@ -17,6 +17,7 @@ import NotificationsIcon from '@mui/icons-material/Notifications';
 import PostAddIcon from '@mui/icons-material/PostAdd';
 import SearchIcon from '@mui/icons-material/Search';
 import KeyIcon from '@mui/icons-material/Key';
+import LogoutIcon from '@mui/icons-material/Logout';
 // import InfiniteScroll from 'react-infinite-scroll-component';
 import { getPosts } from '../api/backend';
 import PostList from '../components/PostList';
@@ -54,6 +55,11 @@ function HomePage() {
       route: '/updatepassword',
       icon: <KeyIcon sx={{ margin: 1 }} />,
       label: 'Update Password',
+    },
+    {
+      route: '/logout',
+      icon: <LogoutIcon sx={{ margin: 1 }} />,
+      label: 'Logout',
     },
   ];
 
