@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Box, Button, Container, Typography } from '@mui/material';
 import { useNavigate, useParams } from 'react-router-dom';
-import { getPostByUserId, getUserById } from '../api/backend';
+import { getPostByUserId, getUserById, followUser } from '../api/backend';
 import PostList from '../components/PostList';
 import Avatar from '../components/Avatar';
 
@@ -27,12 +27,17 @@ function UserProfilePage() {
     });
   }, [userId]);
 
+  const handleFollow = () => {
+    followUser(userId);
+    setUser((prev) => ({ ...prev, is_following: !prev.is_following }));
+  };
+
   const { name, is_following: isFollowing } = user;
 
   const followButton = (
     <Button
+      onClick={handleFollow}
       variant="contained"
-      color="primary"
       type="submit"
       sx={{
         mt: 3,
@@ -48,6 +53,7 @@ function UserProfilePage() {
 
   const followingButton = (
     <Button
+      onClick={handleFollow}
       variant="outlined"
       type="submit"
       sx={{
