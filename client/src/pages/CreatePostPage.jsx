@@ -4,7 +4,6 @@ import Container from '@mui/material/Container';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import { useNavigate } from 'react-router-dom';
-import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
 import { createPost } from '../api/backend';
 
 function CreatePostPage() {
@@ -35,20 +34,12 @@ function CreatePostPage() {
     });
   }
 
-  function handleUploadClick(event) {
-    const image = document.getElementById('output-image');
-    const container = document.getElementById('image-container');
-    image.src = URL.createObjectURL(event.target.files[0]);
-    container.style.border = 'solid';
-    container.style.borderWidth = '0.1rem';
-  }
-
   return (
     <Container component="main">
       <Box
         sx={{
           m: 'auto',
-          mt: '15%',
+          mt: '40%',
           width: 600,
         }}
       >
@@ -71,47 +62,6 @@ function CreatePostPage() {
             onChange={(event) => setContent(event.target.value)}
             autoComplete="off"
           />
-          <Box
-            fullwidth
-            sx={{
-              my: 3,
-              fontSize: 18,
-              display: 'flex',
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-            }}
-          >
-            <label htmlFor="contained-button-file">
-              <typography>Show everyone what you're up to...</typography>
-            </label>
-            <Box
-              sx={{
-                display: 'flex',
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                alignItems: 'space-between',
-              }}
-            >
-              <label htmlFor="contained-button-file">
-                <div>
-                  <AddAPhotoIcon sx={{ mx: 1 }} />
-                </div>
-              </label>
-              <input
-                accept="image/*"
-                id="contained-button-file"
-                multiple
-                type="file"
-                // sx={{ display: 'none', visibility: 'hidden' }}
-                onChange={(event) => {
-                  handleUploadClick(event);
-                }}
-              />
-            </Box>
-          </Box>
-          <Box id="image-container" sx={{ my: 5, p: 2 }}>
-            <img id="output-image" width="100%" height="auto" alt="uploaded" />
-          </Box>
           <Button
             type="submit"
             fullWidth

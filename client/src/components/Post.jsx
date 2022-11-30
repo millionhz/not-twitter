@@ -10,9 +10,7 @@ function Post({ name, content, id, sx, image }) {
   function handleClick() {
     navigate(`/post/${id}`);
   }
-  if (image) {
-    console.log(image.split('\\')[1]);
-  }
+
   return (
     <Card onClick={() => handleClick()} sx={sx}>
       <CardHeader avatar={<Avatar name={name} />} title={name} />
