@@ -83,7 +83,6 @@ function PostPage() {
 
   const handleReport = () => {
     reportPost(postId).then(() => {
-      console.log(isReported);
       setReportAlert(true);
       setIsReported(true);
     });
