@@ -7,23 +7,24 @@ import CssBaseline from '@mui/material/CssBaseline';
 import Toolbar from '@mui/material/Toolbar';
 import List from '@mui/material/List';
 import Typography from '@mui/material/Typography';
-import Avatar from '@mui/material/Avatar';
-import IconButton from '@mui/material/IconButton';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
-import PersonIcon from '@mui/icons-material/Person';
-import NotificationsIcon from '@mui/icons-material/Notifications';
-import PostAddIcon from '@mui/icons-material/PostAdd';
-import SearchIcon from '@mui/icons-material/Search';
-import KeyIcon from '@mui/icons-material/Key';
-// import InfiniteScroll from 'react-infinite-scroll-component';
+import {
+  Key,
+  Search,
+  PostAdd,
+  Person,
+  Notifications,
+} from '@mui/icons-material';
+
 import { getPosts } from '../api/backend';
 import PostList from '../components/PostList';
 import AuthContext from '../context/AuthContext';
 
 function HomePage() {
   const [posts, setPosts] = useState([]);
+
   const {
     user: { userId },
   } = useContext(AuthContext);
@@ -32,27 +33,32 @@ function HomePage() {
   const sideBarNav = [
     {
       route: `/user/${userId}`,
-      icon: <PersonIcon sx={{ margin: 1 }} />,
+      icon: <Person sx={{ margin: 1 }} />,
       label: 'My Profile',
     },
     {
+      route: '/notifications',
+      icon: <Notifications sx={{ margin: 1 }} />,
+      label: 'Notifications',
+    },
+    {
       route: '/post/compose',
-      icon: <PostAddIcon sx={{ margin: 1 }} />,
+      icon: <PostAdd sx={{ margin: 1 }} />,
       label: 'Create Post',
     },
     {
       route: '/post/search',
-      icon: <SearchIcon sx={{ margin: 1 }} />,
+      icon: <Search sx={{ margin: 1 }} />,
       label: 'Search Post',
     },
     {
       route: '/user/search',
-      icon: <SearchIcon sx={{ margin: 1 }} />,
+      icon: <Search sx={{ margin: 1 }} />,
       label: 'Search User',
     },
     {
       route: '/updatepassword',
-      icon: <KeyIcon sx={{ margin: 1 }} />,
+      icon: <Key sx={{ margin: 1 }} />,
       label: 'Update Password',
     },
   ];
@@ -84,19 +90,6 @@ function HomePage() {
           <Typography variant="h4" noWrap sx={{ flex: 1 }}>
             Dostiyan
           </Typography>
-          <Link
-            to="/myprofile"
-            style={{
-              textDecoration: 'none',
-              color: 'inherit',
-              width: 'fullWidth',
-            }}
-          >
-            <Avatar sx={{ bgcolor: '#513' }}>N</Avatar>
-          </Link>
-          <IconButton aria-label="notifications icon" component="label">
-            <NotificationsIcon sx={{ color: '#fff' }} />
-          </IconButton>
         </Toolbar>
       </AppBar>
       <Drawer
