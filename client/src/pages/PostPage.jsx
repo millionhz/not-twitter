@@ -9,7 +9,12 @@ import {
   Box,
   CardHeader,
 } from '@mui/material';
-import { FavoriteBorder, Favorite, DeleteOutline } from '@mui/icons-material';
+import {
+  FavoriteBorder,
+  Favorite,
+  DeleteOutline,
+  ReportGmailerrorred,
+} from '@mui/icons-material';
 import Card from '../components/Card';
 import Compose from '../components/Compose';
 import Comment from '../components/Comment';
@@ -18,6 +23,7 @@ import AuthContext from '../context/AuthContext';
 import {
   addComment,
   deletePost,
+  reportPost,
   getPostById,
   toggleLike,
 } from '../api/backend';
@@ -70,6 +76,12 @@ function PostPage() {
     });
   };
 
+  const handleReport = () => {
+    reportPost(postId).then(() => {
+      alert('Post successfully reported');
+    });
+  };
+
   return (
     postContent && (
       <Container>
@@ -84,6 +96,11 @@ function PostPage() {
             <CardHeader
               avatar={<Avatar name={name} />}
               title={name}
+              action={
+                <IconButton aria-label="report-button" onClick={handleReport}>
+                  <ReportGmailerrorred />
+                </IconButton>
+              }
               onClick={() => {
                 navigate(`/user/${userId}`);
               }}

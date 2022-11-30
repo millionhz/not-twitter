@@ -24,6 +24,8 @@ export const getPostByUserId = (userId) => instance.get(`/post/user/${userId}`);
 
 export const deletePost = (postId) => instance.delete(`/post/${postId}`);
 
+export const reportPost = (postId) => instance.post(`/post/${postId}`);
+
 export const getUserById = (userId) => instance.get(`/user/${userId}`);
 
 export const createPost = (content) => instance.post('/post', { content });
