@@ -280,8 +280,10 @@ const getUserDataById = (userId, myUserId) => {
   );
 };
 
-const deletePost = (postId, userId) => {
-  const sql = `UPDATE posts SET is_deleted = 1 WHERE post_id = ? AND user_id = ?;`;
+const deletePost = (postId, userId, isAdmin) => {
+  const sql = `UPDATE posts SET is_deleted = 1 WHERE post_id = ? ${
+    isAdmin ? '' : 'AND user_id = ?'
+  };`;
 
   return query(sql, [postId, userId]);
 };

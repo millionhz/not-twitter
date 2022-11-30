@@ -138,10 +138,10 @@ router.post('/:postId/comment', (req, res, next) => {
 });
 
 router.delete('/:postId', (req, res, next) => {
-  const { user_id: userId } = req.user;
+  const { user_id: userId, is_admin: isAdmin } = req.user;
   const { postId } = req.params;
 
-  deletePost(postId, userId)
+  deletePost(postId, userId, isAdmin)
     .then(() => {
       res.sendStatus(200);
     })
