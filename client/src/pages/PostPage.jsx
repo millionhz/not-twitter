@@ -34,7 +34,6 @@ import {
 function PostPage() {
   const [post, setPost] = useState({});
   const [reportAlert, setReportAlert] = useState(false);
-  const [isReported, setIsReported] = useState(false);
   const { postId } = useParams();
   const {
     user: { userId: myUserId },
@@ -84,7 +83,6 @@ function PostPage() {
   const handleReport = () => {
     reportPost(postId).then(() => {
       setReportAlert(true);
-      setIsReported(true);
     });
   };
 
@@ -112,15 +110,13 @@ function PostPage() {
                   navigate(`/user/${userId}`);
                 }}
               />
-              {!isReported && (
-                <IconButton
-                  aria-label="report-button"
-                  onClick={handleReport}
-                  sx={{ width: 50 }}
-                >
-                  <ReportGmailerrorred />
-                </IconButton>
-              )}
+              <IconButton
+                aria-label="report-button"
+                onClick={handleReport}
+                sx={{ width: 50, height: 50 }}
+              >
+                <ReportGmailerrorred />
+              </IconButton>
             </Box>
             <CardContent>
               <Typography variant="body.1">{postContent}</Typography>
