@@ -57,7 +57,10 @@ function PostPage() {
     isLiked,
     comments,
     user_id: userId,
+    image_path: imagePath,
   } = post;
+
+  console.log(imagePath);
 
   const handleLike = () => {
     toggleLike(postId);
@@ -87,7 +90,7 @@ function PostPage() {
   };
 
   return (
-    postContent && (
+    name && (
       <Container>
         <Box
           sx={{
@@ -119,6 +122,13 @@ function PostPage() {
               </IconButton>
             </Box>
             <CardContent>
+              {imagePath && (
+                <img
+                  src={`\\${imagePath.split(`\\`)[1]}`}
+                  alt="post"
+                  height="300"
+                />
+              )}
               <Typography variant="body.1">{postContent}</Typography>
             </CardContent>
             <CardActions>

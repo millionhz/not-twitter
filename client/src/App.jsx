@@ -15,6 +15,7 @@ import SearchUserPage from './pages/SearchUserPage';
 import UserProfilePage from './pages/UserProfilePage';
 import UpdatePasswordPage from './pages/UpdatePasswordPage';
 import NotificationPage from './pages/NotificationPage';
+import UploadImagePage from './pages/UploadImagePage';
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
         <Route element={<LoggedInRouter />}>
           <Route index element={<HomePage />} />
           <Route path="post/compose" element={<CreatePostPage />} />
+          <Route path="image/compose" element={<UploadImagePage />} />
           <Route path="post/search" element={<SearchPostPage />} />
           <Route path="post/:postId" element={<PostPage />} />
           <Route path="user/search" element={<SearchUserPage />} />

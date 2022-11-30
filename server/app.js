@@ -10,6 +10,7 @@ const app = express();
 app.use(logger('dev'));
 app.use(express.json());
 app.use(auth.initialize());
+app.use(express.static('uploads'));
 
 app.use('/api', apiRouter);
 
