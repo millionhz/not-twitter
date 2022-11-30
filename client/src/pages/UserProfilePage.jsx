@@ -41,7 +41,7 @@ function UserProfilePage() {
   const followButton = (
     <Button
       // eslint-disable-next-line
-      disabled={userId == currentUserId}
+      disabled={userId == currentUserId || !name}
       onClick={handleFollow}
       variant="contained"
       type="submit"
@@ -60,7 +60,7 @@ function UserProfilePage() {
   const followingButton = (
     <Button
       // eslint-disable-next-line
-      disabled={userId == currentUserId}
+      disabled={userId == currentUserId || !name}
       onClick={handleFollow}
       variant="outlined"
       type="submit"

@@ -98,12 +98,11 @@ function LoginPage() {
         authenticate()
           .then((data) => {
             setUser({ ...data.data, isAuthenticated: true });
+            navigate('/', { replace: true });
           })
           .catch(() => {
             setError(true);
           });
-
-        navigate('/', { replace: true });
       })
       .catch(() => {
         setError(true);
