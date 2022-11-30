@@ -1,5 +1,9 @@
 const express = require('express');
-const { searchName, getUserDataById } = require('../../utilities/database');
+const {
+  searchName,
+  getUserDataById,
+  toggleFollow,
+} = require('../../utilities/database');
 
 const router = express.Router();
 
@@ -14,6 +18,25 @@ router.get('/:userId', (req, res, next) => {
       } else {
         res.sendStatus(404);
       }
+    })
+    .catch((err) => {
+      res.status(500).json({ message: err.message });
+      next(err);
+    });
+});
+
+router.post('/follow', (req, res, next) => {
+  const { userId } = req.body;
+  const { user_id: myUserId } = req.user;
+
+  if (userId === myUserId) {
+    res.status(400).json({ message: 'You cannot follow yourself' });
+    return;
+  }
+
+  toggleFollow(userId, myUserId)
+    .then(() => {
+      res.sendStatus(200);
     })
     .catch((err) => {
       res.status(500).json({ message: err.message });

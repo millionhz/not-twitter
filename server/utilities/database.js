@@ -128,6 +128,33 @@ const insertComment = (postId, content, userId) => {
   });
 };
 
+const insertFollow = (userId, myUserId) => {
+  const createdTime = getCurrentTime();
+  const sql = `INSERT INTO follows (followed_id, follower_id, created_time) VALUES (?, ?, ?);`;
+
+  return query(sql, [userId, myUserId, createdTime]);
+};
+
+const deleteFollow = (userId, myUserId) => {
+  const sql = `DELETE FROM follows WHERE followed_id = ? and follower_id = ?;`;
+
+  return query(sql, [userId, myUserId]);
+};
+
+const toggleFollow = (userId, myUserId) =>
+  new Promise((resolve, reject) => {
+    insertFollow(userId, myUserId)
+      .then(resolve)
+      .catch((err) => {
+        if (err.errno !== 1062) {
+          reject(err);
+          return;
+        }
+
+        deleteFollow(userId, myUserId).then(resolve).catch(reject);
+      });
+  });
+
 const getCommentsById = (postId) => {
   const sql = `SELECT comment_id, content, comments.created_time, name FROM (SELECT * FROM comments WHERE post_id = ? AND is_deleted = 0) as comments INNER JOIN users ON comments.user_id = users.user_id;`;
 
@@ -245,4 +272,5 @@ module.exports = {
   searchPost,
   searchName,
   getUserDataById,
+  toggleFollow,
 };
