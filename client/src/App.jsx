@@ -14,6 +14,7 @@ import SearchPostPage from './pages/SearchPostPage';
 import SearchUserPage from './pages/SearchUserPage';
 import UserProfilePage from './pages/UserProfilePage';
 import UpdatePasswordPage from './pages/UpdatePasswordPage';
+import NotificationPage from './pages/NotificationPage';
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
           <Route path="user/search" element={<SearchUserPage />} />
           <Route path="user/:userId" element={<UserProfilePage />} />
           <Route path="updatePassword" element={<UpdatePasswordPage />} />
+          <Route path="notifications" element={<NotificationPage />} />
         </Route>
         <Route element={<LoggedOutRoutes />}>
           <Route path="login" element={<LogInPage />} />
