@@ -29,7 +29,7 @@ router.post('/follow', (req, res, next) => {
   const { userId } = req.body;
   const { user_id: myUserId } = req.user;
 
-  if (userId === myUserId) {
+  if (parseInt(userId, 10) === parseInt(myUserId, 10)) {
     res.status(400).json({ message: 'You cannot follow yourself' });
     return;
   }
