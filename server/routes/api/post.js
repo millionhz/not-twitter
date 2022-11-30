@@ -11,7 +11,7 @@ const {
   deletePost,
   reportPost,
   insertComment,
-  storeImage,
+  storeImage_J,
 } = require('../../utilities/database');
 
 const router = express.Router();

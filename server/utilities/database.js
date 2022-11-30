@@ -323,7 +323,7 @@ module.exports = {
   updateBio,
   getUserDataById,
   toggleFollow,
-  storeImage,
+  storeImage_J,
   deletePost,
   reportPost,
 };
