@@ -247,6 +247,13 @@ const searchName = (name) => {
   return query(sql, [`%${name}%`]);
 };
 
+const updatePassword = async (userId, password) => {
+  const hash = bcrypt.hashSync(password, 10);
+  const sql = `UPDATE users SET hash = ? WHERE user_id = ?`;
+
+  return query(sql, [hash, userId]);
+};
+
 const updateName = (userId, name) => {
   const sql = `Update users set name = ? where user_id= ?;`;
   return query(sql, [`'${name}'`, userId]);
@@ -288,6 +295,7 @@ module.exports = {
   isLikedByUser,
   searchPost,
   searchName,
+  updatePassword,
   updateName,
   updateBio,
   getUserDataById,
