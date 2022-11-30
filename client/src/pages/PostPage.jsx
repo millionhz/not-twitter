@@ -60,8 +60,6 @@ function PostPage() {
     image_path: imagePath,
   } = post;
 
-  console.log(imagePath);
-
   const handleLike = () => {
     toggleLike(postId);
     setPost((prevPost) => ({

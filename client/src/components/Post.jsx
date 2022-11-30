@@ -15,7 +15,9 @@ function Post({ name, content, id, sx, image }) {
     <Card onClick={() => handleClick()} sx={sx}>
       <CardHeader avatar={<Avatar name={name} />} title={name} />
       <CardContent>
-        {image && <img src={image.split(`\\`)[1]} alt="post" height="300" />}
+        {image && (
+          <img src={`\\${image.split(`\\`)[1]}`} alt="post" height="300" />
+        )}
         <Typography variant="body.1">{content}</Typography>
       </CardContent>
     </Card>
