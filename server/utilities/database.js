@@ -255,6 +255,12 @@ const getUserDataById = (userId, myUserId) => {
   );
 };
 
+const deletePost = (postId, userId) => {
+  const sql = `UPDATE posts SET is_deleted = 1 WHERE post_id = ? AND user_id = ?;`;
+
+  return query(sql, [postId, userId]);
+};
+
 module.exports = {
   connection,
   insertUser,
@@ -274,4 +280,5 @@ module.exports = {
   searchName,
   getUserDataById,
   toggleFollow,
+  deletePost,
 };
