@@ -11,6 +11,7 @@ const {
   deletePost,
   reportPost,
   insertComment,
+  storeImage,
 } = require('../../utilities/database');
 
 const router = express.Router();
@@ -142,6 +143,22 @@ router.post('/:postId/report', (req, res, next) => {
       res.sendStatus(200);
     })
     .catch((err) => {
+      res.status(500).json({ message: err.message });
+      next(err);
+    });
+});
+
+router.get('/:postId/image', (req, res, next) => {
+  const { image } = req.params;
+  const { postId } = req.params;
+
+  storeImage(postId, image)
+    .then(() => {
+
+      res.sendStatus(200);
+    })
+    .catch((err) => {
+
       res.status(500).json({ message: err.message });
       next(err);
     });

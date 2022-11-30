@@ -272,6 +272,23 @@ const getUserDataById = (userId, myUserId) => {
   );
 };
 
+// create a query to insert an image
+const storeImage = (post_id, image_content) => {
+  const modifiedTime = getCurrentTime();
+  const sql = `INSERT INTO images (binary, created_time) VALUES (?, ?)`
+
+  return query(sql, [image_content, modifiedTime]).then(()=> {
+    const id_query = `SELECT image_id FROM images where image_id = (SELECT LAST_INSERT_ID());`
+    var id = query(id_query)
+    id = id["image_id"]
+
+    // update image table now
+    const posts_table = `UPDATE posts SET (image_id = ?) WHERE post_id = ?;`
+    return query(posts_table, [id, post_id])
+
+  })
+};
+
 const deletePost = (postId, userId) => {
   const sql = `UPDATE posts SET is_deleted = 1 WHERE post_id = ? AND user_id = ?;`;
 
@@ -306,6 +323,7 @@ module.exports = {
   updateBio,
   getUserDataById,
   toggleFollow,
+  storeImage,
   deletePost,
   reportPost,
 };
