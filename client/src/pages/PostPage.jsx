@@ -34,10 +34,13 @@ import {
 function PostPage() {
   const [post, setPost] = useState({});
   const [reportAlert, setReportAlert] = useState(false);
+
   const { postId } = useParams();
   const {
     user: { userId: myUserId },
   } = useContext(AuthContext);
+
+  const { user } = useContext(AuthContext);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -115,7 +118,7 @@ function PostPage() {
                 onClick={handleReport}
                 sx={{ width: 50, height: 50 }}
               >
-                <ReportGmailerrorred />
+                {!user.isAdmin && <ReportGmailerrorred />}
               </IconButton>
             </Box>
             <CardContent>
@@ -132,11 +135,11 @@ function PostPage() {
               <p>
                 {likes} {likes === 1 ? 'like' : 'likes'}
               </p>
-              {myUserId === userId && (
+              {myUserId === userId || user.isAdmin ? (
                 <IconButton onClick={handleDelete} color="primary">
                   <DeleteOutline />
                 </IconButton>
-              )}
+              ) : null}
             </CardActions>
           </Card>
           <Collapse in={reportAlert}>
@@ -155,7 +158,7 @@ function PostPage() {
               }
               sx={{ mb: 2 }}
             >
-              Post successfully reported!
+              'Post successfully reported!'
             </Alert>
           </Collapse>
 
