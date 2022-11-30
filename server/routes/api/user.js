@@ -1,8 +1,10 @@
 const express = require('express');
+const auth = require('../../utilities/auth');
 const {
   searchName,
   getUserDataById,
   toggleFollow,
+  updatePassword,
 } = require('../../utilities/database');
 
 const router = express.Router();
@@ -56,5 +58,28 @@ router.post('/search', (req, res, next) => {
       next(err);
     });
 });
+
+router.patch(
+  '/password',
+  (req, res, next) => {
+    const { email } = req.user;
+    req.body.email = email;
+    next();
+  },
+  auth.authenticate('local', { session: false }),
+  (req, res, next) => {
+    const { user_id: userId } = req.user;
+    const { newPassword } = req.body;
+
+    updatePassword(userId, newPassword)
+      .then(() => {
+        res.sendStatus(200);
+      })
+      .catch((err) => {
+        res.status(500).json({ message: err.message });
+        next(err);
+      });
+  }
+);
 
 module.exports = router;

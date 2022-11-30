@@ -247,34 +247,12 @@ const searchName = (name) => {
   return query(sql, [`%${name}%`]);
 };
 
-const updatePassword = async (email, new_password) => {
-  // checking if the user exists
-  const response = await getUserByEmail(email);
-  // this means that the user does not exist
-  if (response.length === 0) {
-    return null;
-  }
-  // hashing the new password
-  const hash = bcrypt.hashSync(new_password, 10);
-  // updating the users table by setting the user_password field equal
-  // to the new one
-  const query = `UPDATE users SET user_password=? WHERE user_email=?`;
-  // seeding the new password and the user_id
-  let values = [hash, email];
+const updatePassword = async (userId, password) => {
+  const hash = bcrypt.hashSync(password, 10);
+  const sql = `UPDATE users SET hash = ? WHERE user_id = ?`;
 
-  // promisifying the query execution to handle errors
-  return new Promise((resolve, reject) => {
-    pool.query(query, values, (error, result) => {
-      // if there was an error encountered during query execution
-      if (error) {
-        // reject the promise
-        reject(error);
-      } else {
-        // resolve it
-        resolve(result);
-      }
-    });
-  });
+  return query(sql, [hash, userId]);
+};
 
 const getUserDataById = (userId, myUserId) => {
   const sql = `SELECT * FROM (SELECT user_id, name, bio FROM users WHERE user_id = ? AND is_activated = 1) as t1 JOIN (SELECT COUNT(followed_id) AS is_following FROM follows WHERE followed_id = ? AND follower_id = ?) AS t2;`;
