@@ -46,8 +46,15 @@ function PostPage() {
     });
   }
 
-  const { content: postContent, name, likes, isLiked, comments } = post;
-  console.log(comments);
+  const {
+    content: postContent,
+    name,
+    likes,
+    isLiked,
+    comments,
+    user_id: userId,
+  } = post;
+
   return (
     postContent && (
       <Container>
@@ -59,7 +66,13 @@ function PostPage() {
           }}
         >
           <Card>
-            <CardHeader avatar={<Avatar name={name} />} title={name} />
+            <CardHeader
+              avatar={<Avatar name={name} />}
+              title={name}
+              onClick={() => {
+                navigate(`/user/${userId}`);
+              }}
+            />
             <CardContent>
               <Typography variant="body.1">{postContent}</Typography>
             </CardContent>

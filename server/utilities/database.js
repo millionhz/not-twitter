@@ -174,6 +174,7 @@ const getPosts = (params = {}) => {
   SELECT
     users.name,
     posts.post_id,
+    posts.user_id,
     posts.content,
     posts.created_time,
     IFNULL(likes, 0) AS likes

@@ -3,13 +3,15 @@ import { Navigate, Outlet } from 'react-router-dom';
 import AuthContext from '../context/AuthContext';
 
 function LoggedOutRoutes() {
-  const { authenticated } = useContext(AuthContext);
+  const {
+    user: { isAuthenticated },
+  } = useContext(AuthContext);
 
-  if (authenticated === false) {
+  if (isAuthenticated === false) {
     return <Outlet />;
   }
 
-  if (authenticated) {
+  if (isAuthenticated) {
     return <Navigate to="/" />;
   }
 

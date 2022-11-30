@@ -1,14 +1,18 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Box, Button, Container, Typography } from '@mui/material';
 import { useNavigate, useParams } from 'react-router-dom';
 import { getPostByUserId, getUserById, followUser } from '../api/backend';
 import PostList from '../components/PostList';
 import Avatar from '../components/Avatar';
+import AuthContext from '../context/AuthContext';
 
 function UserProfilePage() {
   const { userId } = useParams();
   const [user, setUser] = useState({});
   const [posts, setPosts] = useState([]);
+  const {
+    user: { userId: currentUserId },
+  } = useContext(AuthContext);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -36,6 +40,8 @@ function UserProfilePage() {
 
   const followButton = (
     <Button
+      // eslint-disable-next-line
+      disabled={userId == currentUserId}
       onClick={handleFollow}
       variant="contained"
       type="submit"
@@ -53,6 +59,8 @@ function UserProfilePage() {
 
   const followingButton = (
     <Button
+      // eslint-disable-next-line
+      disabled={userId == currentUserId}
       onClick={handleFollow}
       variant="outlined"
       type="submit"
