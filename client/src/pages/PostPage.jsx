@@ -8,8 +8,16 @@ import {
   IconButton,
   Box,
   CardHeader,
+  Alert,
+  Collapse,
 } from '@mui/material';
-import { FavoriteBorder, Favorite, DeleteOutline } from '@mui/icons-material';
+import {
+  FavoriteBorder,
+  Favorite,
+  DeleteOutline,
+  ReportGmailerrorred,
+  Close,
+} from '@mui/icons-material';
 import Card from '../components/Card';
 import Compose from '../components/Compose';
 import Comment from '../components/Comment';
@@ -18,12 +26,14 @@ import AuthContext from '../context/AuthContext';
 import {
   addComment,
   deletePost,
+  reportPost,
   getPostById,
   toggleLike,
 } from '../api/backend';
 
 function PostPage() {
   const [post, setPost] = useState({});
+  const [reportAlert, setReportAlert] = useState(false);
   const { postId } = useParams();
   const {
     user: { userId: myUserId },
@@ -70,6 +80,12 @@ function PostPage() {
     });
   };
 
+  const handleReport = () => {
+    reportPost(postId).then(() => {
+      setReportAlert(true);
+    });
+  };
+
   return (
     postContent && (
       <Container>
@@ -81,13 +97,27 @@ function PostPage() {
           }}
         >
           <Card>
-            <CardHeader
-              avatar={<Avatar name={name} />}
-              title={name}
-              onClick={() => {
-                navigate(`/user/${userId}`);
+            <Box
+              sx={{
+                display: 'flex',
               }}
-            />
+            >
+              <CardHeader
+                sx={{ flex: 1 }}
+                avatar={<Avatar name={name} />}
+                title={name}
+                onClick={() => {
+                  navigate(`/user/${userId}`);
+                }}
+              />
+              <IconButton
+                aria-label="report-button"
+                onClick={handleReport}
+                sx={{ width: 50, height: 50 }}
+              >
+                <ReportGmailerrorred />
+              </IconButton>
+            </Box>
             <CardContent>
               <Typography variant="body.1">{postContent}</Typography>
             </CardContent>
@@ -109,6 +139,26 @@ function PostPage() {
               )}
             </CardActions>
           </Card>
+          <Collapse in={reportAlert}>
+            <Alert
+              action={
+                <IconButton
+                  aria-label="close"
+                  color="inherit"
+                  size="small"
+                  onClick={() => {
+                    setReportAlert(false);
+                  }}
+                >
+                  <Close fontSize="inherit" />
+                </IconButton>
+              }
+              sx={{ mb: 2 }}
+            >
+              Post successfully reported!
+            </Alert>
+          </Collapse>
+
           <Box sx={{ py: '5%' }}>
             <Compose
               placeholder="Enter comment here..."
