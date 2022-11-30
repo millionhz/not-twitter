@@ -174,6 +174,7 @@ const getPosts = (params = {}) => {
   SELECT
     users.name,
     posts.post_id,
+    posts.user_id,
     posts.content,
     posts.created_time,
     IFNULL(likes, 0) AS likes
@@ -254,6 +255,12 @@ const getUserDataById = (userId, myUserId) => {
   );
 };
 
+const deletePost = (postId, userId) => {
+  const sql = `UPDATE posts SET is_deleted = 1 WHERE post_id = ? AND user_id = ?;`;
+
+  return query(sql, [postId, userId]);
+};
+
 module.exports = {
   connection,
   insertUser,
@@ -273,4 +280,5 @@ module.exports = {
   searchName,
   getUserDataById,
   toggleFollow,
+  deletePost,
 };

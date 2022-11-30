@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import {
   Container,
@@ -9,16 +9,25 @@ import {
   Box,
   CardHeader,
 } from '@mui/material';
-import { FavoriteBorder, Favorite } from '@mui/icons-material';
+import { FavoriteBorder, Favorite, DeleteOutline } from '@mui/icons-material';
 import Card from '../components/Card';
 import Compose from '../components/Compose';
 import Comment from '../components/Comment';
 import Avatar from '../components/Avatar';
-import { addComment, getPostById, toggleLike } from '../api/backend';
+import AuthContext from '../context/AuthContext';
+import {
+  addComment,
+  deletePost,
+  getPostById,
+  toggleLike,
+} from '../api/backend';
 
 function PostPage() {
   const [post, setPost] = useState({});
   const { postId } = useParams();
+  const {
+    user: { userId: myUserId },
+  } = useContext(AuthContext);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -31,23 +40,36 @@ function PostPage() {
       });
   }, [postId, navigate]);
 
-  function handleLike() {
+  const {
+    content: postContent,
+    name,
+    likes,
+    isLiked,
+    comments,
+    user_id: userId,
+  } = post;
+
+  const handleLike = () => {
     toggleLike(postId);
     setPost((prevPost) => ({
       ...prevPost,
       isLiked: !prevPost.isLiked,
       likes: isLiked ? prevPost.likes - 1 : prevPost.likes + 1,
     }));
-  }
+  };
 
-  function handleSubmit(content) {
+  const handleSubmit = (content) => {
     addComment(postId, content).then(() => {
       navigate(0);
     });
-  }
+  };
 
-  const { content: postContent, name, likes, isLiked, comments } = post;
-  console.log(comments);
+  const handleDelete = () => {
+    deletePost(postId).then(() => {
+      navigate('/');
+    });
+  };
+
   return (
     postContent && (
       <Container>
@@ -59,12 +81,18 @@ function PostPage() {
           }}
         >
           <Card>
-            <CardHeader avatar={<Avatar name={name} />} title={name} />
+            <CardHeader
+              avatar={<Avatar name={name} />}
+              title={name}
+              onClick={() => {
+                navigate(`/user/${userId}`);
+              }}
+            />
             <CardContent>
               <Typography variant="body.1">{postContent}</Typography>
             </CardContent>
             <CardActions>
-              <IconButton onClick={() => handleLike()}>
+              <IconButton onClick={handleLike}>
                 {isLiked ? (
                   <Favorite color="secondary" />
                 ) : (
@@ -74,13 +102,18 @@ function PostPage() {
               <p>
                 {likes} {likes === 1 ? 'like' : 'likes'}
               </p>
+              {myUserId === userId && (
+                <IconButton onClick={handleDelete} color="primary">
+                  <DeleteOutline />
+                </IconButton>
+              )}
             </CardActions>
           </Card>
           <Box sx={{ py: '5%' }}>
             <Compose
               placeholder="Enter comment here..."
               title="Post"
-              onSubmit={(data) => handleSubmit(data)}
+              onSubmit={handleSubmit}
             />
           </Box>
           <div>
