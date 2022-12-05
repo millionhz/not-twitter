@@ -14,6 +14,7 @@ import SearchPostPage from './pages/SearchPostPage';
 import SearchUserPage from './pages/SearchUserPage';
 import UserProfilePage from './pages/UserProfilePage';
 import UpdatePasswordPage from './pages/UpdatePasswordPage';
+import LogoutRoute from './routes/LogoutRoute';
 import NotificationPage from './pages/NotificationPage';
 import UploadImagePage from './pages/UploadImagePage';
 
@@ -30,6 +31,7 @@ function App() {
           <Route path="user/search" element={<SearchUserPage />} />
           <Route path="user/:userId" element={<UserProfilePage />} />
           <Route path="updatePassword" element={<UpdatePasswordPage />} />
+          <Route path="logout" element={<LogoutRoute />} />
           <Route path="notifications" element={<NotificationPage />} />
         </Route>
         <Route element={<LoggedOutRoutes />}>
