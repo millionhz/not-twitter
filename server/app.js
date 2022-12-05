@@ -15,7 +15,7 @@ app.use(express.static('uploads'));
 
 app.use('/api', apiRouter);
 
-if (process.NODE_ENV === 'production') {
+if (process.env.NODE_ENV === 'production') {
   app.use(express.static(path.join(__dirname, '..', 'client', 'build')));
 
   app.use('*', (req, res) => {
