@@ -1,0 +1,20 @@
+{
+  "name": "not-twitter",
+  "version": "1.0.0",
+  "scripts": {
+    "install": "cd client && npm install && cd ../server && npm install",
+    "build": "cd client && npm run build",
+    "start": "cd server && npm start"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/millionhz/not-twitter.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/millionhz/not-twitter/issues"
+  },
+  "homepage": "https://github.com/millionhz/not-twitter#readme"
+}

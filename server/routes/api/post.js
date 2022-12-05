@@ -1,4 +1,6 @@
 const express = require('express');
+const multer = require('multer');
+
 const {
   insertPost,
   getPostsByUserId,
@@ -11,9 +13,11 @@ const {
   deletePost,
   reportPost,
   insertComment,
+  insertImage,
 } = require('../../utilities/database');
 
 const router = express.Router();
+const upload = multer({ dest: './uploads/' });
 
 router.get('/', (req, res, next) => {
   const { userId } = req.body;
@@ -91,6 +95,19 @@ router.post('/search', (req, res, next) => {
     });
 });
 
+router.post('/image', upload.single('image'), (req, res, next) => {
+  const { user_id: userId } = req.user;
+  const { path } = req.file;
+  insertImage(path, userId)
+    .then(() => {
+      res.sendStatus(200);
+    })
+    .catch((err) => {
+      res.status(500).json({ message: err.message });
+      next(err);
+    });
+});
+
 router.post('/:postId/like', (req, res, next) => {
   const { user_id: userId } = req.user;
   const { postId } = req.params;
@@ -121,10 +138,10 @@ router.post('/:postId/comment', (req, res, next) => {
 });
 
 router.delete('/:postId', (req, res, next) => {
-  const { user_id: userId } = req.user;
+  const { user_id: userId, is_admin: isAdmin } = req.user;
   const { postId } = req.params;
 
-  deletePost(postId, userId)
+  deletePost(postId, userId, isAdmin)
     .then(() => {
       res.sendStatus(200);
     })

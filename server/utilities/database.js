@@ -109,6 +109,13 @@ const insertPost = (postContent, userId) => {
   return query(sql, [createdTime, createdTime, postContent, userId]);
 };
 
+const insertImage = (imagePath, userId) => {
+  const createdTime = getCurrentTime();
+  const sql = `INSERT INTO posts (created_time, updated_time, image_path, user_id) VALUES (?, ?, ?, ?)`;
+
+  return query(sql, [createdTime, createdTime, imagePath, userId]);
+};
+
 const insertComment = (postId, content, userId) => {
   const createdTime = getCurrentTime();
   const sql = `INSERT INTO comments (post_id, content, user_id, created_time) VALUES (?, ?, ?, ?)`;
@@ -177,6 +184,7 @@ const getPosts = (params = {}) => {
     posts.user_id,
     posts.content,
     posts.created_time,
+    posts.image_path,
     IFNULL(likes, 0) AS likes
   FROM
     (
@@ -272,8 +280,10 @@ const getUserDataById = (userId, myUserId) => {
   );
 };
 
-const deletePost = (postId, userId) => {
-  const sql = `UPDATE posts SET is_deleted = 1 WHERE post_id = ? AND user_id = ?;`;
+const deletePost = (postId, userId, isAdmin) => {
+  const sql = `UPDATE posts SET is_deleted = 1 WHERE post_id = ? ${
+    isAdmin ? '' : 'AND user_id = ?'
+  };`;
 
   return query(sql, [postId, userId]);
 };
@@ -308,4 +318,5 @@ module.exports = {
   toggleFollow,
   deletePost,
   reportPost,
+  insertImage,
 };
