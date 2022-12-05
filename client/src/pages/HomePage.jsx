@@ -10,6 +10,8 @@ import Typography from '@mui/material/Typography';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
+import LogoutIcon from '@mui/icons-material/Logout';
+// import InfiniteScroll from 'react-infinite-scroll-component';
 import {
   Key,
   Search,
@@ -66,6 +68,11 @@ function HomePage() {
       route: '/updatepassword',
       icon: <Key sx={{ margin: 1 }} />,
       label: 'Update Password',
+    },
+    {
+      route: '/logout',
+      icon: <LogoutIcon sx={{ margin: 1 }} />,
+      label: 'Logout',
     },
   ];
 
