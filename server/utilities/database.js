@@ -309,6 +309,30 @@ const reportPost = (postId) => {
   return query(sql, [postId]);
 };
 
+const deactivateUserAccount = (userId) => {
+  const sql = `UPDATE users SET is_activated = 0 WHERE user_id = ?;`;
+  const values = [userId];
+
+  return query(sql, values);
+};
+
+const activateUserAccount = (userId) => {
+  const sql = `UPDATE users SET is_activated = 1 WHERE user_id = ?;`;
+  const values = [userId];
+
+  return query(sql, values);
+};
+
+const checkIfAccountActivated = (userId) => {
+  const sql = `SELECT * FROM users WHERE user_id = ? AND is_activated=1;`;
+  let values = [userId];
+
+  return query(sql, values).then((data) =>
+    data.length === 0 ? null : data[0]
+  );
+};
+
+
 module.exports = {
   connection,
   insertUser,
@@ -335,4 +359,7 @@ module.exports = {
   reportPost,
   insertPostWithImage,
   getImage,
+  deactivateUserAccount,
+  activateUserAccount,
+  checkIfAccountActivated,
 };
