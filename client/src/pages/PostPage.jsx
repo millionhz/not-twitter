@@ -21,7 +21,6 @@ import {
 import Image from '../components/Image';
 import Card from '../components/Card';
 import Compose from '../components/Compose';
-import Comment from '../components/Comment';
 import Avatar from '../components/Avatar';
 import AuthContext from '../context/AuthContext';
 import {
@@ -31,6 +30,7 @@ import {
   getPostById,
   toggleLike,
 } from '../api/backend';
+import CommentList from '../components/CommentList';
 
 function PostPage() {
   const [post, setPost] = useState({});
@@ -59,7 +59,6 @@ function PostPage() {
     name,
     likes,
     isLiked,
-    comments,
     user_id: userId,
     image_id: imageId,
   } = post;
@@ -172,23 +171,7 @@ function PostPage() {
               onSubmit={handleSubmit}
             />
           </Box>
-          <div>
-            {comments.map(
-              (
-                { content: commentContent, comment_id: id, name: userName },
-                idx
-              ) => (
-                <Comment
-                  content={commentContent}
-                  name={userName}
-                  key={id}
-                  sx={{
-                    borderBottom: idx === comments.length - 1 ? undefined : 0,
-                  }}
-                />
-              )
-            )}
-          </div>
+          <CommentList postId={postId} />
         </Box>
       </Container>
     )

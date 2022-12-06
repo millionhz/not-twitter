@@ -20,6 +20,9 @@ export const getPosts = () => instance.get('/post');
 
 export const getPostById = (postId) => instance.get(`/post/${postId}`);
 
+export const getCommentByPostId = (postId) =>
+  instance.get(`/post/${postId}/comment`);
+
 export const getPostByUserId = (userId) => instance.get(`/post/user/${userId}`);
 
 export const deletePost = (postId) => instance.delete(`/post/${postId}`);
