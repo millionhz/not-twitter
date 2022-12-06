@@ -54,6 +54,8 @@ export const uploadImage = (imageFile) => {
   });
 };
 
+export const getImage = (imageId) => instance.get(`/post/image/${imageId}`);
+
 export const updatePassword = (password, newPassword) =>
   instance.patch(`/user/password`, { password, newPassword });
 
