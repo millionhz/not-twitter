@@ -68,12 +68,21 @@ router.get('/user/:userId', (req, res, next) => {
     });
 });
 
-router.get('/image/:imageId', (req, res) => {
+router.get('/image/:imageId', (req, res, next) => {
   const { imageId } = req.params;
 
-  getImage(imageId).then((data) => {
-    res.json(data);
-  });
+  getImage(imageId)
+    .then((data) => {
+      if (data) {
+        res.json(data.data);
+      } else {
+        res.sendStatus(404);
+      }
+    })
+    .catch((err) => {
+      res.status(500).json({ message: err.message });
+      next(err);
+    });
 });
 
 router.post('/', (req, res, next) => {

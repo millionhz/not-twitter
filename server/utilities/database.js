@@ -126,8 +126,9 @@ const insertPostWithImage = async (imagePath, userId) => {
 
 const getImage = (id) => {
   const sql = `SELECT * FROM images WHERE image_id = ?`;
-
-  return query(sql, [id]);
+  return query(sql, [id]).then((images) =>
+    images.length === 0 ? null : images[0]
+  );
 };
 
 const insertComment = (postId, content, userId) => {
@@ -198,6 +199,7 @@ const getPosts = (params = {}) => {
     posts.user_id,
     posts.content,
     posts.created_time,
+    posts.image_id,
     IFNULL(likes, 0) AS likes
   FROM
     (
