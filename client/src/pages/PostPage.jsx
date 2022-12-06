@@ -18,6 +18,7 @@ import {
   ReportGmailerrorred,
   Close,
 } from '@mui/icons-material';
+import Image from '../components/Image';
 import Card from '../components/Card';
 import Compose from '../components/Compose';
 import Comment from '../components/Comment';
@@ -60,7 +61,7 @@ function PostPage() {
     isLiked,
     comments,
     user_id: userId,
-    image_path: imagePath,
+    image_id: imageId,
   } = post;
 
   const handleLike = () => {
@@ -123,13 +124,7 @@ function PostPage() {
               </IconButton>
             </Box>
             <CardContent>
-              {imagePath && (
-                <img
-                  src={`\\${imagePath.split(`\\`)[1]}`}
-                  alt="post"
-                  height="300"
-                />
-              )}
+              <Image imageId={imageId} />
               <Typography variant="body.1">{postContent}</Typography>
             </CardContent>
             <CardActions>
