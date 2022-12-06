@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/millionhz/not-twitter/issues"
   },
-  "homepage": "https://github.com/millionhz/not-twitter#readme"
+  "homepage": "https://github.com/millionhz/not-twitter#readme",
+  "engines": {
+    "node": "16.x"
+  }
 }
