@@ -1,6 +1,5 @@
 const express = require('express');
 const multer = require('multer');
-
 const {
   insertPost,
   getPostsByUserId,
@@ -13,7 +12,8 @@ const {
   deletePost,
   reportPost,
   insertComment,
-  insertImage,
+  getImage,
+  insertPostWithImage,
 } = require('../../utilities/database');
 
 const router = express.Router();
@@ -68,6 +68,14 @@ router.get('/user/:userId', (req, res, next) => {
     });
 });
 
+router.get('/image/:imageId', (req, res) => {
+  const { imageId } = req.params;
+
+  getImage(imageId).then((data) => {
+    res.json(data);
+  });
+});
+
 router.post('/', (req, res, next) => {
   const { user_id: userId } = req.user;
   const { content } = req.body;
@@ -98,7 +106,8 @@ router.post('/search', (req, res, next) => {
 router.post('/image', upload.single('image'), (req, res, next) => {
   const { user_id: userId } = req.user;
   const { path } = req.file;
-  insertImage(path, userId)
+
+  insertPostWithImage(path, userId)
     .then(() => {
       res.sendStatus(200);
     })

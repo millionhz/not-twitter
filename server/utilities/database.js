@@ -1,5 +1,6 @@
 const mysql = require('mysql2');
 const bcrypt = require('bcrypt');
+const { readImage, deleteImage } = require('./image');
 
 const connection = mysql.createConnection({
   host: process.env.DB_HOST,
@@ -102,18 +103,31 @@ const getLikesById = (postId) => {
   return query(sql, [postId]);
 };
 
-const insertPost = (postContent, userId) => {
+const insertPost = (postContent, userId, imageId) => {
   const createdTime = getCurrentTime();
-  const sql = `INSERT INTO posts (created_time, updated_time, content, user_id) VALUES (?, ?, ?, ?)`;
+  const sql = `INSERT INTO posts (created_time, updated_time, content, user_id, image_id) VALUES (?, ?, ?, ?, ?)`;
 
-  return query(sql, [createdTime, createdTime, postContent, userId]);
+  return query(sql, [createdTime, createdTime, postContent, userId, imageId]);
 };
 
-const insertImage = (imagePath, userId) => {
+const insertImage = (data) => {
   const createdTime = getCurrentTime();
-  const sql = `INSERT INTO posts (created_time, updated_time, image_path, user_id) VALUES (?, ?, ?, ?)`;
+  const sql = `INSERT INTO images (created_time, data) VALUES (?, ?)`;
 
-  return query(sql, [createdTime, createdTime, imagePath, userId]);
+  return query(sql, [createdTime, data]);
+};
+
+const insertPostWithImage = async (imagePath, userId) => {
+  const data = await readImage(imagePath);
+  deleteImage(imagePath);
+  const { insertId } = await insertImage(data);
+  return insertPost('', userId, insertId);
+};
+
+const getImage = (id) => {
+  const sql = `SELECT * FROM images WHERE image_id = ?`;
+
+  return query(sql, [id]);
 };
 
 const insertComment = (postId, content, userId) => {
@@ -184,7 +198,6 @@ const getPosts = (params = {}) => {
     posts.user_id,
     posts.content,
     posts.created_time,
-    posts.image_path,
     IFNULL(likes, 0) AS likes
   FROM
     (
@@ -318,5 +331,6 @@ module.exports = {
   toggleFollow,
   deletePost,
   reportPost,
-  insertImage,
+  insertPostWithImage,
+  getImage,
 };
