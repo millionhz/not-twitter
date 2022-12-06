@@ -40,14 +40,26 @@ router.get('/:postId', (req, res, next) => {
 
   getPostById(postId)
     .then(async (data) => {
-      const comments = await getCommentsById(postId);
       const isLiked = await isLikedByUser(postId, userId);
 
       if (data) {
-        res.json({ ...data, comments, isLiked });
+        res.json({ ...data, isLiked });
       } else {
         res.sendStatus(404);
       }
+    })
+    .catch((err) => {
+      res.status(500).json({ message: err.message });
+      next(err);
+    });
+});
+
+router.get('/:postId/comment', (req, res, next) => {
+  const { postId } = req.params;
+
+  getCommentsById(postId)
+    .then((data) => {
+      res.json(data);
     })
     .catch((err) => {
       res.status(500).json({ message: err.message });
