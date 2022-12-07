@@ -266,7 +266,7 @@ const searchPost = (word) => {
 };
 
 const searchName = (name) => {
-  const sql = `SELECT user_id ,name, profile_img_id from users where name like ? and is_activated = 1;`;
+  const sql = `SELECT user_id ,name, is_activated from users where name like ? and is_activated = 1;`;
   return query(sql, [`%${name}%`]);
 };
 
@@ -309,29 +309,15 @@ const reportPost = (postId) => {
   return query(sql, [postId]);
 };
 
-const deactivateUserAccount = (userId) => {
-  const sql = `UPDATE users SET is_activated = 0 WHERE user_id = ?;`;
-  const values = [userId];
+const setActivateStatus = (userId, status) => {
+  const sql = `UPDATE users SET is_activated = ? WHERE user_id = ?;`;
 
-  return query(sql, values);
+  return query(sql, [status, userId]);
 };
 
-const activateUserAccount = (userId) => {
-  const sql = `UPDATE users SET is_activated = 1 WHERE user_id = ?;`;
-  const values = [userId];
+const deactivateUser = (userId) => setActivateStatus(userId, 0);
 
-  return query(sql, values);
-};
-
-const checkIfAccountActivated = (userId) => {
-  const sql = `SELECT * FROM users WHERE user_id = ? AND is_activated=1;`;
-  let values = [userId];
-
-  return query(sql, values).then((data) =>
-    data.length === 0 ? null : data[0]
-  );
-};
-
+const activateUser = (userId) => setActivateStatus(userId, 1);
 
 module.exports = {
   connection,
@@ -359,7 +345,6 @@ module.exports = {
   reportPost,
   insertPostWithImage,
   getImage,
-  deactivateUserAccount,
-  activateUserAccount,
-  checkIfAccountActivated,
+  deactivateUser,
+  activateUser,
 };

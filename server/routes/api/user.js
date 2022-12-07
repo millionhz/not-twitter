@@ -5,6 +5,8 @@ const {
   getUserDataById,
   toggleFollow,
   updatePassword,
+  activateUser,
+  deactivateUser,
 } = require('../../utilities/database');
 
 const router = express.Router();
@@ -52,6 +54,44 @@ router.post('/search', (req, res, next) => {
   searchName(name)
     .then((data) => {
       res.json(data);
+    })
+    .catch((err) => {
+      res.status(500).json({ message: err.message });
+      next(err);
+    });
+});
+
+router.patch('/:userId/activate', (req, res, next) => {
+  const { user_id: myUserId, is_admin: isAdmin } = req.user;
+  const { userId } = req.params;
+
+  if (!isAdmin) {
+    res.status(401).json({ message: 'You are not authorized to do this' });
+    return;
+  }
+
+  activateUser(userId, myUserId)
+    .then(() => {
+      res.sendStatus(200);
+    })
+    .catch((err) => {
+      res.status(500).json({ message: err.message });
+      next(err);
+    });
+});
+
+router.patch('/:userId/deactivate', (req, res, next) => {
+  const { user_id: myUserId, is_admin: isAdmin } = req.user;
+  const { userId } = req.params;
+
+  if (!isAdmin) {
+    res.status(401).json({ message: 'You are not authorized to do this' });
+    return;
+  }
+
+  deactivateUser(userId, myUserId)
+    .then(() => {
+      res.sendStatus(200);
     })
     .catch((err) => {
       res.status(500).json({ message: err.message });
