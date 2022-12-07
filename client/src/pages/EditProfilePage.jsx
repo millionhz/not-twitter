@@ -79,7 +79,7 @@ function EditProfilePage() {
           }}
         >
           <Typography variant="h5" sx={{ mb: 1 }}>
-            Bio{' '}
+            Bio
           </Typography>
           <TextField
             autoComplete="off"
@@ -90,7 +90,6 @@ function EditProfilePage() {
             fullWidth
             name="bio"
             value={bio}
-            placeholder="Tell your friends more about yourself ..."
             onChange={(e) => {
               setBio(e.target.value);
             }}

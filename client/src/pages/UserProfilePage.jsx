@@ -10,9 +10,11 @@ function UserProfilePage() {
   const { userId } = useParams();
   const [user, setUser] = useState({});
   const [posts, setPosts] = useState([]);
+
   const {
     user: { userId: currentUserId },
   } = useContext(AuthContext);
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -36,7 +38,11 @@ function UserProfilePage() {
     setUser((prev) => ({ ...prev, is_following: !prev.is_following }));
   };
 
-  const { name, is_following: isFollowing } = user;
+  // const handleEditProfile = () => {
+  //   navigate('/user/edit');
+  // };
+
+  const { name, is_following: isFollowing, bio } = user;
 
   const followButton = (
     <Button
@@ -76,6 +82,25 @@ function UserProfilePage() {
     </Button>
   );
 
+  // const editProfileButton = (
+  //   <Button
+  //     onClick={handleEditProfile}
+  //     variant="contained"
+  //     type="submit"
+  //     sx={{
+  //       mt: 3,
+  //       mb: 3,
+  //       mr: 2,
+  //       width: '11rem',
+  //       height: '3rem',
+  //       fontSize: 17,
+  //     }}
+  //   >
+  //     EDIT PROFILE
+  //     <Edit sx={{ ml: 1 }} />
+  //   </Button>
+  // );
+
   return (
     <Box>
       <Box sx={{ display: 'flex' }}>
@@ -85,7 +110,8 @@ function UserProfilePage() {
         >
           <Box
             sx={{
-              m: 'auto',
+              display: 'flex',
+              flexDirection: 'column',
               mx: '15%',
               p: 3,
             }}
@@ -102,7 +128,23 @@ function UserProfilePage() {
                 name={name}
                 sx={{ width: 100, height: 100, fontSize: 30 }}
               />
-              <Typography variant="h5">{name}</Typography>
+              <Box
+                sx={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  px: 3,
+                  textAlign: 'center',
+                }}
+              >
+                <Typography variant="h5" sx={{ pt: 3 }}>
+                  {name}
+                </Typography>
+                <Typography variant="body1" sx={{ pt: 3 }}>
+                  {bio}
+                </Typography>
+              </Box>
               {isFollowing ? followingButton : followButton}
             </Box>
           </Box>

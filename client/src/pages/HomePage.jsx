@@ -19,6 +19,7 @@ import {
   Person,
   Notifications,
   Upload,
+  Edit,
 } from '@mui/icons-material';
 
 import { getPosts } from '../api/backend';
@@ -38,6 +39,11 @@ function HomePage() {
       route: `/user/${userId}`,
       icon: <Person sx={{ margin: 1 }} />,
       label: 'My Profile',
+    },
+    {
+      route: '/user/edit',
+      icon: <Edit sx={{ margin: 1 }} />,
+      label: 'Edit Profile',
     },
     {
       route: '/notifications',

@@ -5,9 +5,24 @@ const {
   getUserDataById,
   toggleFollow,
   updatePassword,
+  updateProfile,
 } = require('../../utilities/database');
 
 const router = express.Router();
+
+router.patch('/', (req, res, next) => {
+  const { userName, userBio } = req.body;
+  const { user_id: userId } = req.user;
+
+  updateProfile(userId, userName, userBio)
+    .then(() => {
+      res.sendStatus(200);
+    })
+    .catch((err) => {
+      res.status(500).json({ message: err.message });
+      next(err);
+    });
+});
 
 router.get('/:userId', (req, res, next) => {
   const { userId } = req.params;

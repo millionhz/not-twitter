@@ -300,14 +300,9 @@ const updatePassword = async (userId, password) => {
   return query(sql, [hash, userId]);
 };
 
-const updateName = (userId, name) => {
-  const sql = `Update users set name = ? where user_id= ?;`;
-  return query(sql, [`'${name}'`, userId]);
-};
-
-const updateBio = (userId, newBio) => {
-  const sql = `Update users set bio = ? where user_id= ?;`;
-  return query(sql, [`'${newBio}'`, userId]);
+const updateProfile = (userId, userName, userBio) => {
+  const sql = `UPDATE users SET name = ?, bio = ? WHERE user_id = ?;`;
+  return query(sql, [`${userName}`, `${userBio}`, userId]);
 };
 
 const getUserDataById = (userId, myUserId) => {
@@ -350,8 +345,7 @@ module.exports = {
   searchPost,
   searchName,
   updatePassword,
-  updateName,
-  updateBio,
+  updateProfile,
   getUserDataById,
   toggleFollow,
   deletePost,
