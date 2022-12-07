@@ -289,7 +289,7 @@ const searchPost = (word) => {
 };
 
 const searchName = (name) => {
-  const sql = `SELECT user_id ,name, profile_img_id from users where name like ? and is_activated = 1;`;
+  const sql = `SELECT user_id ,name, is_activated from users where name like ? and is_activated = 1;`;
   return query(sql, [`%${name}%`]);
 };
 
@@ -327,6 +327,16 @@ const reportPost = (postId) => {
   return query(sql, [postId]);
 };
 
+const setActivateStatus = (userId, status) => {
+  const sql = `UPDATE users SET is_activated = ? WHERE user_id = ?;`;
+
+  return query(sql, [status, userId]);
+};
+
+const deactivateUser = (userId) => setActivateStatus(userId, 0);
+
+const activateUser = (userId) => setActivateStatus(userId, 1);
+
 module.exports = {
   connection,
   insertUser,
@@ -352,4 +362,6 @@ module.exports = {
   reportPost,
   insertPostWithImage,
   getImage,
+  deactivateUser,
+  activateUser,
 };
