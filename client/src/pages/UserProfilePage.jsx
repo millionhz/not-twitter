@@ -38,10 +38,6 @@ function UserProfilePage() {
     setUser((prev) => ({ ...prev, is_following: !prev.is_following }));
   };
 
-  // const handleEditProfile = () => {
-  //   navigate('/user/edit');
-  // };
-
   const { name, is_following: isFollowing, bio } = user;
 
   const followButton = (
@@ -81,25 +77,6 @@ function UserProfilePage() {
       FOLLOWING
     </Button>
   );
-
-  // const editProfileButton = (
-  //   <Button
-  //     onClick={handleEditProfile}
-  //     variant="contained"
-  //     type="submit"
-  //     sx={{
-  //       mt: 3,
-  //       mb: 3,
-  //       mr: 2,
-  //       width: '11rem',
-  //       height: '3rem',
-  //       fontSize: 17,
-  //     }}
-  //   >
-  //     EDIT PROFILE
-  //     <Edit sx={{ ml: 1 }} />
-  //   </Button>
-  // );
 
   return (
     <Box>
