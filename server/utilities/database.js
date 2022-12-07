@@ -199,6 +199,32 @@ const getPosts = (params = {}) => {
     posts.user_id,
     posts.content,
     posts.created_time,
+    posts.image_id
+  FROM
+    (
+      SELECT
+        *
+      FROM
+        posts
+      WHERE
+        is_deleted = 0 ${params.userId ? 'AND user_id = ?' : ''}
+    ) as posts
+    INNER JOIN users ON posts.user_id = users.user_id
+  ORDER BY
+    created_time DESC;
+  `;
+
+  return query(sql, [params.userId].filter(Boolean));
+};
+
+const getPostById = (postId) => {
+  const sql = `
+  SELECT
+    users.name,
+    posts.post_id,
+    posts.user_id,
+    posts.content,
+    posts.created_time,
     posts.image_id,
     IFNULL(likes, 0) AS likes
   FROM
@@ -208,9 +234,7 @@ const getPosts = (params = {}) => {
       FROM
         posts
       WHERE
-        is_deleted = 0 ${params.postId ? 'AND post_id = ?' : ''} ${
-    params.userId ? 'AND user_id = ?' : ''
-  }
+        is_deleted = 0 AND post_id = ?
     ) as posts
     INNER JOIN users ON posts.user_id = users.user_id
     LEFT JOIN (
@@ -226,11 +250,10 @@ const getPosts = (params = {}) => {
     created_time DESC;
   `;
 
-  return query(sql, [params.postId, params.userId].filter(Boolean));
+  return query(sql, [postId]).then((posts) =>
+    posts.length === 0 ? null : posts[0]
+  );
 };
-
-const getPostById = (postId) =>
-  getPosts({ postId }).then((posts) => (posts.length === 0 ? null : posts[0]));
 
 const getPostsByUserId = (userId) => getPosts({ userId });
 
@@ -277,14 +300,9 @@ const updatePassword = async (userId, password) => {
   return query(sql, [hash, userId]);
 };
 
-const updateName = (userId, name) => {
-  const sql = `Update users set name = ? where user_id= ?;`;
-  return query(sql, [`'${name}'`, userId]);
-};
-
-const updateBio = (userId, newBio) => {
-  const sql = `Update users set bio = ? where user_id= ?;`;
-  return query(sql, [`'${newBio}'`, userId]);
+const updateProfile = (userId, userName, userBio) => {
+  const sql = `UPDATE users SET name = ?, bio = ? WHERE user_id = ?;`;
+  return query(sql, [`${userName}`, `${userBio}`, userId]);
 };
 
 const getUserDataById = (userId, myUserId) => {
@@ -337,8 +355,7 @@ module.exports = {
   searchPost,
   searchName,
   updatePassword,
-  updateName,
-  updateBio,
+  updateProfile,
   getUserDataById,
   toggleFollow,
   deletePost,

@@ -8,11 +8,21 @@ import { uploadImage } from '../api/backend';
 
 function UploadImagePage() {
   const [image, setImage] = useState(null);
+  const [imageUrl, setImageUrl] = useState(null);
   const navigate = useNavigate();
+
   const handleSubmit = () => {
     uploadImage(image).then(() => {
       navigate('/');
     });
+  };
+
+  const handleChange = (e) => {
+    e.preventDefault();
+    const imageData = e.target.files[0];
+    setImage(imageData);
+
+    setImageUrl(URL.createObjectURL(imageData));
   };
 
   return (
@@ -31,6 +41,7 @@ function UploadImagePage() {
             e.preventDefault();
             handleSubmit();
           }}
+          onChange={handleChange}
         >
           <Box
             sx={{
@@ -58,9 +69,7 @@ function UploadImagePage() {
                 </div>
               </label>
               <input
-                onChange={(e) => {
-                  setImage(e.target.files[0]);
-                }}
+                onChange={handleChange}
                 accept="image/*"
                 id="contained-button-file"
                 type="file"
@@ -69,7 +78,15 @@ function UploadImagePage() {
             </Box>
           </Box>
           <Box id="image-container" sx={{ my: 5, p: 2 }}>
-            <img id="output-image" width="100%" height="auto" alt="uploaded" />
+            {imageUrl && (
+              <img
+                src={imageUrl}
+                id="output-image"
+                width="100%"
+                height="auto"
+                alt="uploaded"
+              />
+            )}
           </Box>
           <Button
             type="submit"
