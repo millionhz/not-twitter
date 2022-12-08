@@ -44,6 +44,8 @@ export const searchPost = (word) => instance.post(`/post/search`, { word });
 
 export const searchUser = (name) => instance.post(`/user/search`, { name });
 
+export const getAllUsers = () => instance.get(`/user`);
+
 export const followUser = (userId) => instance.post(`/user/follow`, { userId });
 
 export const uploadImage = (imageFile) => {
@@ -56,6 +58,12 @@ export const uploadImage = (imageFile) => {
     },
   });
 };
+
+export const activateUser = (userId) =>
+  instance.patch(`/user/${userId}/activate`);
+
+export const deactivateUser = (userId) =>
+  instance.patch(`/user/${userId}/deactivate`);
 
 export const getImage = (imageId) => instance.get(`/post/image/${imageId}`);
 

@@ -6,7 +6,7 @@ function Compose({ title, placeholder, onSubmit }) {
 
   return (
     <Box
-      sx={{ maxWidth: 600, display: 'flex' }}
+      sx={{ maxWidth: 700, display: 'flex' }}
       component="form"
       onSubmit={(e) => {
         e.preventDefault();
