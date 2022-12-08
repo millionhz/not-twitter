@@ -8,9 +8,9 @@ router.get('/', (req, res) => {
 });
 
 router.post('/', (req, res, next) => {
-  const { email, password, name, dob } = req.body;
+  const { email, password, name } = req.body;
 
-  insertUser(email, password, name, dob)
+  insertUser(email, password, name)
     .then(() => {
       res.sendStatus(200);
     })

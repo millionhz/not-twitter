@@ -4,8 +4,9 @@ const signupRouter = require('./signup');
 const loginRouter = require('./login');
 const authenticateRouter = require('./authenticate');
 const postRouter = require('./post');
-const searchRouter = require('./search');
-const notificationsRouter = require('./notifications')
+const notificationsRouter = require('./notifications');
+const userRouter = require('./user');
+const personalizeRouter = require('./personalize');
 
 const router = express.Router();
 
@@ -14,8 +15,9 @@ router.use('/login', loginRouter);
 
 router.use(auth.authenticate('jwt', { session: false }));
 router.use('/authenticate', authenticateRouter);
+router.use('/user', userRouter);
 router.use('/post', postRouter);
-router.use('/search', searchRouter);
 router.use('/notifications', notificationsRouter);
+router.use('/personalize', personalizeRouter);
 
 module.exports = router;

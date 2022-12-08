@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
@@ -7,47 +7,85 @@ import CssBaseline from '@mui/material/CssBaseline';
 import Toolbar from '@mui/material/Toolbar';
 import List from '@mui/material/List';
 import Typography from '@mui/material/Typography';
-import Avatar from '@mui/material/Avatar';
-import HomeIcon from '@mui/icons-material/Home';
-import IconButton from '@mui/material/IconButton';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
-import PersonIcon from '@mui/icons-material/Person';
-import NotificationsIcon from '@mui/icons-material/Notifications';
-import PostAddIcon from '@mui/icons-material/PostAdd';
+import LogoutIcon from '@mui/icons-material/Logout';
 // import InfiniteScroll from 'react-infinite-scroll-component';
-import { getPosts } from '../api/backend';
-import Post from '../components/Post';
+import {
+  Key,
+  Search,
+  PostAdd,
+  Person,
+  Notifications,
+  Upload,
+  Edit,
+} from '@mui/icons-material';
 
-const drawerWidth = 240;
-const sideBarNav = [
-  {
-    route: '/home',
-    icon: <HomeIcon sx={{ margin: 1 }} />,
-    label: 'Home',
-  },
-  {
-    route: '/myprofile',
-    icon: <PersonIcon sx={{ margin: 1 }} />,
-    label: 'My Profile',
-  },
-  {
-    route: '/post/compose',
-    icon: <PostAddIcon sx={{ margin: 1 }} />,
-    label: 'Create Post',
-  },
-];
+import { getPosts } from '../api/backend';
+import PostList from '../components/PostList';
+import AuthContext from '../context/AuthContext';
 
 function HomePage() {
   const [posts, setPosts] = useState([]);
-  // const [checkMorePosts, setCheck] = useState(true);
+
+  const {
+    user: { userId },
+  } = useContext(AuthContext);
+
+  const drawerWidth = 240;
+  const sideBarNav = [
+    {
+      route: `/user/${userId}`,
+      icon: <Person sx={{ margin: 1 }} />,
+      label: 'My Profile',
+    },
+    {
+      route: '/user/edit',
+      icon: <Edit sx={{ margin: 1 }} />,
+      label: 'Edit Profile',
+    },
+    {
+      route: '/notifications',
+      icon: <Notifications sx={{ margin: 1 }} />,
+      label: 'Notifications',
+    },
+    {
+      route: '/post/compose',
+      icon: <PostAdd sx={{ margin: 1 }} />,
+      label: 'Create Post',
+    },
+    {
+      route: '/image/compose',
+      icon: <Upload sx={{ margin: 1 }} />,
+      label: 'Upload Image',
+    },
+    {
+      route: '/post/search',
+      icon: <Search sx={{ margin: 1 }} />,
+      label: 'Search Post',
+    },
+    {
+      route: '/user/search',
+      icon: <Search sx={{ margin: 1 }} />,
+      label: 'Search User',
+    },
+    {
+      route: '/updatepassword',
+      icon: <Key sx={{ margin: 1 }} />,
+      label: 'Update Password',
+    },
+    {
+      route: '/logout',
+      icon: <LogoutIcon sx={{ margin: 1 }} />,
+      label: 'Logout',
+    },
+  ];
 
   useEffect(() => {
     getPosts()
       .then((postList) => {
         // posts successfully fetched
-        console.log(postList.data);
         setPosts(postList.data);
       })
       .catch((error) => {
@@ -60,11 +98,6 @@ function HomePage() {
       });
   }, []);
 
-  //   const fetchMorePosts = () => {
-  //     if (dummyPosts.length >= 500) {
-  //       setCheck(false);
-  //     }
-  //   };
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
@@ -76,19 +109,6 @@ function HomePage() {
           <Typography variant="h4" noWrap sx={{ flex: 1 }}>
             Dostiyan
           </Typography>
-          <Link
-            to="/myprofile"
-            style={{
-              textDecoration: 'none',
-              color: 'inherit',
-              width: 'fullWidth',
-            }}
-          >
-            <Avatar sx={{ bgcolor: '#513' }}>N</Avatar>
-          </Link>
-          <IconButton aria-label="notifications icon" component="label">
-            <NotificationsIcon sx={{ color: '#fff' }} />
-          </IconButton>
         </Toolbar>
       </AppBar>
       <Drawer
@@ -127,9 +147,7 @@ function HomePage() {
       </Drawer>
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
         <Toolbar />
-        {posts.map(({ name, post_id: postId, content }) => (
-          <Post name={name} content={content} key={postId} id={postId} />
-        ))}
+        <PostList posts={posts} />
       </Box>
     </Box>
   );
