@@ -292,6 +292,105 @@ const searchName = (name) => {
   const sql = `SELECT user_id ,name, is_activated from users where name like ? and is_activated = 1;`;
   return query(sql, [`%${name}%`]);
 };
+const insertNotification = (notificationId, isRead, content, url, userId) => {
+  const createdTime = getCurrentTime();
+  const sql = `INSERT INTO notifications (notification_id, is_read, created_time, content, url, user_id) VALUES (?, ?, ?, ?, ?, ?)`;
+  const values = [notificationId, isRead, createdTime, content, url, userId];
+
+  return new Promise((resolve, reject) => {
+    connection.query(sql, values, (error, result) => {
+      if (error) {
+        reject(error);
+      } else {
+        resolve(result);
+      }
+    });
+  });
+};
+
+const getAllNotifications = (userId) => {
+  const sql = `SELECT * FROM notifications WHERE user_id=?`;
+  const values = [userId];
+
+  return new Promise((resolve, reject) => {
+    connection.query(sql, values, (error, result) => {
+      if (error) {
+        reject(error);
+      } else {
+        resolve(result);
+      }
+    });
+  });
+};
+
+const getNotificationById = (notificationId) => {
+  const sql = `SELECT * FROM notifications WHERE notification_id=?`;
+  const values = [notificationId];
+
+  return new Promise((resolve, reject) => {
+    connection.query(sql, values, (error, result) => {
+      if (error) {
+        reject(error);
+      } else {
+        if (result.length === 0) {
+          resolve(null);
+        }
+        resolve(result[0]);
+      }
+    });
+  });
+};
+
+const deleteNotification = (notificationId, userId) => {
+  const notification = getNotificationById(notificationId);
+  // if the notification does not exist, return null
+  if (!notification) {
+    return null;
+  }
+
+  const sql = `DELETE FROM notifications WHERE notification_id=$1 AND user_id=$2`;
+  const values = [notificationId, userId];
+
+  return new Promise((resolve, reject) => {
+    connection.query(sql, values, (error, result) => {
+      if (error) {
+        reject(error);
+      } else {
+        resolve(result);
+      }
+    });
+  });
+};
+
+const getNumberOfNotifications = (userId) => {
+  const sql = `SELECT COUNT(*) FROM notifications WHERE user_id=?`;
+  const values = [userId];
+
+  return new Promise((resolve, reject) => {
+    connection.query(sql, values, (error, result) => {
+      if (error) {
+        reject(error);
+      } else {
+        if (result.length === 0) {
+          resolve(null);
+        }
+        resolve(result[0]);
+      }
+    });
+  });
+};
+
+const deleteAllNotifications = (userId) => {
+  const numNotifications = getNumberOfNotifications(userId);
+  // this means there were no notifications for this user to delete
+  if (!numNotifications) {
+    return null;
+  }
+
+  const sql = `DELETE FROM notifications WHERE user_id=?`;
+
+  return query(sql, [userId]);
+};
 
 const updatePassword = async (userId, password) => {
   const hash = bcrypt.hashSync(password, 10);
@@ -354,6 +453,12 @@ module.exports = {
   isLikedByUser,
   searchPost,
   searchName,
+  insertNotification,
+  getAllNotifications,
+  getNotificationById,
+  deleteNotification,
+  getNumberOfNotifications,
+  deleteAllNotifications,
   updatePassword,
   updateProfile,
   getUserDataById,
