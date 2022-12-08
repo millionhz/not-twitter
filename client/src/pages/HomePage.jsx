@@ -1,17 +1,17 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Link } from 'react-router-dom';
-import Box from '@mui/material/Box';
-import Drawer from '@mui/material/Drawer';
-import AppBar from '@mui/material/AppBar';
-import CssBaseline from '@mui/material/CssBaseline';
-import Toolbar from '@mui/material/Toolbar';
-import List from '@mui/material/List';
-import Typography from '@mui/material/Typography';
-import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemText from '@mui/material/ListItemText';
-import LogoutIcon from '@mui/icons-material/Logout';
-// import InfiniteScroll from 'react-infinite-scroll-component';
+import {
+  Box,
+  Drawer,
+  AppBar,
+  CssBaseline,
+  Toolbar,
+  List,
+  Typography,
+  ListItem,
+  ListItemButton,
+  ListItemText,
+} from '@mui/material';
 import {
   Key,
   Search,
@@ -20,17 +20,20 @@ import {
   Notifications,
   Upload,
   Edit,
+  ManageAccounts,
+  Logout,
 } from '@mui/icons-material';
 
 import { getPosts } from '../api/backend';
 import PostList from '../components/PostList';
 import AuthContext from '../context/AuthContext';
+// import InfiniteScroll from 'react-infinite-scroll-component';
 
 function HomePage() {
   const [posts, setPosts] = useState([]);
 
   const {
-    user: { userId },
+    user: { userId, isAdmin },
   } = useContext(AuthContext);
 
   const drawerWidth = 240;
@@ -71,13 +74,18 @@ function HomePage() {
       label: 'Search User',
     },
     {
+      route: '/user/manage',
+      icon: <ManageAccounts sx={{ margin: 1 }} />,
+      label: 'Manage Users',
+    },
+    {
       route: '/updatepassword',
       icon: <Key sx={{ margin: 1 }} />,
       label: 'Update Password',
     },
     {
       route: '/logout',
-      icon: <LogoutIcon sx={{ margin: 1 }} />,
+      icon: <Logout sx={{ margin: 1 }} />,
       label: 'Logout',
     },
   ];
@@ -125,23 +133,25 @@ function HomePage() {
         <Toolbar />
         <Box sx={{ overflow: 'auto' }}>
           <List>
-            {sideBarNav.map(({ route, icon, label }) => (
-              <ListItem key={label} disablePadding>
-                <Link
-                  to={route}
-                  style={{
-                    textDecoration: 'none',
-                    color: 'inherit',
-                    width: 'fullWidth',
-                  }}
-                >
-                  <ListItemButton>
-                    {icon}
-                    <ListItemText primary={label} />
-                  </ListItemButton>
-                </Link>
-              </ListItem>
-            ))}
+            {sideBarNav.map(({ route, icon, label }) =>
+              !isAdmin && label === 'Manage Users' ? null : (
+                <ListItem key={label} disablePadding>
+                  <Link
+                    to={route}
+                    style={{
+                      textDecoration: 'none',
+                      color: 'inherit',
+                      width: 'fullWidth',
+                    }}
+                  >
+                    <ListItemButton>
+                      {icon}
+                      <ListItemText primary={label} />
+                    </ListItemButton>
+                  </Link>
+                </ListItem>
+              )
+            )}
           </List>
         </Box>
       </Drawer>
@@ -152,7 +162,5 @@ function HomePage() {
     </Box>
   );
 }
-
-//  <input hidden accept="image/*" type="file" />;
 
 export default HomePage;
