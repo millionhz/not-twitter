@@ -293,6 +293,11 @@ const searchName = (name) => {
   return query(sql, [`%${name}%`]);
 };
 
+const getAllUsers = () => {
+  const sql = `SELECT user_id, name, is_activated FROM users`;
+  return query(sql, []);
+};
+
 const updatePassword = async (userId, password) => {
   const hash = bcrypt.hashSync(password, 10);
   const sql = `UPDATE users SET hash = ? WHERE user_id = ?`;
@@ -364,4 +369,5 @@ module.exports = {
   getImage,
   deactivateUser,
   activateUser,
+  getAllUsers,
 };
