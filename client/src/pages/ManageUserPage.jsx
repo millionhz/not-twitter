@@ -8,7 +8,8 @@ function ManageUserPage() {
 
   useEffect(() => {
     getAllUsers().then(({ data }) => {
-      setUsers(data);
+      const filteredData = data.filter(({ is_admin: isAdmin }) => !isAdmin);
+      setUsers(filteredData);
     });
   }, []);
 

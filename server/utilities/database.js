@@ -294,7 +294,7 @@ const searchName = (name) => {
 };
 
 const getAllUsers = () => {
-  const sql = `SELECT user_id, name, is_activated FROM users`;
+  const sql = `SELECT user_id, name, is_activated, is_admin FROM users`;
   return query(sql, []);
 };
 
