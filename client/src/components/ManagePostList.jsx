@@ -5,13 +5,19 @@ function ManagePostList({ posts }) {
   return (
     <div>
       {posts.map(
-        ({ content, post_id: postId, name: userName, image_id: imageId }) => (
+        (
+          { content, post_id: postId, name: userName, image_id: imageId },
+          idx
+        ) => (
           <ManagePost
             key={postId}
             userName={userName}
             content={content}
             postId={postId}
             imageId={imageId}
+            sx={{
+              borderBottom: idx === posts.length - 1 ? undefined : 0,
+            }}
           />
         )
       )}

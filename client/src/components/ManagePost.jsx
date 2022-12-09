@@ -12,9 +12,8 @@ import Card from './Card';
 import Avatar from './Avatar';
 import { unreportPost, deletePost } from '../api/backend';
 
-function ManagePost({ userName, content, postId, imageId }) {
+function ManagePost({ userName, content, postId, imageId, sx }) {
   const [disabled, setDisabled] = useState(false);
-  console.log(disabled);
 
   const handleUnreport = () => {
     unreportPost(postId).then(() => {
@@ -28,15 +27,17 @@ function ManagePost({ userName, content, postId, imageId }) {
     });
   };
 
-  const disabledStyles = () => ({
-    minWidth: 700,
-    paddingY: 1,
-    opacity: disabled ? 0.4 : 1,
-    pointerEvents: disabled ? 'none' : 'initial',
-  });
-
   return (
-    <Card variant="outlined" sx={disabledStyles(disabled)}>
+    <Card
+      variant="outlined"
+      sx={{
+        minWidth: 700,
+        paddingY: 1,
+        opacity: disabled ? 0.4 : 1,
+        pointerEvents: disabled ? 'none' : 'initial',
+        ...sx,
+      }}
+    >
       <Box
         sx={{
           display: 'flex',

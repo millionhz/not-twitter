@@ -96,7 +96,7 @@ function PostPage() {
           sx={{
             m: 'auto',
             mt: '5%',
-            width: 600,
+            width: 700,
           }}
         >
           <Card>
