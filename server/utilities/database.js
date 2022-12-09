@@ -1,6 +1,6 @@
-const mysql = require('mysql2');
-const bcrypt = require('bcrypt');
-const { readImage, deleteImage } = require('./image');
+const mysql = require("mysql2");
+const bcrypt = require("bcrypt");
+const { readImage, deleteImage } = require("./image");
 
 const connection = mysql.createPool({
   host: process.env.DB_HOST,
@@ -11,13 +11,13 @@ const connection = mysql.createPool({
 });
 
 const getCurrentTime = () =>
-  new Date().toISOString().slice(0, 19).replace('T', ' ');
+  new Date().toISOString().slice(0, 19).replace("T", " ");
 
 const insertUser = async (email, password, name) => {
   const hash = bcrypt.hashSync(password, 10);
   const createdTime = getCurrentTime();
   const sql =
-    'INSERT INTO users (email, hash, name, created_time) VALUES (?, ?, ?, ?)';
+    "INSERT INTO users (email, hash, name, created_time) VALUES (?, ?, ?, ?)";
 
   return new Promise((resolve, reject) => {
     connection.query(sql, [email, hash, name, createdTime], (err, res) => {
@@ -121,7 +121,7 @@ const insertPostWithImage = async (imagePath, userId) => {
   const data = await readImage(imagePath);
   deleteImage(imagePath);
   const { insertId } = await insertImage(data);
-  return insertPost('', userId, insertId);
+  return insertPost("", userId, insertId);
 };
 
 const getImage = (id) => {
@@ -207,7 +207,7 @@ const getPosts = (params = {}) => {
       FROM
         posts
       WHERE
-        is_deleted = 0 ${params.userId ? 'AND user_id = ?' : ''}
+        is_deleted = 0 ${params.userId ? "AND user_id = ?" : ""}
     ) as posts
     INNER JOIN users ON posts.user_id = users.user_id
   ORDER BY
@@ -292,53 +292,27 @@ const searchName = (name) => {
   const sql = `SELECT user_id ,name, is_activated from users where name like ? and is_activated = 1;`;
   return query(sql, [`%${name}%`]);
 };
+
 const insertNotification = (notificationId, isRead, content, url, userId) => {
   const createdTime = getCurrentTime();
-  const sql = `INSERT INTO notifications (notification_id, is_read, created_time, content, url, user_id) VALUES (?, ?, ?, ?, ?, ?)`;
+  const sql = `INSERT INTO notifications (notification_id, is_read, created_time, content, url, user_id) VALUES (?, ?, ?, ?, ?, ?);`;
   const values = [notificationId, isRead, createdTime, content, url, userId];
 
-  return new Promise((resolve, reject) => {
-    connection.query(sql, values, (error, result) => {
-      if (error) {
-        reject(error);
-      } else {
-        resolve(result);
-      }
-    });
-  });
+  return query(sql, values);
 };
 
 const getAllNotifications = (userId) => {
-  const sql = `SELECT * FROM notifications WHERE user_id=?`;
+  const sql = `SELECT * FROM notifications WHERE user_id=?;`;
   const values = [userId];
 
-  return new Promise((resolve, reject) => {
-    connection.query(sql, values, (error, result) => {
-      if (error) {
-        reject(error);
-      } else {
-        resolve(result);
-      }
-    });
-  });
+  return query(sql, values);
 };
 
 const getNotificationById = (notificationId) => {
-  const sql = `SELECT * FROM notifications WHERE notification_id=?`;
+  const sql = `SELECT * FROM notifications WHERE notification_id=?;`;
   const values = [notificationId];
 
-  return new Promise((resolve, reject) => {
-    connection.query(sql, values, (error, result) => {
-      if (error) {
-        reject(error);
-      } else {
-        if (result.length === 0) {
-          resolve(null);
-        }
-        resolve(result[0]);
-      }
-    });
-  });
+  return query(sql, values);
 };
 
 const deleteNotification = (notificationId, userId) => {
@@ -348,36 +322,17 @@ const deleteNotification = (notificationId, userId) => {
     return null;
   }
 
-  const sql = `DELETE FROM notifications WHERE notification_id=$1 AND user_id=$2`;
+  const sql = `DELETE FROM notifications WHERE notification_id=? AND user_id=?`;
   const values = [notificationId, userId];
 
-  return new Promise((resolve, reject) => {
-    connection.query(sql, values, (error, result) => {
-      if (error) {
-        reject(error);
-      } else {
-        resolve(result);
-      }
-    });
-  });
+  return query(sql, values);
 };
 
 const getNumberOfNotifications = (userId) => {
   const sql = `SELECT COUNT(*) FROM notifications WHERE user_id=?`;
   const values = [userId];
 
-  return new Promise((resolve, reject) => {
-    connection.query(sql, values, (error, result) => {
-      if (error) {
-        reject(error);
-      } else {
-        if (result.length === 0) {
-          resolve(null);
-        }
-        resolve(result[0]);
-      }
-    });
-  });
+  return query(sql, values);
 };
 
 const deleteAllNotifications = (userId) => {
@@ -414,7 +369,7 @@ const getUserDataById = (userId, myUserId) => {
 
 const deletePost = (postId, userId, isAdmin) => {
   const sql = `UPDATE posts SET is_deleted = 1 WHERE post_id = ? ${
-    isAdmin ? '' : 'AND user_id = ?'
+    isAdmin ? "" : "AND user_id = ?"
   };`;
 
   return query(sql, [postId, userId]);
