@@ -1,4 +1,4 @@
-import { Modal, Button } from '@mui/material';
+import { Modal, Button } from 'react-bootstrap';
 import { useState, useEffect } from 'react';
 
 function NotificationPage() {
