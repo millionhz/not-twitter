@@ -11,8 +11,9 @@ const router = express.Router();
 
 // ROUTES
 router.post("/new", (req, res, next) => {
-  const { notification_id, is_read, content, url, user_id } = req.body;
-  insertNotification(notification_id, is_read, content, url, user_id)
+  const { notification_id, is_read, content, url } = req.body;
+  const { user_id: userId } = req.user;
+  insertNotification(notification_id, is_read, content, url, userId)
     .then(() => {
       res.status(200);
     })
@@ -26,8 +27,8 @@ router.get(
   "/all",
   auth.authenticate("local", { session: false }),
   (req, res) => {
-    const { user_id } = req.body;
-    getAllNotifications(user_id)
+    const { user_id: userId } = req.user;
+    getAllNotifications(userId)
       .then(() => {
         res.status(200);
       })
@@ -41,8 +42,9 @@ router.delete(
   "/id/:id",
   auth.authenticate("local", { session: false }),
   (req, res) => {
-    const { notification_id, user_id } = req.body;
-    deleteNotification(notification_id, user_id)
+    const { id } = req.params;
+    const { user_id: userId } = req.user;
+    deleteNotification(id, userId)
       .then((response) => {
         if (response !== null) {
           res.status(200);
@@ -64,8 +66,8 @@ router.delete(
   "/all",
   auth.authenticate("local", { session: false }),
   (req, res) => {
-    const { user_id } = req.body;
-    deleteAllNotifications(user_id)
+    const { user_id: userId } = req.user;
+    deleteAllNotifications(userId)
       .then((response) => {
         if (response !== null) {
           res.status(200);
