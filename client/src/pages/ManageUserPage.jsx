@@ -2,9 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { Box, Typography } from '@mui/material';
 import { activateUser, deactivateUser, getAllUsers } from '../api/backend';
 import ManageUser from '../components/ManageUser';
+import Compose from '../components/Compose';
 
 function ManageUserPage() {
   const [users, setUsers] = useState([]);
+  const [term, setTerm] = useState('');
 
   useEffect(() => {
     getAllUsers().then(({ data }) => {
@@ -32,29 +34,43 @@ function ManageUserPage() {
         paddingY: 2,
       }}
     >
-      <Typography variant="h4" sx={{ paddingY: 6 }}>
+      <Typography variant="h4" sx={{ paddingTop: 6 }}>
         Manage Users
       </Typography>
+      <Compose
+        title="Filter"
+        placeholder="Enter name here..."
+        sx={{ paddingY: 4 }}
+        onSubmit={(value) => setTerm(value)}
+      />
       {users.length === 0 ? (
         <Typography textAlign="center" variant="h4">
           Loading...
         </Typography>
       ) : (
         <div>
-          {users.map(
-            ({ user_id: userId, name, is_activated: isActivated }, idx) => (
-              <ManageUser
-                key={userId}
-                userId={userId}
-                name={name}
-                isActivated={isActivated}
-                handleStateChange={toggleState}
-                sx={{
-                  borderBottom: idx === users.length - 1 ? undefined : 0,
-                }}
-              />
+          {users
+            .filter(({ name }) =>
+              name.toLowerCase().includes(term.toLowerCase())
             )
-          )}
+            .map(
+              (
+                { user_id: userId, name, is_activated: isActivated },
+                idx,
+                arr
+              ) => (
+                <ManageUser
+                  key={userId}
+                  userId={userId}
+                  name={name}
+                  isActivated={isActivated}
+                  handleStateChange={toggleState}
+                  sx={{
+                    borderBottom: idx === arr.length - 1 ? undefined : 0,
+                  }}
+                />
+              )
+            )}
         </div>
       )}
     </Box>
