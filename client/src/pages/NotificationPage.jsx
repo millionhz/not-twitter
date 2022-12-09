@@ -1,4 +1,4 @@
-import { Modal, Button } from 'react-bootstrap';
+import { Modal, Button, Container } from 'react-bootstrap';
 import { useState, useEffect } from 'react';
 
 function NotificationPage() {
@@ -92,7 +92,7 @@ function NotificationPage() {
   }
   const renderNotifications = () => {
     try {
-      if (state.length > 0) {
+      if (state.length > 1) {
         return state.map((item, index) => {
           const { timestamp, title, notificationId } = item;
           const currDate = timestamp.split(' ')[0];
@@ -129,9 +129,8 @@ function NotificationPage() {
           );
         });
       } 
-      if (!state.length > 0)
+      if (state.length === 1)
       {
-        console.log('Returning div')
         return (
           <div>
             <span>You have no new notifications.</span>
@@ -141,15 +140,24 @@ function NotificationPage() {
     } 
     catch { console.error('foo');  }
   };
+
   return (
+    <Container>
     <div>
       <div>
         <h1>Notifications</h1>
         <br />
+        <br />
+        {renderNotifications()}
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
         <ul>
           <button
             type = 'submit'
-            className='link-v2 deleteAll'
+            className='deleteAll'
             onClick={() =>
               handleShow(
                 [
@@ -164,13 +172,6 @@ function NotificationPage() {
             Delete All
           </button>
         </ul>
-        <br />
-        {renderNotifications()}
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
       </div>
       <Modal show={show} onHide={handleClose} className='delete-modal'>
         <Modal.Header closeButton>
@@ -180,14 +181,12 @@ function NotificationPage() {
         <Modal.Footer>
           <Button
             variant='secondary'
-            className='delete-secondary'
             onClick={() => handleClose(false)}
           >
             {msg[1]}
           </Button>
           <Button
             variant='primary'
-            className='delete-primary'
             onClick={() => handleClose(true)}
           >
             {msg[2]}
@@ -195,6 +194,7 @@ function NotificationPage() {
         </Modal.Footer>
       </Modal>
     </div>
+    </Container>
   );
 }
 
