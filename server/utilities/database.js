@@ -13,6 +13,17 @@ const connection = mysql.createPool({
 const getCurrentTime = () =>
   new Date().toISOString().slice(0, 19).replace('T', ' ');
 
+const query = (sql, params) =>
+  new Promise((resolve, reject) => {
+    connection.query(sql, params, (err, res) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(res);
+      }
+    });
+  });
+
 const insertUser = async (email, password, name) => {
   const hash = bcrypt.hashSync(password, 10);
   const createdTime = getCurrentTime();
@@ -33,33 +44,13 @@ const insertUser = async (email, password, name) => {
 const getUserByEmail = async (email) => {
   const sql = `SELECT * FROM users WHERE email = ?`;
 
-  return new Promise((resolve, reject) => {
-    connection.query(sql, [email], (err, res) => {
-      if (err) {
-        reject(err);
-      } else {
-        resolve(res);
-      }
-    });
-  });
+  return query(sql, [email]);
 };
 
 const getUserById = (id) => {
   const sql = `SELECT * FROM users WHERE user_id = ?`;
 
-  return new Promise((resolve, reject) => {
-    connection.query(sql, [id], (err, res) => {
-      if (err) {
-        reject(err);
-      } else {
-        if (res.length === 0) {
-          resolve(null);
-        }
-
-        resolve(res[0]);
-      }
-    });
-  });
+  return query(sql, [id]).then((user) => (user.length === 0 ? null : user[0]));
 };
 
 const authenticate = async (email, password) => {
@@ -78,17 +69,6 @@ const authenticate = async (email, password) => {
 
   return null;
 };
-
-const query = (sql, params) =>
-  new Promise((resolve, reject) => {
-    connection.query(sql, params, (err, res) => {
-      if (err) {
-        reject(err);
-      } else {
-        resolve(res);
-      }
-    });
-  });
 
 const insertLike = (postId, userId) => {
   const createdTime = getCurrentTime();
@@ -135,19 +115,7 @@ const insertComment = (postId, content, userId) => {
   const createdTime = getCurrentTime();
   const sql = `INSERT INTO comments (post_id, content, user_id, created_time) VALUES (?, ?, ?, ?)`;
 
-  return new Promise((resolve, reject) => {
-    connection.query(
-      sql,
-      [postId, content, userId, createdTime],
-      (err, res) => {
-        if (err) {
-          reject(err);
-        } else {
-          resolve(res);
-        }
-      }
-    );
-  });
+  return query(sql, [postId, content, userId, createdTime]);
 };
 
 const insertFollow = (userId, myUserId) => {
@@ -180,15 +148,7 @@ const toggleFollow = (userId, myUserId) =>
 const getCommentsById = (postId) => {
   const sql = `SELECT comment_id, content, comments.created_time, name FROM (SELECT * FROM comments WHERE post_id = ? AND is_deleted = 0) as comments INNER JOIN users ON comments.user_id = users.user_id;`;
 
-  return new Promise((resolve, reject) => {
-    connection.query(sql, [postId], (err, res) => {
-      if (err) {
-        reject(err);
-      } else {
-        resolve(res);
-      }
-    });
-  });
+  return query(sql, [postId]);
 };
 
 const getPosts = (params = {}) => {
@@ -210,6 +170,8 @@ const getPosts = (params = {}) => {
         is_deleted = 0 ${params.userId ? 'AND user_id = ?' : ''}
     ) as posts
     INNER JOIN users ON posts.user_id = users.user_id
+  WHERE
+    users.is_activated = 1
   ORDER BY
     created_time DESC;
   `;
@@ -294,7 +256,7 @@ const searchName = (name) => {
 };
 
 const getAllUsers = () => {
-  const sql = `SELECT user_id, name, is_activated, is_admin FROM users`;
+  const sql = `SELECT user_id, name, is_activated, is_admin FROM users ORDER BY name`;
   return query(sql, []);
 };
 
