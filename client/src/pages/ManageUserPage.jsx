@@ -32,18 +32,31 @@ function ManageUserPage() {
         paddingY: 2,
       }}
     >
-      <Typography variant="h4" sx={{ paddingY: 3 }}>
+      <Typography variant="h4" sx={{ paddingY: 6 }}>
         Manage Users
       </Typography>
-      {users.map(({ user_id: userId, name, is_activated: isActivated }) => (
-        <ManageUser
-          key={userId}
-          userId={userId}
-          name={name}
-          isActivated={isActivated}
-          handleStateChange={toggleState}
-        />
-      ))}
+      {users.length === 0 ? (
+        <Typography textAlign="center" variant="h4">
+          Loading...
+        </Typography>
+      ) : (
+        <div>
+          {users.map(
+            ({ user_id: userId, name, is_activated: isActivated }, idx) => (
+              <ManageUser
+                key={userId}
+                userId={userId}
+                name={name}
+                isActivated={isActivated}
+                handleStateChange={toggleState}
+                sx={{
+                  borderBottom: idx === users.length - 1 ? undefined : 0,
+                }}
+              />
+            )
+          )}
+        </div>
+      )}
     </Box>
   );
 }
