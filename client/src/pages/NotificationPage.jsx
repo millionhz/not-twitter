@@ -15,15 +15,6 @@ function NotificationPage() {
   ]);
   // login check -> return to \ if user is not logged in
   const [callEffect, setCallEffect] = useState(false);
-  const checkSession = () => {
-    if (!session || session === null) {
-      sessionStorage.setItem(
-        'msg',
-        JSON.stringify('Please Log in to Continue')
-      );
-      window.location.href = '/';
-    }
-  };
   useEffect(() => {
     async function getData(url) {
       const response = await fetch(url, {
@@ -92,6 +83,7 @@ function NotificationPage() {
   }
   const renderNotifications = () => {
     try {
+      console.log(state)
       if (state.length > 1) {
         return state.map((item, index) => {
           const { timestamp, title, notificationId } = item;
