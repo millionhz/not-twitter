@@ -173,7 +173,8 @@ const getPosts = (params = {}) => {
   WHERE
     users.is_activated = 1
   ORDER BY
-    created_time DESC;
+    created_time DESC
+  ${params.userId ? '' : 'LIMIT 100'};
   `;
 
   return query(sql, [params.userId].filter(Boolean));
