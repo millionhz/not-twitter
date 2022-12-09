@@ -2,13 +2,14 @@ import React from 'react';
 import { FormControlLabel, Switch, Card, CardHeader, Box } from '@mui/material';
 import Avatar from './Avatar';
 
-function ManageUser({ userId, name, isActivated, handleStateChange }) {
+function ManageUser({ userId, name, isActivated, handleStateChange, sx }) {
   return (
     <Card
       variant="outlined"
       sx={{
         minWidth: 700,
         paddingY: 1,
+        ...sx,
       }}
     >
       <Box

@@ -114,13 +114,15 @@ function PostPage() {
                   navigate(`/user/${userId}`);
                 }}
               />
-              <IconButton
-                aria-label="report-button"
-                onClick={handleReport}
-                sx={{ width: 50, height: 50 }}
-              >
-                {!user.isAdmin && <ReportGmailerrorred />}
-              </IconButton>
+              {!user.isAdmin && (
+                <IconButton
+                  aria-label="report-button"
+                  onClick={handleReport}
+                  sx={{ width: 50, height: 50 }}
+                >
+                  <ReportGmailerrorred />
+                </IconButton>
+              )}
             </Box>
             <CardContent>
               <Image imageId={imageId} />
