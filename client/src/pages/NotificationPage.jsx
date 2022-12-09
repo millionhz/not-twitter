@@ -95,13 +95,13 @@ function NotificationPage() {
       if (state.length > 0) {
         return state.map((item, index) => {
           const { timestamp, title, notificationId } = item;
-          const date = timestamp.split(' ')[0];
-          const time = timestamp.split(' ')[1];
+          const currDate = timestamp.split(' ')[0];
+          const currTime = timestamp.split(' ')[1];
           return (
             <div>
               <div className='datetime'>
-                <h2 className='date remove-wrapping'>{date}</h2>
-                <h3 className='time'>{time}</h3>
+                <h2 className='date remove-wrapping'>{currDate}</h2>
+                <h3 className='time'>{currTime}</h3>
               </div>
               <div className='notificationBox'>
                 <span>
@@ -112,9 +112,9 @@ function NotificationPage() {
                     onClick={() =>
                       handleShow(
                         [
-                          `Are you sure you want to delete this notification?`,
-                          `Don't Delete`,
-                          `Delete Notification`,
+                          `Do you want to delete this notification?`,
+                          `No`,
+                          `Delete`,
                         ],
                         notificationId
                       )
@@ -133,7 +133,7 @@ function NotificationPage() {
       {
         console.log('Returning div')
         return (
-          <div className='notificationBox'>
+          <div>
             <span>You have no new notifications.</span>
           </div>
         );
@@ -143,8 +143,7 @@ function NotificationPage() {
   };
   return (
     <div>
-      {checkSession()}
-      <div className='min-height-div'>
+      <div>
         <h1>Notifications</h1>
         <br />
         <ul>
@@ -154,9 +153,9 @@ function NotificationPage() {
             onClick={() =>
               handleShow(
                 [
-                  `Are you sure you want to delete all notifications?`,
-                  `Don't Delete`,
-                  `Delete All`,
+                  `Do you want to delete all notifications?`,
+                  `No`,
+                  `Yes`,
                 ],
                 `all`
               )
