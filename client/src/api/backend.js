@@ -18,6 +18,8 @@ export const login = (email, password) =>
 
 export const getPosts = () => instance.get('/post');
 
+export const getAllReportedPosts = () => instance.get(`/post/report`);
+
 export const getPostById = (postId) => instance.get(`/post/${postId}`);
 
 export const getCommentByPostId = (postId) =>
@@ -28,6 +30,9 @@ export const getPostByUserId = (userId) => instance.get(`/post/user/${userId}`);
 export const deletePost = (postId) => instance.delete(`/post/${postId}`);
 
 export const reportPost = (postId) => instance.post(`/post/${postId}/report`);
+
+export const unreportPost = (postId) =>
+  instance.post(`/post/${postId}/unreport`);
 
 export const getUserById = (userId) => instance.get(`/user/${userId}`);
 

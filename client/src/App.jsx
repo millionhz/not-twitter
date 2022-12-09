@@ -19,6 +19,7 @@ import NotificationPage from './pages/NotificationPage';
 import UploadImagePage from './pages/UploadImagePage';
 import EditProfilePage from './pages/EditProfilePage';
 import ManageUserPage from './pages/ManageUserPage';
+import ManagePostPage from './pages/ManagePostPage';
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
           <Route path="post/compose" element={<CreatePostPage />} />
           <Route path="image/compose" element={<UploadImagePage />} />
           <Route path="post/search" element={<SearchPostPage />} />
+          <Route path="post/report" element={<ManagePostPage />} />
           <Route path="post/:postId" element={<PostPage />} />
           <Route path="user/search" element={<SearchUserPage />} />
           <Route path="user/manage" element={<ManageUserPage />} />

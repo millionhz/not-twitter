@@ -21,6 +21,7 @@ import {
   Upload,
   Edit,
   ManageAccounts,
+  ReportProblem,
   Logout,
 } from '@mui/icons-material';
 
@@ -79,6 +80,11 @@ function HomePage() {
       label: 'Manage Users',
     },
     {
+      route: '/post/report',
+      icon: <ReportProblem sx={{ margin: 1 }} />,
+      label: 'Manage Posts',
+    },
+    {
       route: '/updatepassword',
       icon: <Key sx={{ margin: 1 }} />,
       label: 'Update Password',
@@ -134,7 +140,8 @@ function HomePage() {
         <Box sx={{ overflow: 'auto' }}>
           <List>
             {sideBarNav.map(({ route, icon, label }) =>
-              !isAdmin && label === 'Manage Users' ? null : (
+              !isAdmin &&
+              (label === 'Manage Users' || label === 'Manage Posts') ? null : (
                 <ListItem key={label} disablePadding>
                   <Link
                     to={route}

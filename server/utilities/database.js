@@ -168,6 +168,7 @@ const getPosts = (params = {}) => {
         posts
       WHERE
         is_deleted = 0 ${params.userId ? 'AND user_id = ?' : ''}
+
     ) as posts
     INNER JOIN users ON posts.user_id = users.user_id
   WHERE
@@ -216,6 +217,33 @@ const getPostById = (postId) => {
   return query(sql, [postId]).then((posts) =>
     posts.length === 0 ? null : posts[0]
   );
+};
+
+const getAllReportedPosts = () => {
+  const sql = `
+  SELECT
+    users.name,
+    posts.post_id,
+    posts.user_id,
+    posts.content,
+    posts.created_time,
+    posts.image_id,
+    posts.is_reported
+  FROM
+    (
+      SELECT
+        *
+      FROM
+        posts
+      WHERE
+        is_deleted = 0 AND is_reported = 1
+    ) as posts
+    INNER JOIN users ON posts.user_id = users.user_id
+  ORDER BY
+    created_time DESC;
+  `;
+
+  return query(sql, []);
 };
 
 const getPostsByUserId = (userId) => getPosts({ userId });
@@ -291,7 +319,11 @@ const deletePost = (postId, userId, isAdmin) => {
 
 const reportPost = (postId) => {
   const sql = `UPDATE posts SET is_reported = 1 WHERE post_id = ?;`;
+  return query(sql, [postId]);
+};
 
+const unreportPost = (postId) => {
+  const sql = `UPDATE posts SET is_reported = 0 WHERE post_id = ?;`;
   return query(sql, [postId]);
 };
 
@@ -328,9 +360,11 @@ module.exports = {
   toggleFollow,
   deletePost,
   reportPost,
+  unreportPost,
   insertPostWithImage,
   getImage,
   deactivateUser,
   activateUser,
   getAllUsers,
+  getAllReportedPosts,
 };
