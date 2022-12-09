@@ -38,10 +38,10 @@ function NotificationPage() {
     getData(
       'https://not-twitter-production.up.railway.app/notifications/all'
     ).then((response) => {
-      console.log(response);
+      // console.log(response);
       setState(response);
-      console.log(response);
-      console.log(response.length);
+      // console.log(response);
+      // console.log(response.length);
       setNumNotif(response.length);
     });
   }, [callEffect]);
@@ -129,19 +129,17 @@ function NotificationPage() {
           );
         });
       } 
-      // else {
-      //   return (
-      //     <div className='notificationBox'>
-      //       <span>You have no new notifications.</span>
-      //     </div>
-      //   );
-      // }
+      if (!state.length > 0)
+      {
+        console.log('Returning div')
+        return (
+          <div className='notificationBox'>
+            <span>You have no new notifications.</span>
+          </div>
+        );
+      }
     } 
-    catch {  return (
-            <div className='notificationBox'>
-              <span>You have no new notifications.</span>
-            </div> );
-          }
+    catch { console.error('foo');  }
   };
   return (
     <div>
