@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { TextField, Box, Button } from '@mui/material';
 
-function Compose({ title, placeholder, onSubmit }) {
+function Compose({ title, placeholder, onSubmit, sx }) {
   const [value, setValue] = useState('');
 
   return (
     <Box
-      sx={{ maxWidth: 700, display: 'flex' }}
+      sx={{ minWidth: 700, display: 'flex', ...sx }}
       component="form"
       onSubmit={(e) => {
         e.preventDefault();
