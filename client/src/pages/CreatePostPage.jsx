@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import { createPost } from '../api/backend';
 
 function CreatePostPage() {
-  const MAX_LENGTH = 256;
+  const MAX_LENGTH = 512;
   const [content, setContent] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const navigate = useNavigate();
@@ -39,8 +39,8 @@ function CreatePostPage() {
       <Box
         sx={{
           m: 'auto',
-          mt: '40%',
-          width: 600,
+          mt: '30%',
+          width: 700,
         }}
       >
         <Box
@@ -52,7 +52,11 @@ function CreatePostPage() {
           }}
         >
           <TextField
+            autoComplete="off"
+            hiddenLabel
+            multiline
             fullWidth
+            rows={7}
             required
             error={content.length >= MAX_LENGTH}
             helperText={errorMessage}
@@ -60,7 +64,7 @@ function CreatePostPage() {
             inputProps={{ maxLength: MAX_LENGTH }}
             placeholder="What's on your mind..."
             onChange={(event) => setContent(event.target.value)}
-            autoComplete="off"
+            variant="filled"
           />
           <Button
             type="submit"
