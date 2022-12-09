@@ -137,7 +137,11 @@ function NotificationPage() {
       //   );
       // }
     } 
-    catch {checkSession()}
+    catch {  return (
+            <div className='notificationBox'>
+              <span>You have no new notifications.</span>
+            </div> );
+          }
   };
   return (
     <div>
