@@ -7,7 +7,7 @@ function AdminRouter() {
     user: { isAdmin },
   } = useContext(AuthContext);
 
-  if (!isAdmin) {
+  if (isAdmin === false) {
     return <Navigate to="/" />;
   }
 
