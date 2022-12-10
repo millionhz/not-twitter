@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Box } from '@mui/material';
 import { getImage } from '../api/backend';
 
 function Image({ imageId }) {
@@ -15,7 +16,13 @@ function Image({ imageId }) {
     }
   }, [imageId]);
 
-  return imageUrl && <img src={imageUrl} alt="post" width={500} />;
+  return (
+    imageUrl && (
+      <Box sx={{ textAlign: 'center' }}>
+        <img src={imageUrl} alt="post" width={500} />
+      </Box>
+    )
+  );
 }
 
 export default Image;

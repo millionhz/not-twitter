@@ -5,11 +5,13 @@ import ManagePostList from '../components/ManagePostList';
 
 function ManagePostPage() {
   const [posts, setPosts] = useState([]);
+  const [fetched, setFetched] = useState(false);
 
   useEffect(() => {
     getAllReportedPosts()
       .then((reportedPostList) => {
         setPosts(reportedPostList.data);
+        setFetched(true);
       })
       .catch((error) => {
         const {
@@ -34,7 +36,7 @@ function ManagePostPage() {
       <Typography variant="h4" sx={{ paddingY: 3 }}>
         Manage Posts
       </Typography>
-      {posts.length === 0 ? (
+      {posts.length === 0 && fetched ? (
         <Typography textAlign="center" variant="h6" marginTop="2">
           No Reported Posts Found
         </Typography>

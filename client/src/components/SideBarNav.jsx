@@ -48,12 +48,12 @@ const sideBarNav = (userId) => [
     label: 'Search User',
   },
   {
-    route: '/user/manage',
+    route: '/manage/user',
     icon: <ManageAccounts sx={{ margin: 1 }} />,
     label: 'Manage Users',
   },
   {
-    route: '/post/report',
+    route: '/manage/post',
     icon: <ReportProblem sx={{ margin: 1 }} />,
     label: 'Manage Posts',
   },
