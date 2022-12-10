@@ -20,6 +20,7 @@ import UploadImagePage from './pages/UploadImagePage';
 import EditProfilePage from './pages/EditProfilePage';
 import ManageUserPage from './pages/ManageUserPage';
 import ManagePostPage from './pages/ManagePostPage';
+import AdminRouter from './routes/AdminRouter';
 
 function App() {
   return (
@@ -30,15 +31,17 @@ function App() {
           <Route path="post/compose" element={<CreatePostPage />} />
           <Route path="image/compose" element={<UploadImagePage />} />
           <Route path="post/search" element={<SearchPostPage />} />
-          <Route path="post/report" element={<ManagePostPage />} />
           <Route path="post/:postId" element={<PostPage />} />
           <Route path="user/search" element={<SearchUserPage />} />
-          <Route path="user/manage" element={<ManageUserPage />} />
           <Route path="user/:userId" element={<UserProfilePage />} />
           <Route path="user/edit" element={<EditProfilePage />} />
           <Route path="updatePassword" element={<UpdatePasswordPage />} />
           <Route path="logout" element={<LogoutRoute />} />
           <Route path="notifications" element={<NotificationPage />} />
+        </Route>
+        <Route element={<AdminRouter />}>
+          <Route path="manage/post" element={<ManagePostPage />} />
+          <Route path="manage/user" element={<ManageUserPage />} />
         </Route>
         <Route element={<LoggedOutRoutes />}>
           <Route path="login" element={<LogInPage />} />
