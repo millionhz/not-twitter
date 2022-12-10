@@ -2,10 +2,11 @@ import { Modal, Button, Container } from 'react-bootstrap';
 import { useState, useEffect } from 'react';
 
 function NotificationPage() {
-  const tokeId = sessionStorage.getItem('token');
-  const session = sessionStorage.getItem('logged-in');
+  // unused vars causing build issues
+  // const tokeId = sessionStorage.getItem('token');
+  // const session = sessionStorage.getItem('logged-in');
   const [numNotifications, setNumNotif] = useState(0);
-  const [total, setTotal] = useState(0);
+  // const [total, setTotal] = useState(0);
   const [state, setState] = useState([
     {
       date: 0,
@@ -20,7 +21,7 @@ function NotificationPage() {
       const response = await fetch(url, {
         method: 'GET',
         withCredentials: true,
-        credentials: 'include'
+        credentials: 'include',
       });
 
       return response.json();
@@ -34,8 +35,9 @@ function NotificationPage() {
       // console.log(response);
       // console.log(response.length);
       setNumNotif(response.length);
+      console.log(numNotifications);
     });
-  }, [callEffect]);
+  }, [numNotifications]);
 
   const [show, setShow] = useState(false);
   const [msg, setMsg] = useState([``]);
@@ -67,7 +69,7 @@ function NotificationPage() {
       {
         method: 'DELETE',
         withCredentials: true,
-        credentials: 'include'
+        credentials: 'include',
       }
     );
     console.log(response);
@@ -83,24 +85,24 @@ function NotificationPage() {
   }
   const renderNotifications = () => {
     try {
-      console.log(state)
+      console.log(state);
       if (state.length > 1) {
-        return state.map((item, index) => {
+        return state.map((item) => {
           const { timestamp, title, notificationId } = item;
           const currDate = timestamp.split(' ')[0];
           const currTime = timestamp.split(' ')[1];
           return (
             <div>
-              <div className='datetime'>
-                <h2 className='date remove-wrapping'>{currDate}</h2>
-                <h3 className='time'>{currTime}</h3>
+              <div className="datetime">
+                <h2 className="date remove-wrapping">{currDate}</h2>
+                <h3 className="time">{currTime}</h3>
               </div>
-              <div className='notificationBox'>
+              <div className="notificationBox">
                 <span>
                   {title}
                   <button
-                    type='submit'
-                    className='link-v2 deletenotification'
+                    type="submit"
+                    className="link-v2 deletenotification"
                     onClick={() =>
                       handleShow(
                         [
@@ -120,72 +122,62 @@ function NotificationPage() {
             </div>
           );
         });
-      } 
-      if (state.length === 1)
-      {
+      }
+      if (state.length === 1) {
         return (
           <div>
             <span>You have no new notifications.</span>
           </div>
         );
       }
-    } 
-    catch { console.error('foo');  }
+    } catch {
+      console.error('foo');
+    }
   };
 
   return (
     <Container>
-    <div>
       <div>
-        <h1>Notifications</h1>
-        <br />
-        <br />
-        {renderNotifications()}
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-        <ul>
-          <button
-            type = 'submit'
-            className='deleteAll'
-            onClick={() =>
-              handleShow(
-                [
-                  `Do you want to delete all notifications?`,
-                  `No`,
-                  `Yes`,
-                ],
-                `all`
-              )
-            }
-          >
-            Delete All
-          </button>
-        </ul>
+        <div>
+          <h1>Notifications</h1>
+          <br />
+          <br />
+          {renderNotifications()}
+          <br />
+          <br />
+          <br />
+          <br />
+          <br />
+          <ul>
+            <button
+              type="submit"
+              className="deleteAll"
+              onClick={() =>
+                handleShow(
+                  [`Do you want to delete all notifications?`, `No`, `Yes`],
+                  `all`
+                )
+              }
+            >
+              Delete All
+            </button>
+          </ul>
+        </div>
+        <Modal show={show} onHide={handleClose} className="delete-modal">
+          <Modal.Header closeButton>
+            <Modal.Title>Confirm Delete</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>{msg[0]}</Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={() => handleClose(false)}>
+              {msg[1]}
+            </Button>
+            <Button variant="primary" onClick={() => handleClose(true)}>
+              {msg[2]}
+            </Button>
+          </Modal.Footer>
+        </Modal>
       </div>
-      <Modal show={show} onHide={handleClose} className='delete-modal'>
-        <Modal.Header closeButton>
-          <Modal.Title>Confirm Delete</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>{msg[0]}</Modal.Body>
-        <Modal.Footer>
-          <Button
-            variant='secondary'
-            onClick={() => handleClose(false)}
-          >
-            {msg[1]}
-          </Button>
-          <Button
-            variant='primary'
-            onClick={() => handleClose(true)}
-          >
-            {msg[2]}
-          </Button>
-        </Modal.Footer>
-      </Modal>
-    </div>
     </Container>
   );
 }
