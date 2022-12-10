@@ -146,8 +146,31 @@ const toggleFollow = (userId, myUserId) =>
   });
 
 const getCommentsById = (postId) => {
-  const sql = `SELECT comment_id, content, comments.created_time, name FROM (SELECT * FROM comments WHERE post_id = ? AND is_deleted = 0) as comments INNER JOIN users ON comments.user_id = users.user_id;`;
-
+  const sql = `
+  SELECT
+    comment_id,
+    content,
+    comments.created_time,
+    name
+  FROM
+    (
+        SELECT
+            *
+        FROM
+            comments
+        WHERE
+            post_id = ?
+            AND is_deleted = 0
+    ) as comments
+    INNER JOIN (
+        SELECT
+            *
+        FROM
+            users
+        WHERE
+            users.is_activated = 1
+    ) AS users ON comments.user_id = users.user_id;
+  `;
   return query(sql, [postId]);
 };
 
