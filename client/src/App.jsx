@@ -18,6 +18,9 @@ import LogoutRoute from './routes/LogoutRoute';
 import NotificationPage from './pages/NotificationPage';
 import UploadImagePage from './pages/UploadImagePage';
 import EditProfilePage from './pages/EditProfilePage';
+import ManageUserPage from './pages/ManageUserPage';
+import ManagePostPage from './pages/ManagePostPage';
+import AdminRouter from './routes/AdminRouter';
 
 function App() {
   return (
@@ -35,6 +38,10 @@ function App() {
           <Route path="updatePassword" element={<UpdatePasswordPage />} />
           <Route path="logout" element={<LogoutRoute />} />
           <Route path="notifications" element={<NotificationPage />} />
+        </Route>
+        <Route element={<AdminRouter />}>
+          <Route path="manage/post" element={<ManagePostPage />} />
+          <Route path="manage/user" element={<ManageUserPage />} />
         </Route>
         <Route element={<LoggedOutRoutes />}>
           <Route path="login" element={<LogInPage />} />

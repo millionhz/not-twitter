@@ -8,6 +8,7 @@ const {
   activateUser,
   deactivateUser,
   updateProfile,
+  getAllUsers,
 } = require('../../utilities/database');
 
 const router = express.Router();
@@ -19,6 +20,24 @@ router.patch('/', (req, res, next) => {
   updateProfile(userId, userName, userBio)
     .then(() => {
       res.sendStatus(200);
+    })
+    .catch((err) => {
+      res.status(500).json({ message: err.message });
+      next(err);
+    });
+});
+
+router.get('/', (req, res, next) => {
+  const { is_admin: isAdmin } = req.user;
+
+  if (!isAdmin) {
+    res.status(401).json({ message: 'You are not authorized to do this' });
+    return;
+  }
+
+  getAllUsers()
+    .then((data) => {
+      res.json(data);
     })
     .catch((err) => {
       res.status(500).json({ message: err.message });
@@ -77,15 +96,14 @@ router.post('/search', (req, res, next) => {
 });
 
 router.patch('/:userId/activate', (req, res, next) => {
-  const { user_id: myUserId, is_admin: isAdmin } = req.user;
+  const { is_admin: isAdmin } = req.user;
   const { userId } = req.params;
 
   if (!isAdmin) {
     res.status(401).json({ message: 'You are not authorized to do this' });
     return;
   }
-
-  activateUser(userId, myUserId)
+  activateUser(userId)
     .then(() => {
       res.sendStatus(200);
     })
@@ -96,7 +114,7 @@ router.patch('/:userId/activate', (req, res, next) => {
 });
 
 router.patch('/:userId/deactivate', (req, res, next) => {
-  const { user_id: myUserId, is_admin: isAdmin } = req.user;
+  const { is_admin: isAdmin } = req.user;
   const { userId } = req.params;
 
   if (!isAdmin) {
@@ -104,7 +122,7 @@ router.patch('/:userId/deactivate', (req, res, next) => {
     return;
   }
 
-  deactivateUser(userId, myUserId)
+  deactivateUser(userId)
     .then(() => {
       res.sendStatus(200);
     })

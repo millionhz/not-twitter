@@ -11,9 +11,11 @@ const {
   searchPost,
   deletePost,
   reportPost,
+  unreportPost,
   insertComment,
   getImage,
   insertPostWithImage,
+  getAllReportedPosts,
 } = require('../../utilities/database');
 
 const router = express.Router();
@@ -25,6 +27,17 @@ router.get('/', (req, res, next) => {
   const posts = userId ? getPostsByUserId(userId) : getPosts();
 
   posts
+    .then((data) => {
+      res.json(data);
+    })
+    .catch((err) => {
+      res.status(500).json({ message: err.message });
+      next(err);
+    });
+});
+
+router.get('/report', (req, res, next) => {
+  getAllReportedPosts()
     .then((data) => {
       res.json(data);
     })
@@ -138,6 +151,20 @@ router.post('/image', upload.single('image'), (req, res, next) => {
     });
 });
 
+router.delete('/:postId', (req, res, next) => {
+  const { user_id: userId, is_admin: isAdmin } = req.user;
+  const { postId } = req.params;
+
+  deletePost(postId, userId, isAdmin)
+    .then(() => {
+      res.sendStatus(200);
+    })
+    .catch((err) => {
+      res.status(500).json({ message: err.message });
+      next(err);
+    });
+});
+
 router.post('/:postId/like', (req, res, next) => {
   const { user_id: userId } = req.user;
   const { postId } = req.params;
@@ -167,11 +194,10 @@ router.post('/:postId/comment', (req, res, next) => {
     });
 });
 
-router.delete('/:postId', (req, res, next) => {
-  const { user_id: userId, is_admin: isAdmin } = req.user;
+router.post('/:postId/report', (req, res, next) => {
   const { postId } = req.params;
 
-  deletePost(postId, userId, isAdmin)
+  reportPost(postId)
     .then(() => {
       res.sendStatus(200);
     })
@@ -181,10 +207,10 @@ router.delete('/:postId', (req, res, next) => {
     });
 });
 
-router.post('/:postId/report', (req, res, next) => {
+router.post('/:postId/unreport', (req, res, next) => {
   const { postId } = req.params;
 
-  reportPost(postId)
+  unreportPost(postId)
     .then(() => {
       res.sendStatus(200);
     })

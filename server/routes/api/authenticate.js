@@ -8,7 +8,7 @@ router.get('/', (req, res) => {
     userId: user.user_id,
     name: user.name,
     email: user.email,
-    isAdmin: user.is_admin,
+    isAdmin: Boolean(user.is_admin),
   });
 });
 

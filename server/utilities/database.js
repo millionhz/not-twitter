@@ -13,6 +13,17 @@ const connection = mysql.createPool({
 const getCurrentTime = () =>
   new Date().toISOString().slice(0, 19).replace('T', ' ');
 
+const query = (sql, params) =>
+  new Promise((resolve, reject) => {
+    connection.query(sql, params, (err, res) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(res);
+      }
+    });
+  });
+
 const insertUser = async (email, password, name) => {
   const hash = bcrypt.hashSync(password, 10);
   const createdTime = getCurrentTime();
@@ -33,33 +44,13 @@ const insertUser = async (email, password, name) => {
 const getUserByEmail = async (email) => {
   const sql = `SELECT * FROM users WHERE email = ?`;
 
-  return new Promise((resolve, reject) => {
-    connection.query(sql, [email], (err, res) => {
-      if (err) {
-        reject(err);
-      } else {
-        resolve(res);
-      }
-    });
-  });
+  return query(sql, [email]);
 };
 
 const getUserById = (id) => {
   const sql = `SELECT * FROM users WHERE user_id = ?`;
 
-  return new Promise((resolve, reject) => {
-    connection.query(sql, [id], (err, res) => {
-      if (err) {
-        reject(err);
-      } else {
-        if (res.length === 0) {
-          resolve(null);
-        }
-
-        resolve(res[0]);
-      }
-    });
-  });
+  return query(sql, [id]).then((user) => (user.length === 0 ? null : user[0]));
 };
 
 const authenticate = async (email, password) => {
@@ -78,17 +69,6 @@ const authenticate = async (email, password) => {
 
   return null;
 };
-
-const query = (sql, params) =>
-  new Promise((resolve, reject) => {
-    connection.query(sql, params, (err, res) => {
-      if (err) {
-        reject(err);
-      } else {
-        resolve(res);
-      }
-    });
-  });
 
 const insertLike = (postId, userId) => {
   const createdTime = getCurrentTime();
@@ -135,19 +115,7 @@ const insertComment = (postId, content, userId) => {
   const createdTime = getCurrentTime();
   const sql = `INSERT INTO comments (post_id, content, user_id, created_time) VALUES (?, ?, ?, ?)`;
 
-  return new Promise((resolve, reject) => {
-    connection.query(
-      sql,
-      [postId, content, userId, createdTime],
-      (err, res) => {
-        if (err) {
-          reject(err);
-        } else {
-          resolve(res);
-        }
-      }
-    );
-  });
+  return query(sql, [postId, content, userId, createdTime]);
 };
 
 const insertFollow = (userId, myUserId) => {
@@ -180,15 +148,7 @@ const toggleFollow = (userId, myUserId) =>
 const getCommentsById = (postId) => {
   const sql = `SELECT comment_id, content, comments.created_time, name FROM (SELECT * FROM comments WHERE post_id = ? AND is_deleted = 0) as comments INNER JOIN users ON comments.user_id = users.user_id;`;
 
-  return new Promise((resolve, reject) => {
-    connection.query(sql, [postId], (err, res) => {
-      if (err) {
-        reject(err);
-      } else {
-        resolve(res);
-      }
-    });
-  });
+  return query(sql, [postId]);
 };
 
 const getPosts = (params = {}) => {
@@ -208,10 +168,14 @@ const getPosts = (params = {}) => {
         posts
       WHERE
         is_deleted = 0 ${params.userId ? 'AND user_id = ?' : ''}
+
     ) as posts
     INNER JOIN users ON posts.user_id = users.user_id
+  WHERE
+    users.is_activated = 1
   ORDER BY
-    created_time DESC;
+    created_time DESC
+  ${params.userId ? '' : 'LIMIT 100'};
   `;
 
   return query(sql, [params.userId].filter(Boolean));
@@ -253,6 +217,33 @@ const getPostById = (postId) => {
   return query(sql, [postId]).then((posts) =>
     posts.length === 0 ? null : posts[0]
   );
+};
+
+const getAllReportedPosts = () => {
+  const sql = `
+  SELECT
+    users.name,
+    posts.post_id,
+    posts.user_id,
+    posts.content,
+    posts.created_time,
+    posts.image_id,
+    posts.is_reported
+  FROM
+    (
+      SELECT
+        *
+      FROM
+        posts
+      WHERE
+        is_deleted = 0 AND is_reported = 1
+    ) as posts
+    INNER JOIN users ON posts.user_id = users.user_id
+  ORDER BY
+    created_time DESC;
+  `;
+
+  return query(sql, []);
 };
 
 const getPostsByUserId = (userId) => getPosts({ userId });
@@ -392,6 +383,11 @@ const deleteAllNotifications = (userId) => {
   return query(sql, [userId]);
 };
 
+const getAllUsers = () => {
+  const sql = `SELECT user_id, name, is_activated, is_admin FROM users ORDER BY name`;
+  return query(sql, []);
+};
+
 const updatePassword = async (userId, password) => {
   const hash = bcrypt.hashSync(password, 10);
   const sql = `UPDATE users SET hash = ? WHERE user_id = ?`;
@@ -422,7 +418,11 @@ const deletePost = (postId, userId, isAdmin) => {
 
 const reportPost = (postId) => {
   const sql = `UPDATE posts SET is_reported = 1 WHERE post_id = ?;`;
+  return query(sql, [postId]);
+};
 
+const unreportPost = (postId) => {
+  const sql = `UPDATE posts SET is_reported = 0 WHERE post_id = ?;`;
   return query(sql, [postId]);
 };
 
@@ -465,8 +465,11 @@ module.exports = {
   toggleFollow,
   deletePost,
   reportPost,
+  unreportPost,
   insertPostWithImage,
   getImage,
   deactivateUser,
   activateUser,
+  getAllUsers,
+  getAllReportedPosts,
 };

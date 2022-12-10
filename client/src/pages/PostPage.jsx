@@ -15,7 +15,7 @@ import {
   FavoriteBorder,
   Favorite,
   DeleteOutline,
-  ReportGmailerrorred,
+  Report,
   Close,
 } from '@mui/icons-material';
 import Image from '../components/Image';
@@ -41,7 +41,6 @@ function PostPage() {
     user: { userId: myUserId },
   } = useContext(AuthContext);
 
-  const { user } = useContext(AuthContext);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -97,7 +96,7 @@ function PostPage() {
           sx={{
             m: 'auto',
             mt: '5%',
-            width: 600,
+            width: 700,
           }}
         >
           <Card>
@@ -114,13 +113,15 @@ function PostPage() {
                   navigate(`/user/${userId}`);
                 }}
               />
-              <IconButton
-                aria-label="report-button"
-                onClick={handleReport}
-                sx={{ width: 50, height: 50 }}
-              >
-                {!user.isAdmin && <ReportGmailerrorred />}
-              </IconButton>
+              {myUserId !== userId && (
+                <IconButton
+                  aria-label="report-button"
+                  onClick={handleReport}
+                  sx={{ width: 50, height: 50 }}
+                >
+                  <Report />
+                </IconButton>
+              )}
             </Box>
             <CardContent>
               <Image imageId={imageId} />
@@ -137,7 +138,7 @@ function PostPage() {
               <p>
                 {likes} {likes === 1 ? 'like' : 'likes'}
               </p>
-              {myUserId === userId || user.isAdmin ? (
+              {myUserId === userId ? (
                 <IconButton onClick={handleDelete} color="primary">
                   <DeleteOutline />
                 </IconButton>
