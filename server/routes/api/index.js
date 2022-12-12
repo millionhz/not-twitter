@@ -4,7 +4,6 @@ const signupRouter = require('./signup');
 const loginRouter = require('./login');
 const authenticateRouter = require('./authenticate');
 const postRouter = require('./post');
-const notificationsRouter = require('./notifications');
 const userRouter = require('./user');
 
 const router = express.Router();
@@ -16,6 +15,5 @@ router.use(auth.authenticate('jwt', { session: false }));
 router.use('/authenticate', authenticateRouter);
 router.use('/user', userRouter);
 router.use('/post', postRouter);
-router.use('/notifications', notificationsRouter);
 
 module.exports = router;
