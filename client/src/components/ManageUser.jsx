@@ -19,7 +19,8 @@ function ManageUser({ userId, name, isActivated, handleStateChange, sx }) {
       >
         <CardHeader
           avatar={<Avatar name={name} />}
-          title={name}
+          title={`${name}`}
+          subheader={`User ID: ${userId}`}
           sx={{ flex: 1 }}
         />
         <FormControlLabel
