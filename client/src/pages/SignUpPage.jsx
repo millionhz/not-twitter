@@ -12,14 +12,45 @@ import { LockOutlined } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import { signup } from '../api/backend';
 
-function AuthForm({ title, onSubmit, error, children }) {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [name, setName] = useState('');
+function SignupPage() {
+  const title = 'Sign Up';
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    onSubmit(name, email, password);
+  const [email, setEmail] = useState('');
+  const [emailError, setEmailError] = useState(false);
+
+  const [password, setPassword] = useState('');
+  const [passwordError, setPasswordError] = useState(false);
+
+  const [name, setName] = useState('');
+  const [nameError, setNameError] = useState(false);
+
+  const navigate = useNavigate();
+
+  const handleSignup = () => {
+    signup(name, email, password)
+      .then(() => {
+        navigate('/login');
+      })
+      .catch(() => {
+        setEmailError(true);
+      });
+  };
+
+  const onChangeName = (e) => {
+    const name_ = e.target.value;
+    setNameError(name_.length < 1);
+    setName(name_);
+  };
+
+  const onChangeEmail = (e) => {
+    setEmailError(!e.target.checkValidity());
+    setEmail(e.target.value);
+  };
+
+  const onChangePassword = (e) => {
+    const password_ = e.target.value;
+    setPassword(password_);
+    setPasswordError(password_.length < 6);
   };
 
   return (
@@ -38,7 +69,15 @@ function AuthForm({ title, onSubmit, error, children }) {
         <Typography component="h1" variant="h5">
           {title}
         </Typography>
-        <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+        <Box
+          component="form"
+          onSubmit={(e) => {
+            e.preventDefault();
+            handleSignup();
+          }}
+          noValidate
+          sx={{ mt: 1 }}
+        >
           <TextField
             autoFocus
             margin="normal"
@@ -48,9 +87,9 @@ function AuthForm({ title, onSubmit, error, children }) {
             label="Name"
             type="text"
             id="name"
-            error={error}
+            error={nameError}
             value={name}
-            onChange={(event) => setName(event.target.value)}
+            onChange={onChangeName}
           />
           <TextField
             margin="normal"
@@ -59,10 +98,11 @@ function AuthForm({ title, onSubmit, error, children }) {
             id="email"
             label="Email Address"
             name="email"
+            type="email"
             autoComplete="email"
-            error={error}
             value={email}
-            onChange={(event) => setEmail(event.target.value)}
+            error={emailError}
+            onChange={onChangeEmail}
           />
           <TextField
             margin="normal"
@@ -73,9 +113,9 @@ function AuthForm({ title, onSubmit, error, children }) {
             type="password"
             id="password"
             autoComplete="current-password"
-            error={error}
+            error={passwordError}
             value={password}
-            onChange={(event) => setPassword(event.target.value)}
+            onChange={onChangePassword}
           />
           <Button
             type="submit"
@@ -85,43 +125,15 @@ function AuthForm({ title, onSubmit, error, children }) {
           >
             {title}
           </Button>
-          {children}
+          <Typography variant="body2" color="text.secondary" align="center">
+            Already have an account?{' '}
+            <Link href="/login" variant="body2" color="inherit">
+              Log In
+            </Link>
+          </Typography>
         </Box>
       </Box>
     </Container>
-  );
-}
-
-function SignupPage() {
-  const [isError, setError] = useState(false);
-  const navigate = useNavigate();
-
-  const signUp = (name, email, password) => {
-    signup(name, email, password)
-      .then(() => {
-        navigate('/login');
-      })
-      .catch((err) => {
-        const {
-          response: {
-            data: { message },
-          },
-        } = err;
-
-        console.log(message);
-        setError(true);
-      });
-  };
-
-  return (
-    <AuthForm onSubmit={signUp} title="Sign Up" error={isError}>
-      <Typography variant="body2" color="text.secondary" align="center">
-        Already have an account?{' '}
-        <Link href="/login" variant="body2" color="inherit">
-          Log In
-        </Link>
-      </Typography>
-    </AuthForm>
   );
 }
 
