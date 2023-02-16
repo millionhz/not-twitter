@@ -1,6 +1,5 @@
 const mysql = require('mysql2');
 const bcrypt = require('bcrypt');
-const { readImage, deleteImage } = require('./image');
 
 const connection = mysql.createPool({
   host: process.env.DB_HOST,
@@ -97,10 +96,8 @@ const insertImage = (data) => {
   return query(sql, [createdTime, data]);
 };
 
-const insertPostWithImage = async (imagePath, userId) => {
-  const data = await readImage(imagePath);
-  deleteImage(imagePath);
-  const { insertId } = await insertImage(data);
+const insertPostWithImage = async (image, userId) => {
+  const { insertId } = await insertImage(image);
   return insertPost('', userId, insertId);
 };
 

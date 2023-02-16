@@ -19,7 +19,8 @@ const {
 } = require('../../utilities/database');
 
 const router = express.Router();
-const upload = multer({ dest: './uploads/' });
+const storage = multer.memoryStorage();
+const upload = multer({ storage });
 
 router.get('/', (req, res, next) => {
   const { userId } = req.body;
@@ -139,9 +140,9 @@ router.post('/search', (req, res, next) => {
 
 router.post('/image', upload.single('image'), (req, res, next) => {
   const { user_id: userId } = req.user;
-  const { path } = req.file;
+  const { buffer } = req.file;
 
-  insertPostWithImage(path, userId)
+  insertPostWithImage(buffer, userId)
     .then(() => {
       res.sendStatus(200);
     })
